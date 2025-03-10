@@ -1,5 +1,7 @@
-/*<!-- video-section --> */
-<section className="video-section">
+export default function VideoSection() {
+  return<>
+{/*<!-- video-section --> */
+}<section className="video-section">
   <div
     className="bg-layer parallax-bg"
     data-parallax='{"y": 100}'
@@ -153,4 +155,6 @@
     </div>
   </div>
 </section>
-/* <!-- video-section end -->*/
+{/* <!-- video-section end -->*/
+}  </>
+}

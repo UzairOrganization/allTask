@@ -1,5 +1,7 @@
-/*<!-- main-footer --> */
-<footer className="main-footer">
+export default function Footer() {
+  return<>
+{  /*<!-- main-footer --> */
+}<footer className="main-footer">
   <div className="auto-container">
     <div className="widget-section">
       <div className="row clearfix">
@@ -133,4 +135,6 @@
     </div>
   </div>
 </footer>
-/* <!-- main-footer end --> */
+{/* <!-- main-footer end --> */
+}  </>
+}

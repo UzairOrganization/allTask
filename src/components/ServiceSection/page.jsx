@@ -1,5 +1,7 @@
-/*<!-- service-section --> */
-<section className="service-section">
+export default function ServiceSection() {
+  return<>
+{  /*<!-- service-section --> */
+}<section className="service-section">
   <div
     className="pattern-layer"
     style={{ backgroundImage: 'url(assets/images/shape/shape-6.png)' }}
@@ -336,4 +338,6 @@
     </div>
   </div>
 </section>
-/* <!-- service-section end -->*/
+{/* <!-- service-section end -->*/
+}  </>
+}

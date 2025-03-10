@@ -1,5 +1,9 @@
-/*!-- switcher menu --> */
-<div className="switcher">
+export default function SwitcherMenu()
+{
+  return(
+    <div>
+{      /*!-- switcher menu --> */
+}<div className="switcher">
   <div className="switch_btn">
     <button>
       <i className="fas fa-palette"></i>
@@ -48,4 +52,7 @@
     </div>
   </div>
 </div>
-/* <!-- end switcher menu -->*/
+{/* <!-- end switcher menu -->*/}
+    </div>
+  )
+}

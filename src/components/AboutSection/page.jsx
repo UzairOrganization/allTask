@@ -1,4 +1,6 @@
-/*<!-- about-section --> */
+export default function AboutSection() {
+  return (
+   /*<!-- about-section --> */
 <section className="about-section pt_170 pb_170">
   <div className="pattern-layer">
     <div
@@ -65,4 +67,7 @@
     </div>
   </div>
 </section>
+
 /* <!-- about-section end -->*/
+  );
+}

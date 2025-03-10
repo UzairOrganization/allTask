@@ -1,4 +1,7 @@
-<div id="search-popup" className="search-popup">
+export default function SearchPopup() {
+  return(
+    <>
+    <div id="search-popup" className="search-popup">
 <div className="popup-inner">
   <div className="upper-box clearfix">
     <figure className="logo-box pull-left">
@@ -33,4 +36,6 @@
     </div>
   </div>
 </div>
-</div>
+</div></>
+  )
+}

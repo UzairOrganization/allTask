@@ -1,5 +1,9 @@
-          {/* <!-- main header --> */}
-          <header className="main-header header-style-one">
+export default function Header() 
+{
+  return(
+    <>
+              {/* <!-- main header --> */}
+              <header className="main-header header-style-one">
             {/* <!-- header-top -->
 
         <!-- header-lower --> */}
@@ -83,4 +87,7 @@
               </div>
             </div>
           </header>
-          /* <!-- main-header end -->*/
+{          /* <!-- main-header end -->*/
+}    </>
+  )
+}

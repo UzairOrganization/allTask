@@ -1,5 +1,7 @@
-/*<!-- testimonial-section --> */
-<section className="testimonial-section">
+export default function TestimonialSection() {
+  return<>
+{  /*<!-- testimonial-section --> */
+}<section className="testimonial-section">
   <div className="pattern-layer">
     <div
       className="pattern-1"
@@ -271,4 +273,6 @@
     </div>
   </div>
 </section>
-/* <!-- testimonial-section end -->*/
+{/* <!-- testimonial-section end -->*/
+}  </>
+}

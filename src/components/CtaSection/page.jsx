@@ -1,5 +1,8 @@
-/*<!-- cta-section --> */
-<section className="cta-section">
+export default function CtaSection()
+{
+  return<>
+{  /*<!-- cta-section --> */
+}<section className="cta-section">
   <div
     className="bg-layer parallax-bg"
     data-parallax='{"y": 100}'
@@ -21,4 +24,6 @@
     </div>
   </div>
 </section>
-/* <!-- cta-section end -->*/
+{/* <!-- cta-section end -->*/
+}  </>
+}

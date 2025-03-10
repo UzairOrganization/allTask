@@ -1,5 +1,7 @@
-          /* <!--Scroll to top--> */
-          <div className="scroll-to-top">
+export default function ScrollToTop(){
+  return<>
+{            /* <!--Scroll to top--> */
+}          <div className="scroll-to-top">
             <div>
               <div className="scroll-top-inner">
                 <div className="scroll-bar">
@@ -9,4 +11,6 @@
               </div>
             </div>
           </div>
-          /* <!-- Scroll to top end --> */
+{          /* <!-- Scroll to top end --> */
+}  </>
+}
