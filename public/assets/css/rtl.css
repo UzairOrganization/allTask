@@ -1,0 +1,479 @@
+
+.rtl {
+  direction: rtl; 
+}
+
+.ltr {
+  direction: ltr; 
+}
+
+.rtl .switcher{
+  right: 60px;
+  left: inherit;
+}
+
+.rtl .switcher .switch_menu{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .owl-carousel{
+  direction: ltr;
+}
+
+.rtl .scroll-to-top .scroll-bar{
+  margin-right: 0px;
+  margin-left: 10px;
+}
+
+.rtl .main-menu .navigation > li{
+  float: right;
+}
+
+.rtl .main-menu .navigation > li:first-child{
+  margin-left: 15px !important;
+  margin-right: 0px;
+}
+
+.rtl .main-menu .navigation > li:last-child{
+  margin-right: 15px !important;
+  margin-left: 0px;
+}
+
+.rtl .main-menu .navigation > li > ul > li > a, 
+.rtl .main-menu .navigation > li > .megamenu li > a{
+  text-align: right;
+}
+
+.rtl .main-menu .navigation li.dropdown .megamenu li h4{
+  text-align: right;
+}
+
+.rtl .main-menu .navigation > li > ul > li > ul > li > a{
+  text-align: right;
+}
+
+.rtl .main-menu .navigation > li > ul > li.dropdown > a:after{
+  right: inherit;
+  left: 20px;
+  content: "\f104";
+}
+
+.rtl .mobile-menu{
+  text-align: right;
+}
+
+.rtl .mobile-menu .nav-logo{
+  text-align: right;
+}
+
+.rtl .mobile-menu .navigation li > a:before{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .mobile-menu .navigation li.dropdown .dropdown-btn{
+  right: inherit;
+  left: 6px;
+}
+
+.rtl .mobile-menu .navigation li.dropdown .dropdown-btn.open{
+  transform: rotate(-90deg);
+}
+
+.rtl .scroll-to-top{
+  right: inherit;
+  left: 0px;
+}
+
+.rtl .content_block_one .content-box{
+  margin-left: 0px;
+  margin-right: 80px;
+}
+
+.rtl .content_block_one .content-box .single-item{
+  padding-left: 0px;
+  padding-right: 130px;
+}
+
+.rtl .content_block_one .content-box .single-item .count-text{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .content_block_one .content-box .lower-box .text-box{
+  padding-left: 0px;
+  padding-right: 50px;
+}
+
+.rtl .content_block_one .content-box .lower-box .text-box:before{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .service-section .upper-box .text-box .btn-box .theme-btn{
+  margin-right: 0px;
+  margin-left: 20px;
+}
+
+.rtl .service-block-one .inner-box{
+  text-align: right;
+}
+
+.rtl .service-block-one .inner-box .count-text{
+  right: inherit;
+  left: 40px;
+}
+
+.rtl .service-block-one .inner-box .list-item li{
+  padding-left: 0px;
+  padding-right: 32px;
+}
+
+.rtl .service-block-one .inner-box .list-item li:before{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .service-intro-section .tab-btn-box{
+  margin-left: 0px;
+  margin-right: -226px;
+}
+
+.rtl .service-intro-section .tab-btns li{
+  float: right;
+  margin-right: 0px;
+  margin-left: 20px;
+}
+
+.rtl .service-intro-section .content-box .inner-box .single-item{
+  padding-left: 0px;
+  padding-right: 120px;
+}
+
+.rtl .service-intro-section .content-box .inner-box .single-item .icon-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .content_block_three .content-box .inner-box{
+  padding-left: 0px;
+  padding-right: 163px;
+}
+
+.rtl .content_block_three .content-box .inner-box .image-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .progress-box .count-text{
+  right: inherit;
+  left: 0px;
+}
+
+.rtl .project-block-one .inner-box .content-box{
+  text-align: right;
+}
+
+.rtl .video-section .content-box h2:before{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .testimonial-block-one .inner-box{
+  text-align: right;
+}
+
+.rtl .testimonial-block-one .inner-box .icon-box{
+  right: inherit;
+  left: 50px;
+}
+
+.rtl .testimonial-block-one .inner-box .author-box{
+  padding-left: 0px;
+  padding-right: 130px;
+}
+
+.rtl .testimonial-block-one .inner-box .author-box .author-thumb{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .testimonial-block-one .inner-box .author-box .rating li{
+  float: right;
+  margin-right: 0px;
+  margin-left: 8px;
+}
+
+.rtl .news-block-one .inner-box .lower-content{
+  padding-left: 0px;
+  padding-right: 120px;
+}
+
+.rtl .news-block-one .inner-box .lower-content .post-date{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .news-block-one .inner-box .lower-content .author-box{
+  padding-left: 0px;
+  padding-right: 80px;
+}
+
+.rtl .news-block-one .inner-box .lower-content .author-box .author-thumb{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .cta-section .text-box{
+  padding-left: 0px;
+  padding-right: 215px;
+}
+
+.rtl .cta-section .text-box .icon-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .main-footer .widget-title:before,
+.rtl .main-footer .widget-title:after{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .main-footer .contact-widget .info-list li{
+  padding-left: 0px;
+  padding-right: 50px;
+}
+
+.rtl .main-footer .contact-widget .info-list li .icon-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .main-footer .logo-widget .social-links li{
+  float: right;
+  margin-right: 0px;
+  margin-left: 20px;
+}
+
+.rtl .feature-block-one .inner-box{
+  padding-left: 30px;
+  padding-right: 120px;
+}
+
+.rtl .feature-block-one .inner-box .icon-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .feature-section .inner-container{
+  border-radius: 20px 0px 0px 20px;
+}
+
+.rtl .feature-block-one .inner-box:before{
+  right: -30px;
+}
+
+.rtl .content_block_five .content-box .inner-box .single-item{
+  padding-left: 0px;
+  padding-right: 120px;
+}
+
+.rtl .content_block_five .content-box .inner-box .single-item .icon-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .intro-style-two .image-layer{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .intro-style-two:before{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .contact-section .map-inner{
+  right: inherit;
+  left: 0px;
+}
+
+.rtl .content_block_seven .content-box{
+  margin-right: 0px;
+  margin-left: 35px;
+}
+
+.rtl .banner-style-three .content-box{
+  text-align: right;
+}
+
+.rtl .service-block-two .inner-box .count-text{
+  right: inherit;
+  left: 74px;
+}
+
+.rtl .header-style-three .header-lower .search-box-outer{
+  margin-right: 0px;
+  margin-left: 95px;
+}
+
+.rtl .header-style-three .header-lower .search-box-outer:before{
+  right: inherit;
+  left: -48px;
+}
+
+.rtl .service-details-content .content-one .inner-box .single-item{
+  padding-left: 0px;
+  padding-right: 120px;
+}
+
+.rtl .service-details-content .content-one .inner-box .single-item .icon-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .service-sidebar .widget-title:before{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .service-sidebar .widget-title:after{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .service-details-content .content-two .single-item .lower-content{
+  padding-left: 0px;
+  padding-right: 90px;
+}
+
+.rtl .service-details-content .content-two .single-item .lower-content .icon-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .news-block-two .inner-box .image-box .post-date{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .news-block-two .inner-box .lower-content .post-info li{
+  float: right;
+  margin-right: 0px;
+  margin-left: 80px;
+}
+
+.rtl .news-block-two .inner-box .lower-content .post-info li:before{
+  right: inherit;
+  left: -40px;
+}
+
+.rtl .news-block-two .inner-box .lower-content .post-info li.author-box{
+  padding-left: 0px;
+  padding-right: 85px;
+}
+
+.rtl .news-block-two .inner-box .lower-content .post-info li .author-thumb{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .news-block-two .inner-box .lower-content .post-info li.comment-box{
+  padding-left: 0px;
+  padding-right: 55px;
+}
+
+.rtl .news-block-two .inner-box .lower-content .post-info li .icon-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .pagination li{
+  float: right;
+  margin-right: 0px;
+  margin-left: 10px;
+}
+
+.rtl .blog-sidebar .widget-title:before{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .blog-sidebar .post-widget .post{
+  padding-left: 0px;
+  padding-right: 110px;
+}
+
+.rtl .blog-sidebar .post-widget .post .post-thumb{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .blog-sidebar .tags-widget .tags-list li{
+  float: right;
+}
+
+.rtl .blog-details-content .comment-box .comment{
+  padding-left: 60px;
+  padding-right: 110px;
+}
+
+.rtl .blog-details-content .comment-box .comment .thumb-box{
+  left: inherit;
+  right: 0px;
+}
+
+.rtl .blog-details-content .comment-box .comment .reply-btn{
+  right: inherit;
+  left: 0px;
+}
+
+.rtl .content_block_eight .content-box .tab-btns li{
+  float: right;
+}
+
+.rtl .sortable-masonry .filter-tabs li{
+  float: right;
+}
+
+.rtl .content_block_six .content-box .tab-btns li{
+  float: right;
+  margin-right: 0px;
+  margin-left: 18px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

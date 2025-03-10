@@ -1,0 +1,199 @@
+
+/** contact-section **/
+
+.contact-section{
+  position: relative;
+  padding: 88px 0px 64px 0px;
+}
+
+.contact-section .map-inner{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 50%;
+  height: 100%;
+}
+
+.contact-section .map-inner #contact-google-map{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.content_block_seven .content-box{
+  position: relative;
+  display: block;
+}
+
+
+/** contact-style-two **/
+
+.contact-style-two{
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-style-two .bg-layer:before{
+  position: absolute;
+  content: '';
+  background: rgba(0, 21, 90, 0.9);
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+}
+
+.contact-style-two .image-layer{
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
+
+
+.google-map-section{
+  position: relative;
+}
+
+.google-map-section #contact-google-map{
+  position: relative;
+  width: 100%;
+  height: 550px;
+}
+
+.contact-style-two .default-form .form-group .theme-btn:hover{
+  color: var(--secondary-color) !important;
+  background: #fff;
+}
+
+.contact-style-two .default-form .form-group .theme-btn:before{
+  background: #fff;
+}
+
+
+/** contact-style-three **/
+
+.contact-style-three{
+  position: relative;
+}
+
+.contact-style-three .content-box{
+  position: relative;
+  display: block;
+}
+
+.contact-style-three .content-box h2{
+  display: block;
+  font-size: 80px;
+  line-height: 90px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.contact-style-three .content-box h2 span{
+  color: var(--theme-color);
+}
+
+.contact-style-three .content-box p{
+  color: var(--title-color);
+  margin-bottom: 50px;
+}
+
+.contact-style-three .form-inner{
+  position: relative;
+  display: block;
+  background: #F6F9FF;
+  padding: 80px 40px;
+}
+
+.contact-style-three .form-inner form{
+  position: relative;
+  margin: 0px 5px;
+}
+
+.contact-style-three .form-inner .form-group{
+  position: relative;
+  display: block;
+  padding: 0px 10px;
+  margin-bottom: 20px;
+}
+
+.contact-style-three .form-inner .form-group:last-child{
+  margin-bottom: 0px;
+}
+
+.contact-style-three .form-inner .form-group input[type='text'],
+.contact-style-three .form-inner .form-group input[type='email'],
+.contact-style-three .form-inner .form-group textarea{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 55px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  font-family: var(--title-font);
+  color: rgba(0, 0, 0, 0.3);
+  padding: 10px 20px;
+  transition: all 500ms ease;
+}
+
+.contact-style-three .form-inner .form-group textarea{
+  height: 175px;
+  resize: none;
+  padding-top: 15px;
+}
+
+.contact-style-three .form-inner .form-group input:focus,
+.contact-style-three .form-inner .form-group textarea:focus{
+  border-color: var(--theme-color);
+}
+
+.contact-style-three .form-inner .form-group .theme-btn{
+  padding: 20px 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

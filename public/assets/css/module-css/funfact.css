@@ -1,0 +1,171 @@
+
+/** funfact-section **/
+
+.funfact-section{
+  position: relative;
+  background: #F6F9FF;
+}
+
+.funfact-block-one .inner-box{
+  position: relative;
+  display: block;
+  padding-bottom: 28px;
+}
+
+.funfact-block-one .inner-box:before{
+  position: absolute;
+  content: '';
+  background: var(--theme-color);
+  width: 40px;
+  height: 1px;
+  left: 50%;
+  margin-left: -20px;
+  bottom: 0px;
+}
+
+.funfact-block-one .inner-box .icon-box{
+  position: relative;
+  margin-bottom: 16px;
+  display: block;
+  text-align: center;
+}
+
+.funfact-block-one .inner-box .icon-box .icon{
+  position: relative;
+  display: inline-block;
+  font-size: 80px;
+  color: var(--theme-color);
+  margin-bottom: 34px;
+}
+
+.funfact-block-one .inner-box .icon-box .owl-theme .owl-dots .owl-dot span{
+  position: relative;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--theme-color);
+  margin: 0px 5px;
+  cursor: pointer;
+  transition: all 500ms ease;
+}
+
+.funfact-block-one .inner-box .icon-box .owl-theme .owl-dots .owl-dot.active span,
+.funfact-block-one .inner-box .icon-box .owl-theme .owl-dots .owl-dot span:hover{
+  transform: scale(1.25);
+}
+
+.funfact-block-one .inner-box .icon-box .owl-nav{
+  position: absolute;
+  left: 0px;
+  bottom: 36px;
+  right: 0px;
+  max-width: 112px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.funfact-block-one .inner-box .icon-box .owl-nav button{
+  position: absolute;
+  top: 21px;
+}
+
+.funfact-block-one .inner-box .icon-box .owl-nav button span{
+  display: none;
+}
+
+.funfact-block-one .inner-box .icon-box .owl-nav button.owl-prev{
+  left: 0px;
+}
+
+.funfact-block-one .inner-box .icon-box .owl-nav button.owl-prev:before{
+  position: absolute;
+  content: '';
+  background-image: url(../../images/icons/icon-4.png);
+  width: 20px;
+  height: 16px;
+  left: 0px;
+  top: 0px;
+  background-repeat: no-repeat;
+}
+
+.funfact-block-one .inner-box .icon-box .owl-nav button.owl-next{
+  right: 0px;
+}
+
+.funfact-block-one .inner-box .icon-box .owl-nav button.owl-next:before{
+  position: absolute;
+  content: '';
+  background-image: url(../../images/icons/icon-5.png);
+  width: 20px;
+  height: 16px;
+  right: 0px;
+  top: 0px;
+  background-repeat: no-repeat;
+}
+
+.funfact-block-one .inner-box .count-outer{
+  position: relative;
+  display: block;
+  font-size: 80px;
+  line-height: 90px;
+  font-family: var(--title-font);
+  font-weight: 700;
+  color: var(--title-color);
+  margin-bottom: 16px;
+}
+
+.funfact-block-one .inner-box .count-outer .symble{
+  font-weight: 300;
+}
+
+.funfact-block-one .inner-box h3{
+  display: block;
+  font-size: 30px;
+  line-height: 40px;
+  font-weight: 700;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

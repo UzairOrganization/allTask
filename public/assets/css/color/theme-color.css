@@ -1,0 +1,150 @@
+
+
+
+/* color */
+
+.main-menu .navigation > li.current > a,
+.main-menu .navigation > li:hover > a,
+.main-menu .navigation > li > ul > li > a:hover,
+.main-menu .navigation > li > .megamenu li > a:hover,
+.main-menu .navigation > li > ul > li > ul > li > a:hover,
+.scroll-to-top .scroll-bar-text,
+.banner-carousel .content-box .category-list li a,
+.main-header .search-box-outer:hover,
+.content_block_one .content-box .single-item .count-text,
+.content_block_one .content-box .single-item h2 a:hover,
+.content_block_one .content-box .lower-box a,
+.sec-title .sub-title,
+.sec-title h2 span,
+.service-block-one .inner-box .icon-box,
+.service-intro-section .content-box .inner-box .single-item .icon-box,
+.testimonial-block-one .inner-box .author-box .designation,
+.news-block-one .inner-box .lower-content .author-box span,
+.main-footer a:hover,
+.banner-style-two .content-box h2 span,
+.feature-block-one .inner-box .icon-box,
+.feature-block-one .inner-box h3 a:hover,
+.image_block_two .image-box .support-box h3,
+.content_block_five .content-box .inner-box .single-item .icon-box,
+.banner-style-three .content-box h2 span,
+.service-block-two .inner-box h3 a:hover,
+.funfact-block-one .inner-box .icon-box .icon,
+.project-style-two .more-text h2 a,
+.banner-style-four .content-inner h2 span,
+.feature-block-two .inner-box .icon-box,
+.service-block-three .inner-box .lower-content h3 a:hover,
+.service-block-three .inner-box .lower-content .link a,
+.video-style-two .content-box h2 span,
+.team-details .image-box .info-list li span,
+.team-details .content-box .text-box .designation,
+.service-details-content .content-one .inner-box .single-item .icon-box,
+.service-details-content .content-two .single-item .lower-content .icon-box,
+.service-details-content .content-two .single-item .lower-content h3 a:hover,
+.news-block-two .inner-box .lower-content .post-info li span,
+.news-block-two .inner-box .lower-content h2 a:hover,
+.news-block-two .inner-box .lower-content .link a:hover,
+.blog-sidebar .search-widget .search-form .form-group input:focus + button,
+.blog-sidebar .search-widget .search-form .form-group button:hover,
+.blog-sidebar .category-widget .category-list li a:before,
+.blog-sidebar .category-widget .category-list li a:hover,
+.blog-sidebar .post-widget .post .post-date,
+.blog-details-content .post-share-option .post-share-links li a:hover,
+.blog-details-content .group-title h3 span,
+.blog-details-content .comment-box .comment .post-date
+
+{
+  color: var(--theme-color) !important;
+}
+
+
+/** background **/
+
+.switcher .switch_btn button,
+.theme-btn.btn-two:hover,
+.theme-btn.btn-two:before,
+button.rtl,
+.theme-btn.btn-one,
+.banner-carousel .content-box .category-list li:before,
+.content_block_one .content-box .lower-box .text-box:before,
+.service-block-one .inner-box:before,
+.service-block-one .inner-box .btn-box a,
+.service-section .owl-theme .owl-dots .owl-dot span,
+.service-intro-section .tab-btns li.active-btn,
+.service-intro-section .tab-btns li:hover,
+.service-intro-section .content-box .inner-box .single-item .icon-box:before,
+.progress-box .bar-inner,
+.project-block-one .inner-box .content-box .link a:before,
+.project-section .owl-theme .owl-dots .owl-dot span,
+.video-section .content-box .video-btn a,
+.testimonial-section .owl-theme .owl-dots .owl-dot span,
+.news-block-one .inner-box .lower-content .post-date,
+.cta-section .bg-layer:before,
+.banner-style-two .content-box a:hover,
+.feature-block-one .inner-box .icon-box:before,
+.content_block_five .content-box .inner-box .single-item .icon-box:before,
+.intro-style-two:before,
+.service-block-two .inner-box:before,
+.service-block-two .inner-box .btn-box a,
+.content_block_eight .content-box .tab-btns li:before,
+.funfact-block-one .inner-box .icon-box .owl-theme .owl-dots .owl-dot span,
+.funfact-block-one .inner-box:before,
+.faq-block:first-child .faq-block-one .inner-box,
+.banner-style-four .content-inner a:hover,
+.banner-style-four .content-inner a:before,
+.banner-style-four .owl-nav button:hover,
+.feature-block-two .inner-box .icon-box:before,
+.service-block-three .inner-box:hover .image-box .icon-box,
+.team-block-one .inner-box .content-box:before,
+.project-style-three .sec-title .icon-box,
+.project-style-three .project-block-one .inner-box .image-box:before,
+.service-details-content .content-one .inner-box .single-item .icon-box:before,
+.news-block-two .inner-box .image-box .post-date,
+.pagination li a:hover,
+.pagination li a.current,
+.blog-sidebar .widget-title:before,
+.blog-sidebar .tags-widget .tags-list li a:hover,
+.blog-details-content .text-box blockquote,
+.blog-details-content .post-share-option .post-tags li a:hover,
+.check-box label:after,
+.sortable-masonry .filter-tabs li:before,
+.banner-section:before
+
+{
+  background: var(--theme-color) !important;
+}
+
+
+
+
+/** border-color **/
+
+.service-section .owl-theme .owl-dots .owl-dot span,
+.project-section .owl-theme .owl-dots .owl-dot span,
+.content_block_four .inner-box,
+.content_block_four .inner-box .form-inner .form-group input:focus,
+.content_block_four .inner-box .form-inner .form-group textarea:focus,
+.video-section .content-box .video-btn a .border-animation,
+.testimonial-block-one .inner-box .author-box .author-thumb,
+.testimonial-section .owl-theme .owl-dots .owl-dot span,
+.default-form .form-group input:focus,
+.default-form .form-group textarea:focus,
+.content_block_eight .content-box .tab-btns li.active-btn,
+.content_block_eight .content-box .tab-btns li:hover,
+.faq-block:first-child .faq-block-one .inner-box,
+.header-style-three,
+.banner-style-four,
+.service-sidebar .contact-widget .form-inner .form-group input:focus,
+.service-sidebar .contact-widget .form-inner .form-group textarea:focus,
+.blog-sidebar .sidebar-widget,
+.blog-sidebar .search-widget .search-form .form-group input:focus,
+.blog-sidebar .tags-widget .tags-list li a:hover,
+.blog-details-content .post-share-option .post-tags li a:hover,
+.contact-style-three .form-inner .form-group input:focus,
+.contact-style-three .form-inner .form-group textarea:focus,
+.sortable-masonry .filter-tabs li:hover,
+.sortable-masonry .filter-tabs li.active
+
+{
+  border-color: var(--theme-color) !important;
+}
+
