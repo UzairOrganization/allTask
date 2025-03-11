@@ -87,6 +87,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  background-color: #00155A;
 }
 .owl-carousel.owl-loaded {
   display: block;

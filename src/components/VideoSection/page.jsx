@@ -30,7 +30,7 @@ export default function VideoSection() {
       </div>
       <div className="col-lg-6 col-md-12 col-sm-12 inner-column">
         <div className="content_block_four">
-          <div className="inner-box ml_100">
+          <div className="inner-box ml_100" >
             <h2>Request a Service</h2>
             <div className="form-inner">
               <form action="index.html" method="post">
@@ -56,7 +56,6 @@ export default function VideoSection() {
                     Select Service Category:
                   </label>
                   <select
-                   style={{ width: '200px' }}
 
                     id=""
                     name="category"
@@ -75,7 +74,6 @@ export default function VideoSection() {
                     </option>
                   </select>
                 </div>
-                <br />
                 <div className="form-group">
                   <input
                     type="text"
@@ -127,8 +125,6 @@ export default function VideoSection() {
                     </option>
                   </select>
                 </div>
-
-                <br />
                 <div className="form-group">
                   <label for="date">Pick a Date:</label>
                   <input type="date" id="date" name="date" />

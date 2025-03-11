@@ -1,21 +1,17 @@
 export default function ServiceSection() {
   return<>
 {  /*<!-- service-section --> */
-}<section className="service-section">
+}<section className="service-section" 
+    style={{backgroundColor: '#45535C'}}
+>
   <div
     className="pattern-layer"
-    style={{ backgroundImage: 'url(assets/images/shape/shape-6.png)' }}
-
   ></div>
   <div className="shape">
     <div
-      className="shape-1 rotate-me"
-      style={{ backgroundImage: 'url(assets/images/shape/shape-7.png)' }}
 
     ></div>
     <div
-      className="shape-2 float-bob-y"
-      style={{ backgroundImage: 'url(assets/images/shape/shape-8.png)' }}
 
     ></div>
   </div>
@@ -28,8 +24,7 @@ export default function ServiceSection() {
               MORE ABOUT US
             </span>
             <h2>
-              We work day in, day out to meet our
-              <span>clients' demands.</span>
+              We work day in, day out to meet our clients' demands.
             </h2>
           </div>
         </div>

@@ -3,11 +3,7 @@ export default function ProjectSection(){
 {  /*<!-- project-section --> */
 }<section className="project-section">
 <div className="shape">
-  <div
-    className="shape-1 rotate-me"
-    style={{ backgroundImage: 'url(assets/images/shape/shape-14.png)' }}
-
-  ></div>
+  
   <div
     className="shape-2 rotate-me"
     style={{ backgroundImage: 'url(assets/images/shape/shape-15.png)' }}
