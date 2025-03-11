@@ -18,7 +18,7 @@
   animation-name: fadeOut;
 }
 
-@-webkit-keyframes fadeOut {
+/* @-webkit-keyframes fadeOut {
   0% {
     opacity: 1;
   }
@@ -35,7 +35,7 @@
   100% {
     opacity: 0;
   }
-}
+} */
 
 /* 
  * 	Owl Carousel - Auto Height Plugin

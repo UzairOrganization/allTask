@@ -48,7 +48,7 @@
 .image_block_one .image-box:before{
   position: absolute;
   content: '';
-  background: var(--theme-color);
+  background-color: #00155A;
   width: 47px;
   height: calc(100% - 52px);
   top: 72px;
@@ -80,7 +80,7 @@
   font-size: 80px;
   line-height: 90px;
   font-family: var(--title-font);
-  color: var(--theme-color);
+  color:black !important;
 }
 
 .content_block_one .content-box .single-item h2{
