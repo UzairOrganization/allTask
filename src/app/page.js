@@ -55,10 +55,10 @@ export default function Home() {
     <>
       <body>
         <div className="boxed_wrapper ltr">
-          <PageDirection/>
+          {/* <PageDirection/>  */}
 
      {/* <!-- switcher menu --> */}
-          <SwitcherMenu/>
+          {/* <SwitcherMenu/>  */}
           {/* <!-- end switcher menu -->
 
       <!--Search Popup--> */}
