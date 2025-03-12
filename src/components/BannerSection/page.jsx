@@ -8,10 +8,10 @@ export default function BannerSection() {
         <div className="banner-carousel owl-theme owl-carousel owl-dots-none owl-nav-none">
           <div className="slide-item p_relative">
             <div
-              className="bg-layer"
-              style={{
-                backgroundImage: "url(assets/images/banner/mainBanner1.jpg)",
-              }}
+              // className="bg-layer"
+              // style={{
+              //   backgroundImage: "url(assets/images/banner/mainBanner1.jpg)",
+              // }}
             ></div>
             <div className="shape">
               <div className="shape-1"></div>

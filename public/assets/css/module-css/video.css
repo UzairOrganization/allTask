@@ -135,19 +135,29 @@
 }
 .content_block_four .inner-box .form-inner .form-group input[type='text'],
 .content_block_four .inner-box .form-inner .form-group input,
-.content_block_four .inner-box .form-inner .form-group textarea{
+.content_block_four .inner-box .form-inner .form-group select,
+.content_block_four .inner-box .form-inner .form-group textarea {
   position: relative;
   display: block;
   width: 100%;
   height: 45px;
   background: #F3F3F3;
-  border: 1px solid #DFDFDF;
+  border: none;
+  border-bottom: 2px solid #DFDFDF; /* Only bottom border */
   font-size: 16px;
   font-family: var(--title-font);
   color: #979797;
   font-weight: 600;
   padding: 10px 20px;
-  transition: all 500ms ease;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+/* Highlight bottom border when selected */
+.content_block_four .inner-box .form-inner .form-group input:focus,
+.content_block_four .inner-box .form-inner .form-group textarea:focus {
+  outline: none;
+  border-bottom: 2px solid black; /* Change color when focused */
+  background: #FFFFFF; /* Optional: change background on focus */
 }
 
 .content_block_four .inner-box .form-inner .form-group textarea{
@@ -160,7 +170,7 @@
 
 .content_block_four .inner-box .form-inner .form-group input:focus,
 .content_block_four .inner-box .form-inner .form-group textarea:focus{
-  border-color: var(--theme-color);
+  border-color: black !important;
 }
 
 
