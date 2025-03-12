@@ -100,7 +100,7 @@ export default function Home() {
           {/* <!-- testimonial-section end -->
 
       <!-- cta-section --> */}
-          <CtaSection/>
+          {/* <CtaSection/> */}
           {/* <!-- cta-section end -->
 
       <!-- main-footer --> */}

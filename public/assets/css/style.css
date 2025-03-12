@@ -401,13 +401,13 @@ img {
 }
 
 .theme-btn.btn-two:hover{
-  background: var(--theme-color);
+  background: #45535c !important;
 }
 
 .theme-btn.btn-two:before{
   position: absolute;
   content: '';
-  background: var(--theme-color);
+  background: black !important;
   width: 0%;
   height: 100%;
   left: 0px;
@@ -427,7 +427,7 @@ img {
 }
 
 .theme-btn.btn-one:hover{
-  background: var(--secondary-color) !important;
+  background: #45535c !important;
 }
 
 .theme-btn.btn-one:before{
@@ -731,20 +731,21 @@ img {
 
 /** main-header **/
 
-.main-header{
-  position:relative;
-  left:0px;
-  top:0px;
+.main-header {
+  position: relative;
+  left: 0px;
+  top: 0px;
   right: 0px;
-  z-index:999;
-  width:100%;
-  transition:all 500ms ease;
-  -moz-transition:all 500ms ease;
-  -webkit-transition:all 500ms ease;
-  -ms-transition:all 500ms ease;
-  -o-transition:all 500ms ease;
-  border: 1px solid black;
+  z-index: 999;
+  width: 100%;
+  transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -webkit-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* bottom shadow */
 }
+
 
 .sticky-header{
   position:fixed;
@@ -1809,7 +1810,7 @@ button.ltr {
 
 .main-footer{
   position: relative;
-  background: var(--secondary-color);
+  background: white;
 }
 
 .main-footer .widget-section{
@@ -1833,6 +1834,7 @@ button.ltr {
   display: inline-block;
   float: left;
   margin-right: 20px;
+  color: black !important;
 }
 
 .main-footer .logo-widget .social-links li:last-child{
@@ -1844,12 +1846,12 @@ button.ltr {
   display: inline-block;
   font-size: 16px;
   line-height: 34px;
-  color: #fff;
+  color: black;
 }
 
 .main-footer p,
 .main-footer a{
-  color: #fff;
+  color: black;
 }
 
 .main-footer a:hover{
@@ -1861,6 +1863,7 @@ button.ltr {
   display: block;
   padding-bottom: 7px;
   margin-bottom: 30px;
+  color: black;
 }
 
 .main-footer .widget-title:before{
@@ -1876,7 +1879,7 @@ button.ltr {
 .main-footer .widget-title:after{
   position: absolute;
   content: '';
-  background: var(--theme-color);
+  background: #00155A;
   width: 28px;
   height: 5px;
   left: 0px;
@@ -1887,7 +1890,7 @@ button.ltr {
 .main-footer .widget-title h3{
   font-size: 30px;
   line-height: 40px;
-  color: #fff;
+  color: black;
   font-weight: 700;
 }
 

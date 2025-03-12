@@ -70,9 +70,10 @@ export default function Header() {
               </div>
               <div className="btn-box">
                 <a href="index.html" className="theme-btn btn-two">
-                  Get A Quote{" "}
+                  Join as Professional
                 </a>
               </div>
+
             </div>
           </div>
         </div>
@@ -96,7 +97,7 @@ export default function Header() {
               <div className="search-box-outer search-toggler"></div>
               <div className="btn-box">
                 <a href="index.html" className="theme-btn btn-two">
-                  Get A Quote{" "}
+                Join as Professional{" "}
                 </a>
               </div>
             </div>

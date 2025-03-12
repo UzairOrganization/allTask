@@ -19,13 +19,14 @@
 
 .banner-carousel .slide-item {
   position: relative;
-  padding: 287px 0px;
+  padding: 147px 0px;
+  /* border: 1px solid black; */
 }
 
 .banner-carousel .slide-item:before {
   position: absolute;
   content: "";
-  background: rgba(69, 83, 92, 0.65);
+  /* background: rgba(69, 83, 92, 0.65); */
   width: 100%;
   height: 100%;
   left: 0px;
@@ -106,7 +107,7 @@
 
 .banner-carousel .content-box .category-list li a {
   display: inline-block;
-  color: white !important;
+  color: black !important;
 }
 
 .banner-carousel .content-box .category-list li a:hover {
@@ -137,7 +138,7 @@
   line-height: 90px;
   font-weight: 700;
   margin-bottom: 34px;
-  color: #fff;
+  color: black;
   opacity: 0;
   -webkit-transform: translateY(50px);
   -moz-transform: translateY(50px);
@@ -605,7 +606,7 @@
   background-color: #fff;
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   width: 60%;
   margin: auto;
 }
@@ -644,9 +645,10 @@
   width: 60%;
   display: flex;
   align-items: center;
-  border: 1px solid #ccc;
+  border: 0px 0px 1px 0px solid #ccc;
   border-radius: 4px;
   padding: 0px;
+  
 }
 .search-container-parent .search-container .mainBar input {
   outline: none;
@@ -657,7 +659,7 @@
   width: 20%;
   display: flex;
   align-items: center;
-  border: 1px solid #ccc;
+  border: 0px 0px 1px 0px solid #ccc;
   border-radius: 4px;
   padding: 0px;
 }
@@ -667,7 +669,7 @@
   margin-top: 10px;
 }
 .search-container-parent .search-container .searchBtn {
-  padding: 20px;
+  padding: 10px;
   background-color: #00115a;
   color: #fff;
   border: none;
