@@ -422,7 +422,7 @@ img {
 }
 
 .theme-btn.btn-one{
-  background: var(--theme-color);
+  background: #00155A !important;
   padding: 20px 50px;
 }
 
@@ -607,7 +607,7 @@ img {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  color: var(--theme-color);
+  color: #00155A !important;
   transition: all 500ms ease;
 }
 
@@ -652,7 +652,7 @@ img {
   line-height: 30px; 
   font-family: var(--title-font);
   font-weight: 600;
-  color: var(--theme-color);
+  color: black !important;
 }
 
 .sec-title .sub-title:before{

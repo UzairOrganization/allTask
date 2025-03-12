@@ -52,7 +52,7 @@ export default function BannerSection() {
                   <h3>Get free quotes within minutes</h3>
                   <div class="search-container">
                     <div className="mainBar">
-                    <span style={{marginLeft:"5px"}}>
+                    <span style={{marginLeft:"8px"}}>
                         <FaSearch size={25}/>
                       </span>
                       <input

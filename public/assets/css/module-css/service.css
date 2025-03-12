@@ -26,6 +26,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  margin-top: 30px;
 }
 
 .service-section .upper-box .text-box .btn-box .theme-btn{
@@ -83,7 +84,7 @@
 .service-block-one .inner-box:before{
   position: absolute;
   content: '';
-  background: var(--theme-color);
+  background: #00155A !important;
   width: 100%;
   height: 20px;
   left: 0px;
@@ -108,7 +109,7 @@
   display: inline-block;
   font-size: 100px;
   line-height: 100px;
-  color: var(--theme-color);
+  color: #00155A !important;
   margin-bottom: 25px;
 }
 
@@ -140,7 +141,7 @@
   font-size: 18px;
   line-height: 37px;
   font-weight: 700;
-  color: var(--title-color);
+  color: black;
   padding-left: 32px;
 }
 
@@ -178,14 +179,14 @@
   font-size: 20px;
   line-height: 30px;
   font-family: var(--title-font);
-  background: var(--theme-color);
+  background: #00155A !important;
   font-weight: 600;
   color: #fff;
   padding: 17.5px 30px;
 }
 
 .service-block-one .inner-box .btn-box a:hover{
-  background: var(--secondary-color) !important;
+  background: #00155A !important;
 }
 
 .service-section .owl-dots{
@@ -275,7 +276,7 @@
 .service-block-two .inner-box:after{
   position: absolute;
   content: '';
-  background: var(--secondary-color);
+  background: #00155A !important;
   width: 100%;
   height: 0%;
   left: 0px;
@@ -448,13 +449,13 @@
   font-size: 40px;
   color: #fff;
   text-align: center;
-  background: var(--secondary-color);
+  background: #00155A !important;
   z-index: 1;
   transition: all 500ms ease;
 }
 
 .service-block-three .inner-box:hover .image-box .icon-box{
-  background: var(--theme-color);
+  background: #00155A !important;
 }
 
 .service-block-three .inner-box .lower-content{
