@@ -5,6 +5,7 @@
   position: relative;
   overflow: hidden;
   padding-top: 158px;
+  margin-top:150px;
 }
 
 .video-section .bg-layer:before{
@@ -118,6 +119,7 @@
   font-weight: 700;
   margin-bottom: 9px;
   text-align: center;
+  color: black !important;
 }
 
 .content_block_four .inner-box .form-inner .form-group{

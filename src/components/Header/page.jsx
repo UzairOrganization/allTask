@@ -1,3 +1,5 @@
+import { IoMdArrowDropdown } from "react-icons/io";
+
 export default function Header() {
   return (
     <>
@@ -18,27 +20,28 @@ export default function Header() {
               </div>
               <div className="menu-area">
                 {/* <!--Mobile Navigation Toggler--> */}
-                <div className="mobile-nav-toggler">
+                {/* <div className="mobile-nav-toggler">
                   <i className="icon-bar"></i>
                   <i className="icon-bar"></i>
                   <i className="icon-bar"></i>
-                </div>
+                </div> */}
                 <nav className="main-menu navbar-expand-md navbar-light clearfix">
                   <ul className="navigation clearfix">
-                    <li className="current dropdown">
+                    <li className="current dropdown" style={{visibility:"hidden"}}>
                       <a href="index.html">Home</a>
                     </li>
-                    <li className="dropdown">
+                    <li className="dropdown" style={{visibility:"hidden"}}>
                       <a href="index.html">Services</a>
                     </li>
-                    <li className="dropdown">
+                    <li className="dropdown" style={{visibility:"hidden"}}>
                       <a href="index.html">Gallery</a>
                     </li>
-                    <li className="dropdown">
+                    <li className="dropdown" style={{visibility:"hidden"}}>
                       <a href="index.html">Customer Reviews</a>
                     </li>
-                    <li className="dropdown">
-                      <a href="index.html"> Contact Us</a>
+                    <li className="dropdown" style={{display:"flex",alignItems:"center"}}>
+                      <a href="index.html"> Explore </a>
+                      <IoMdArrowDropdown size={20} color="black"/>
                     </li>
                   </ul>
                   {/* <div
@@ -92,6 +95,7 @@ export default function Header() {
               <div className="menu-area">
                 <nav className="main-menu clearfix">
                   {/* <!--Keep This Empty / Menu will come through Javascript--> */}
+                  
                 </nav>
               </div>
               <div className="search-box-outer search-toggler"></div>

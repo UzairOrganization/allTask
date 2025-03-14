@@ -8,33 +8,13 @@ export default function BannerSection() {
         <div className="banner-carousel owl-theme owl-carousel owl-dots-none owl-nav-none">
           <div className="slide-item p_relative">
             <div
-              // className="bg-layer"
-              // style={{
-              //   backgroundImage: "url(assets/images/banner/mainBanner1.jpg)",
-              // }}
+              className="bg-layer"
+              style={{
+                backgroundImage: "url(assets/images/banner/canva1.png)",
+                objectFit:"contain"
+              }}
             ></div>
-            <div className="shape">
-              <div className="shape-1"></div>
-              <div className="shape-2"></div>
-              <div
-                className="shape-3"
-                style={{
-                  backgroundImage: "url(assets/images/shape/shape-1.png)",
-                }}
-              ></div>
-              <div
-                className="shape-4"
-                style={{
-                  backgroundImage: "url(assets/images/shape/shape-2.png)",
-                }}
-              ></div>
-              <div
-                className="shape-5"
-                style={{
-                  backgroundImage: "url(assets/images/shape/shape-3.png)",
-                }}
-              ></div>
-            </div>
+           
             <div className="auto-container">
               <div className="content-box p_relative d_block z_5">
                 <ul className="category-list mb_10 clearfix">
@@ -43,7 +23,7 @@ export default function BannerSection() {
                   </li>
                 </ul>
                 <h2 className="p_relative d_block">
-                  Alltasko - A Way to Hire
+                  Alltasko - A Way to Hire{" "}
                   <br />
                   Local Services & Professionals
                 </h2>
