@@ -811,8 +811,8 @@ img {
   -op-animation-iteration-count: 1;
   -webkit-animation-iteration-count: 1;
   animation-iteration-count: 1;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.2),
-    0 0 30px rgba(0, 0, 0, 0.2), 0 0 60px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 0, 0, 0.5); 
 }
 
 .header-style-one {
@@ -1003,8 +1003,8 @@ img {
 }
 .main-header {
   height: 92px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.2),
-    0 0 30px rgba(0, 0, 0, 0.2), 0 0 60px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 0, 0, 0.5); 
 }
 
 .main-header .outer-box {
@@ -1901,7 +1901,7 @@ button.ltr {
 } */
 
 .main-footer .widget-title h3 {
-  font-size: 30px;
+  font-size: 25px;
   line-height: 40px;
   color: black;
   font-weight: 700;

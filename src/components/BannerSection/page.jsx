@@ -8,11 +8,11 @@ export default function BannerSection() {
         <div className="banner-carousel owl-theme owl-carousel owl-dots-none owl-nav-none">
           <div className="slide-item p_relative">
             <div
-              className="bg-layer"
-              style={{
-                backgroundImage: "url(assets/images/banner/canva1.png)",
-                objectFit:"contain"
-              }}
+              // className="bg-layer"
+              // style={{
+              //   backgroundImage: "url(assets/images/banner/canva1.png)",
+              //   objectFit:"contain"
+              // }}
             ></div>
            
             <div className="auto-container">
@@ -23,9 +23,9 @@ export default function BannerSection() {
                   </li>
                 </ul>
                 <h2 className="p_relative d_block">
-                  Alltasko - A Way to Hire{" "}
+                  Alltasko -Trusted Pros{" "}
                   <br />
-                  Local Services & Professionals
+                  For Every Task.
                 </h2>
 
                 <div className="search-container-parent clearfix p_relative d_block z_5">
@@ -49,7 +49,7 @@ export default function BannerSection() {
                     <div className="searchBtn">Search</div>
                   </div>
                   <div>
-                    Popular: House Cleaning, Web Design, Personal Trainers
+                    Popular: House Cleaning, Plumbing, Personal Trainers
                   </div>
                 </div>
                 <div class="popular-services"></div>

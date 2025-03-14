@@ -31,7 +31,7 @@ const Discover = () => {
             className="item"
             onClick={() => handleSelect(id)}
             style={{
-              backgroundColor: selected === id ? "#45535C" : "transparent",
+              backgroundColor: selected === id ? "black" : "transparent",
               color: selected === id ? "white" : "black",
               cursor: "pointer",
             }}
@@ -52,7 +52,7 @@ const Discover = () => {
                 width={300}
                 height={200}
               />
-              <h3>Gernal Furniture Assemble</h3>
+              <h3>Furniture Assemble</h3>
             </div>
             <div className="item">
               <Image
@@ -70,14 +70,7 @@ const Discover = () => {
               />
               <h3>Crib Assemble</h3>
             </div>
-            <div className="item">
-              <Image
-                src={"/assets/images/discover/asssemble4.jpg"}
-                width={300}
-                height={200}
-              />
-              <h3>PAX Assemble</h3>
-            </div>
+            
           </>
         )}
         {selected == 2 && (
@@ -106,14 +99,7 @@ const Discover = () => {
               />
               <h3>Mount & Anchor Furniture</h3>
             </div>
-            <div className="item">
-              <Image
-                src={"/assets/images/discover/mount4.jpg"}
-                width={300}
-                height={200}
-              />
-              <h3>TV Mounting</h3>
-            </div>
+           
           </>
         )}
 
@@ -143,14 +129,7 @@ const Discover = () => {
               />
               <h3>Trash & Furniture Removal</h3>
             </div>
-            <div className="item">
-              <Image
-                src={"/assets/images/discover/move4.jpg"}
-                width={300}
-                height={200}
-              />
-              <h3>Heavy Lifting & Loading</h3>
-            </div>
+           
           </>
         )}
 
@@ -180,14 +159,7 @@ const Discover = () => {
               />
               <h3>Apartment Cleaning</h3>
             </div>
-            <div className="item">
-              <Image
-                src={"/assets/images/discover/clean4.jpg"}
-                width={300}
-                height={200}
-              />
-              <h3>Garage Cleaning</h3>
-            </div>
+          
           </>
         )}
         {selected == 5 && (
@@ -216,14 +188,7 @@ const Discover = () => {
               />
               <h3>Snow Removal</h3>
             </div>
-            <div className="item">
-              <Image
-                src={"/assets/images/discover/outdoor4.jpg"}
-                width={300}
-                height={200}
-              />
-              <h3>Branch & Hedge Trimming</h3>
-            </div>
+           
             
           </>
         )}
@@ -253,14 +218,7 @@ const Discover = () => {
               />
               <h3>Electric Help</h3>
             </div>
-            <div className="item">
-              <Image
-                src={"/assets/images/discover/home4.jpg"}
-                width={300}
-                height={200}
-              />
-              <h3>Plumbing Help</h3>
-            </div>
+            
             
           </>
         )}
@@ -290,14 +248,7 @@ const Discover = () => {
               />
               <h3>Outdoor Painting</h3>
             </div>
-            <div className="item">
-              <Image
-                src={"/assets/images/discover/paint4.jpg"}
-                width={300}
-                height={200}
-              />
-              <h3>Concrete & Brick Painting</h3>
-            </div>
+           
             
           </>
         )}

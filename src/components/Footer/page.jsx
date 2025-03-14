@@ -166,12 +166,13 @@ export default function Footer() {
           </div>
           <div className="footer-bottom centred">
             <div className="copyright">
-              <p>
+              <p style={{color:"gray"}}>
                 Copyright &copy; 2025 All rights reserved. Designed & Developed
                 by Technovativelab
               </p>
             </div>
           </div>
+
         </div>
       </footer>
       {/* <!-- main-footer end --> */}{" "}
