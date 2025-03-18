@@ -1,0 +1,183 @@
+:root {
+  --theme-color: #fc6000;
+  --secondary-color: #00155a;
+  --pink-color: #ffc0cb;
+  --violet-color: #7f00ff;
+  --crimson-color: #dc143c;
+  --orange-color: #ffa500;
+  --text-color: #666f77;
+  --title-color: #00155a;
+  --text-font: "Rubik", sans-serif;
+  --title-font: "Rajdhani", sans-serif;
+}
+
+.discoverSection {
+  display: flex;
+  width: 80%;
+  margin: auto;
+  justify-content: space-around;
+  margin-top: -120px;
+}
+.discoverSection .item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+  width: 150px;
+  transition: 0.9s all;
+}
+@media (min-width: 300px) and (max-width: 800px) {
+  .discoverSection {
+    overflow-x: scroll;
+    gap: 20px;
+    width: 90%;
+  }
+  .discoverSection .item h3 {
+    text-align: center;
+    white-space: nowrap;
+  }
+  .discoverCartsSection {
+    width: 90%;
+  }
+}
+.discoverSection .item h3 {
+  color: black;
+  font-size: 18px;
+}
+
+.discoverCartsSection {
+  display: flex;
+  width: 72%;
+  margin: auto;
+  justify-content: center;
+  gap: 55px;
+  padding-top: 60px;
+  flex-wrap: wrap;
+}
+.discoverCartsSection .item {
+  width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+.discoverCartsSection .item img {
+  border-radius: 10px;
+  object-fit: cover;
+}
+.discoverCartsSection .item h3 {
+  color: black;
+  font-size: 20px;
+  padding: 6px 6px;
+  text-align: center;
+}
+.trendingSection {
+  width: 100%;
+  margin-top: 200px;
+  background-color: rgba(235, 231, 231, 0.85);
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+.trendingSection .item {
+  width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease-in-out;
+  background-color: white;
+}
+.trendingSection .head {
+  width: 80%;
+  margin: auto;
+  margin-bottom: 40px;
+}
+@media (min-width: 300px) and (max-width: 800px) {
+  .trendingSection .head h2 {
+    text-align: center;
+    font-size: 30px;
+  }
+  .trendingSection {
+    margin-top: 100px;
+  }
+}
+.trendingSection .head h2 {
+  color: black;
+  font-size: 40px;
+  font-family: var(--title-font);
+  font-weight: 700;
+}
+
+.trendingSection .item:nth-child(odd) {
+  transform: translateY(-20px);
+}
+.trendingSection .item:nth-child(even) {
+  transform: translateY(20px);
+}
+
+.trendingSection .item img {
+  border-radius: 10px;
+  object-fit: cover;
+}
+.trendingSection .item h3 {
+  color: black;
+  font-size: 20px;
+  padding: 6px 0px 6px 6px;
+  text-align: left;
+  font-family: "Rajdhani", sans-serif;
+}
+.marqueeContent {
+  display: flex;
+  gap: 30px; /* Space between items */
+  margin-left: 30px;
+  padding-bottom: 50px;
+  padding-top: 50px;
+}
+
+.container321 {
+  background-color: #f5f5f5;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 150px;
+}
+.logos321 {
+  display: flex;
+  gap: 85px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  width: 100%;
+  padding: 10px;
+}
+.logo321 {
+  opacity: 0.5;
+  transition: opacity 0.3s ease-in-out;
+  max-height: 25px;
+  width: auto;
+}
+.logo321:hover {
+  opacity: 1;
+}
+@media (max-width: 768px) {
+  .logos321 {
+    gap: 20px;
+  }
+  .logo321 {
+    max-height: 40px;
+  }
+}
+@media (max-width: 480px) {
+  .logos321 {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .logo321 {
+    max-height: 35px;
+  }
+}

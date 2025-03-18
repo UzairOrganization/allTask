@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "node init && next dev --turbopack",
+    "build": "node init && next build",
+    "lint": "next lint",
+    "start": "node init && NODE_ENV=production node server.js"
   },
   "dependencies": {
     "next": "15.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-fast-marquee": "^1.6.5",
     "react-icons": "^5.5.0"
   },
   "devDependencies": {
