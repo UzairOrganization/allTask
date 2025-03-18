@@ -10,31 +10,11 @@ export default function BannerSection() {
             <div
               // className="bg-layer"
               // style={{
-              //   backgroundImage: "url(assets/images/banner/mainBanner1.jpg)",
+              //   backgroundImage: "url(assets/images/banner/canva1.png)",
+              //   objectFit:"contain"
               // }}
             ></div>
-            <div className="shape">
-              <div className="shape-1"></div>
-              <div className="shape-2"></div>
-              <div
-                className="shape-3"
-                style={{
-                  backgroundImage: "url(assets/images/shape/shape-1.png)",
-                }}
-              ></div>
-              <div
-                className="shape-4"
-                style={{
-                  backgroundImage: "url(assets/images/shape/shape-2.png)",
-                }}
-              ></div>
-              <div
-                className="shape-5"
-                style={{
-                  backgroundImage: "url(assets/images/shape/shape-3.png)",
-                }}
-              ></div>
-            </div>
+           
             <div className="auto-container">
               <div className="content-box p_relative d_block z_5">
                 <ul className="category-list mb_10 clearfix">
@@ -43,9 +23,9 @@ export default function BannerSection() {
                   </li>
                 </ul>
                 <h2 className="p_relative d_block">
-                  Alltasko - A Way to Hire
+                  Alltasko -Trusted Pros{" "}
                   <br />
-                  Local Services & Professionals
+                  For Every Task.
                 </h2>
 
                 <div className="search-container-parent clearfix p_relative d_block z_5">
@@ -69,7 +49,7 @@ export default function BannerSection() {
                     <div className="searchBtn">Search</div>
                   </div>
                   <div>
-                    Popular: House Cleaning, Web Design, Personal Trainers
+                    Popular: House Cleaning, Plumbing, Personal Trainers
                   </div>
                 </div>
                 <div class="popular-services"></div>

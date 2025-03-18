@@ -18,12 +18,7 @@ export default function TestimonialSection() {
   </div>
   <div className="auto-container">
     <div className="sec-title mb_60 centred">
-      <div className="icon-inner mb_10">
-        <div className="icon-box">
-          <i className="icon-5"></i>
-        </div>
-      </div>
-      <span className="sub-title mb_17">TESTIMONIAL</span>
+      
       <h2>Client Feedback</h2>
     </div>
     <div className="two-item-carousel owl-carousel owl-theme owl-nav-none">
