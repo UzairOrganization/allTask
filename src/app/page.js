@@ -15,6 +15,10 @@ import TestimonialSection from "@/components/TestimonialSection/page";
 import CtaSection from "@/components/CtaSection/page";
 import Footer from "@/components/Footer/page";
 import ScrollToTop from "@/components/ScrollToTop/page";
+import Discover from "@/components/DiscoverSection/Discover";
+import DiscoverCart from "@/components/DiscoverCartsSection/DiscoverCart";
+import Trending from "@/components/TrendingServicesSections/Trending";
+import Company from "@/components/CompanySection/Company";
 export const metadata = {
   title: "AllTasko",
   icons: {
@@ -44,6 +48,7 @@ export const metadata = {
       "/assets/css/module-css/testimonial.css",
       "/assets/css/module-css/news.css",
       "/assets/css/module-css/cta.css",
+      "/assets/css/module-css/discover.css",
       "/assets/css/responsive.css",
       "https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap",
       "https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap",
@@ -55,61 +60,18 @@ export default function Home() {
     <>
       <body>
         <div className="boxed_wrapper ltr">
-          {/* <PageDirection/>  */}
 
-     {/* <!-- switcher menu --> */}
-          {/* <SwitcherMenu/>  */}
-          {/* <!-- end switcher menu -->
+          <SearchPopup />
+          <Header />
+          <MobileMenu />
+          <BannerSection />
+          <Discover />
+          <Trending />
+          <VideoSection />
+          <ProjectSection />
+          <TestimonialSection />
 
-      <!--Search Popup--> */}
-          <SearchPopup/>
-
-          {/* <!-- main header --> */}
-            {/* <!-- header-top -->
-
-        <!-- header-lower --> */}
-            <Header/>
-          {/* <!-- main-header end -->
-
-      <!-- Mobile Menu  --> */}
-          <MobileMenu/>
-          {/* <!-- End Mobile Menu -->
-
-      <!-- banner-section --> */}
-         <BannerSection/>
-          {/* <!-- banner-section end -->
-
-      <!-- about-section --> */}
-          <AboutSection/>
-          {/* <!-- about-section end -->
-
-      <!-- service-section --> */}
-          <ServiceSection/>
-          {/* <!-- service-section end -->
-
-      <!-- project-section --> */}
-          <ProjectSection/>
-          {/* <!-- project-section end -->
-
-      <!-- video-section --> */}
-          <VideoSection/>
-          {/* <!-- video-section end -->
-
-      <!-- testimonial-section --> */}
-        <TestimonialSection/>
-          {/* <!-- testimonial-section end -->
-
-      <!-- cta-section --> */}
-          {/* <CtaSection/> */}
-          {/* <!-- cta-section end -->
-
-      <!-- main-footer --> */}
-          <Footer/>
-          {/* <!-- main-footer end --> */}
-
-          {/* <!--Scroll to top--> */}
-          <ScrollToTop/>
-          {/* <!-- Scroll to top end --> */}
+          <Footer />
         </div>
       </body>
       <Script src="/assets/js/jquery.js" strategy="beforeInteractive" />

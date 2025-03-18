@@ -3,13 +3,14 @@
 
 .project-section{
   position: relative;
-  padding: 140px 0px 125px 0px;
+  padding: 140px 0px 0px 0px;
 }
 
 .project-block-one .inner-box{
   position: relative;
   display: block;
   overflow: hidden;
+  height: 350px;
 }
 
 .project-block-one .inner-box .image-box{
@@ -23,6 +24,7 @@
   width: 100%;
   border-radius: 20px;
   transition: all 500ms ease;
+  height: 100%;
 }
 
 .project-block-one .inner-box:hover .image-box img{
