@@ -19,6 +19,7 @@ import Discover from "@/components/DiscoverSection/Discover";
 import DiscoverCart from "@/components/DiscoverCartsSection/DiscoverCart";
 import Trending from "@/components/TrendingServicesSections/Trending";
 import Company from "@/components/CompanySection/Company";
+import AppSection from "@/components/AppSection/AppSection";
 export const metadata = {
   title: "AllTasko",
   icons: {
@@ -67,7 +68,8 @@ export default function Home() {
           <BannerSection />
           <Discover />
           <Trending />
-          <VideoSection />
+          {/* <VideoSection /> */}
+          <AppSection />
           <ProjectSection />
           <TestimonialSection />
 
