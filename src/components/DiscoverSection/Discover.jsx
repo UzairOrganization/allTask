@@ -31,9 +31,14 @@ const Discover = () => {
             className="item"
             onClick={() => handleSelect(id)}
             style={{
-              backgroundColor: selected === id ? "black" : "transparent",
+              backgroundColor: selected === id ? "#008B6E" : "transparent",
               color: selected === id ? "white" : "black",
               cursor: "pointer",
+              // boxShadow:
+              //   selected == id
+              //     ? "0 0 5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 0, 0, 0.3), 0 0 60px rgba(0, 0, 0, 0.3)"
+              //     : "none",
+              
             }}
           >
             <Icon size={30} color={selected === id ? "white" : "black"} />
@@ -70,7 +75,6 @@ const Discover = () => {
               />
               <h3>Crib Assemble</h3>
             </div>
-            
           </>
         )}
         {selected == 2 && (
@@ -99,7 +103,6 @@ const Discover = () => {
               />
               <h3>Mount & Anchor Furniture</h3>
             </div>
-           
           </>
         )}
 
@@ -129,7 +132,6 @@ const Discover = () => {
               />
               <h3>Trash & Furniture Removal</h3>
             </div>
-           
           </>
         )}
 
@@ -159,7 +161,6 @@ const Discover = () => {
               />
               <h3>Apartment Cleaning</h3>
             </div>
-          
           </>
         )}
         {selected == 5 && (
@@ -188,11 +189,9 @@ const Discover = () => {
               />
               <h3>Snow Removal</h3>
             </div>
-           
-            
           </>
         )}
-         {selected == 6 && (
+        {selected == 6 && (
           <>
             <div className="item">
               <Image
@@ -218,8 +217,6 @@ const Discover = () => {
               />
               <h3>Electric Help</h3>
             </div>
-            
-            
           </>
         )}
         {selected == 7 && (
@@ -248,8 +245,6 @@ const Discover = () => {
               />
               <h3>Outdoor Painting</h3>
             </div>
-           
-            
           </>
         )}
       </div>

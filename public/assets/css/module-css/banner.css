@@ -19,7 +19,7 @@
 
 .banner-carousel .slide-item {
   position: relative;
-  padding: 147px 0px;
+  padding: 100px 0px;
 }
 
 .banner-carousel .slide-item:before {
@@ -133,7 +133,7 @@
 }
 
 .banner-carousel .content-box h2 {
-  font-size: 80px;
+  font-size: 42px;
   line-height: 90px;
   font-weight: 700;
   margin-bottom: 34px;
@@ -615,8 +615,8 @@
   background-color: #fff;
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 0, 0, 0.6),
-    0 0 30px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 0, 0, 0.6); 
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05), 0 0 15px rgba(0, 0, 0, 0.05),
+    0 0 30px rgba(0, 0, 0, 0.05), 0 0 60px rgba(0, 0, 0, 0.05); 
   width: 60%;
   margin: auto;
 }
@@ -679,13 +679,15 @@
 }
 .search-container-parent .search-container .searchBtn {
   padding: 10px;
-  background-color: black;
+  background-color: #008B6E;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   width: 20%;
   font-size: 20px;
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 0, 0, 0.3),
+  0 0 30px rgba(0, 0, 0, 0.3), 0 0 60px rgba(0, 0, 0, 0.3);  */
 }
 .search-container-parent .search-container button:hover {
   background-color: #0056b3;

@@ -428,10 +428,12 @@ img {
   border-radius: 40px;
   z-index: 1;
   transition: all 500ms ease;
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(0, 0, 0, 0.3), 0 0 60px rgba(0, 0, 0, 0.3); */
 }
 
 .theme-btn.btn-two {
-  background: black;
+  background: #008b6e;
   padding: 10px 30px;
 }
 
@@ -811,8 +813,8 @@ img {
   -op-animation-iteration-count: 1;
   -webkit-animation-iteration-count: 1;
   animation-iteration-count: 1;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 0, 0, 0.5),
-    0 0 30px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 0, 0, 0.5); 
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05), 0 0 15px rgba(0, 0, 0, 0.05),
+    0 0 30px rgba(0, 0, 0, 0.05), 0 0 60px rgba(0, 0, 0, 0.05);
 }
 
 .header-style-one {
@@ -1003,8 +1005,8 @@ img {
 }
 .main-header {
   height: 92px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 0, 0, 0.5),
-    0 0 30px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 0, 0, 0.5); 
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05), 0 0 15px rgba(0, 0, 0, 0.05),
+    0 0 30px rgba(0, 0, 0, 0.05), 0 0 60px rgba(0, 0, 0, 0.05);
 }
 
 .main-header .outer-box {
@@ -1012,6 +1014,9 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.main-header .outer-box .logo {
+  width: 140px;
 }
 
 .main-header .search-box-outer {
@@ -1840,6 +1845,7 @@ button.ltr {
   position: relative;
   display: block;
   margin-bottom: 20px;
+  width: 130px;
 }
 
 .main-footer .logo-widget .social-links li {

@@ -17,14 +17,9 @@ export default function BannerSection() {
            
             <div className="auto-container">
               <div className="content-box p_relative d_block z_5">
-                <ul className="category-list mb_10 clearfix">
-                  <li>
-                    <a href="index.html">Handyman Services</a>
-                  </li>
-                </ul>
+                
                 <h2 className="p_relative d_block">
-                  Alltasko -Trusted Pros{" "}
-                  <br />
+                  Alltasko - Trusted Pros 
                   For Every Task.
                 </h2>
 
