@@ -1,25 +1,17 @@
 import Image from "next/image";
 import Script from "next/script";
 import generateStylesheetObject from "@/common/generateStylesheetsObject";
-import PageDirection from "@/components/PageDirection/page";
-import SwitcherMenu from "@/components/SwitcherMenu/page";
 import SearchPopup from "@/components/SearchPopup/page";
 import Header from "@/components/Header/page";
 import MobileMenu from "@/components/MobileMenu/page";
 import BannerSection from "@/components/BannerSection/page";
-import AboutSection from "@/components/AboutSection/page";
-import ServiceSection from "@/components/ServiceSection/page";
 import ProjectSection from "@/components/ProjectSection/page";
-import VideoSection from "@/components/VideoSection/page";
 import TestimonialSection from "@/components/TestimonialSection/page";
-import CtaSection from "@/components/CtaSection/page";
 import Footer from "@/components/Footer/page";
-import ScrollToTop from "@/components/ScrollToTop/page";
 import Discover from "@/components/DiscoverSection/Discover";
-import DiscoverCart from "@/components/DiscoverCartsSection/DiscoverCart";
 import Trending from "@/components/TrendingServicesSections/Trending";
-import Company from "@/components/CompanySection/Company";
 import AppSection from "@/components/AppSection/AppSection";
+import { ThemeToggle } from "@/components/ThemeToggle/ThemeToogle";
 export const metadata = {
   title: "AllTasko",
   icons: {
@@ -64,6 +56,7 @@ export default function Home() {
 
           <SearchPopup />
           <Header />
+          <ThemeToggle />
           <MobileMenu />
           <BannerSection />
           <Discover />
@@ -77,7 +70,7 @@ export default function Home() {
         </div>
       </body>
       <Script src="/assets/js/jquery.js" strategy="beforeInteractive" />
-      <Script src="/assets/js/bootstrap.min.js" strategy="beforeInteractive" />
+      {/* <Script src="/assets/js/bootstrap.min.js" strategy="beforeInteractive" /> */}
 
       <Script strategy="beforeInteractive" src="/assets/js/owl.js"></Script>
       <Script strategy="beforeInteractive" src="/assets/js/wow.js"></Script>
