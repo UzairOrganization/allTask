@@ -108,11 +108,34 @@ body {
 
 .auto-container {
   position: static;
-  max-width: 1330px;
-  padding: 0px 15px;
-  margin: 0 auto;
+  max-width: 1450px;
+  padding: 0px 10px;
+  margin: auto;
 }
+@media (min-width:1600px) and (max-width:1700px) {
+  .auto-container{
+    width: 1400px ;
+  }
 
+}
+@media (min-width:1500px) and (max-width:1600px) {
+  .auto-container{
+    width: 1300px ;
+  }
+
+}
+@media (min-width:1400px) and (max-width:1500px) {
+  .auto-container{
+    width: 1200px ;
+  }
+
+}
+@media (min-width:1300px) and (max-width:1400px) {
+  .auto-container{
+    width: 1150px ;
+  }
+
+}
 .small-container {
   max-width: 680px;
   margin: 0 auto;
@@ -784,7 +807,7 @@ img {
 }
 
 .sticky-header .outer-box {
-  width: 80%;
+  width: 95%;
 }
 
 .fixed-header .sticky-header {
@@ -1014,7 +1037,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 80%;
+  width: 95%;
   margin: auto;
   height: 92px;
 }
