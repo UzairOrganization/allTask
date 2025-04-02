@@ -49,54 +49,28 @@ export const metadata = {
   },
 };
 export default function Home() {
+
   return (
     <>
       <body>
         <div className="boxed_wrapper ltr">
-
           <SearchPopup />
           <Header />
-          <ThemeToggle />
           <MobileMenu />
           <BannerSection />
           <Discover />
           <Trending />
-          {/* <VideoSection /> */}
           <AppSection />
           <ProjectSection />
           <TestimonialSection />
-
           <Footer />
         </div>
       </body>
       <Script src="/assets/js/jquery.js" strategy="beforeInteractive" />
       {/* <Script src="/assets/js/bootstrap.min.js" strategy="beforeInteractive" /> */}
-
       <Script strategy="beforeInteractive" src="/assets/js/owl.js"></Script>
       <Script strategy="beforeInteractive" src="/assets/js/wow.js"></Script>
-      <Script
-        strategy="beforeInteractive"
-        src="/assets/js/validation.js"
-      ></Script>
-      <Script
-        strategy="beforeInteractive"
-        src="/assets/js/jquery.fancybox.js"
-      ></Script>
-
-      <Script strategy="beforeInteractive" src="/assets/js/appear.js"></Script>
-      <Script strategy="beforeInteractive" src="/assets/js/isotope.js"></Script>
-      <Script
-        strategy="beforeInteractive"
-        src="/assets/js/parallax-scroll.js"
-      ></Script>
-      <Script
-        strategy="beforeInteractive"
-        src="/assets/js/jquery.nice-select.min.js"
-      ></Script>
-      <Script
-        strategy="beforeInteractive"
-        src="/assets/js/jQuery.style.switcher.min.js"
-      ></Script>
+     
 
       {/* <Script src="/assets/js/smoother-script.js" strategy="lazyOnload" /> */}
 
