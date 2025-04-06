@@ -1,0 +1,71 @@
+@import url("./css/bootstrap.css");
+/* @import url("./css/font-awesome-all.css"); */
+@import url("./css/owl.css");
+@import url("./css/animate.css");
+@import url("./css/nice-select.css");
+@import url("./css/style.css");
+@import url("./css/responsive.css");
+
+/* Module-Specific Styles */
+@import url("./css/module-css/banner.css");
+@import url("./css/module-css/about.css");
+@import url("./css/module-css/service.css");
+@import url("./css/module-css/service-intro.css");
+@import url("./css/module-css/clients.css");
+@import url("./css/module-css/chooseus.css");
+@import url("./css/module-css/project.css");
+@import url("./css/module-css/video.css");
+@import url("./css/module-css/testimonial.css");
+@import url("./css/module-css/news.css");
+@import url("./css/module-css/cta.css");
+@import url("./css/module-css/discover.css");
+
+/* Import Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* === Home Page Specific Styling === */
+.boxed_wrapper {
+  background: #f8f8f8;
+}
+
+/* Header Adjustments */
+.header {
+  background-color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Banner Section */
+.banner {
+  padding: 100px 0;
+  text-align: center;
+  background: url("./imgs/banner.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+/* Project Section */
+.project-section {
+  padding: 80px 0;
+  background-color: #f0f0f0;
+}
+
+/* Testimonial Section */
+.testimonial-section {
+  padding: 60px 0;
+  background-color: #ffffff;
+}
+
+/* Footer */
+.footer {
+  background-color: #222;
+  color: #fff;
+  padding: 50px 0;
+  text-align: center;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .banner {
+    padding: 50px 0;
+  }
+}

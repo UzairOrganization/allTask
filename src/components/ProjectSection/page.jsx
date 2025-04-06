@@ -1,179 +1,155 @@
+"use client"
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation'; // For navigation arrows (if needed)
+import 'swiper/css/pagination'; // For pagination (if needed)
+// import { Navigation, Pagination } from 'swiper';
+
 export default function ProjectSection() {
   return (
     <>
-      {/*<!-- project-section --> */}
       <section className="project-section">
         <div className="auto-container">
           <div className="sec-title mb_60 centred">
-            {/* <div className="icon-inner mb_10">
-      <div className="icon-box">
-        <i className="icon-5"></i>
-      </div>
-    </div> */}
             <h2>
               Our Recent Projects
               <br />
               Gallery
             </h2>
           </div>
-          <div className="three-item-carousel owl-carousel owl-theme owl-nav-none">
-            <div className="project-block-one">
-              <div className="inner-box">
-                <figure className="image-box">
-                  <img src="assets/images/gallery/gallery1.jpg" alt="" />
-                </figure>
-                <div className="content-box">
-                  <h3>
-                    <a href="index.html">Completed Industrial Projects</a>
-                  </h3>
-                  <div className="link">
-                    <a href="index.html">
-                      <i className="icon-13"></i>
-                    </a>
+
+          {/* Swiper Carousel */}
+          <Swiper
+            spaceBetween={30} // Space between slides
+            slidesPerView={3} // Display 3 items at once
+            loop={true} // Infinite loop
+            // Import necessary modules
+            breakpoints={{
+              320: { slidesPerView: 1 },
+              768: { slidesPerView: 2 }, 
+              1020: { slidesPerView: 3 }, // Tablets and above
+            }}
+            className="three-item-carousel"
+          >
+            <SwiperSlide>
+              <div className="project-block-one">
+                <div className="inner-box">
+                  <figure className="image-box">
+                    <img src="assets/images/gallery/gallery1.jpg" alt="" />
+                  </figure>
+                  <div className="content-box">
+                    <h3>
+                      <a href="index.html">Completed Industrial Projects</a>
+                    </h3>
+                    <div className="link">
+                      <a href="index.html">
+                        <i className="icon-13"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="project-block-one">
-              <div className="inner-box">
-                <figure className="image-box">
-                  <img src="assets/images/gallery/gallery2.jpg" alt="" />
-                </figure>
-                <div className="content-box">
-                  <h3>
-                    <a href="index.html">Handymen projects</a>
-                  </h3>
-                  <div className="link">
-                    <a href="index.html">
-                      <i className="icon-13"></i>
-                    </a>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="project-block-one">
+                <div className="inner-box">
+                  <figure className="image-box">
+                    <img src="assets/images/gallery/gallery2.jpg" alt="" />
+                  </figure>
+                  <div className="content-box">
+                    <h3>
+                      <a href="index.html">Handymen projects</a>
+                    </h3>
+                    <div className="link">
+                      <a href="index.html">
+                        <i className="icon-13"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="project-block-one">
-              <div className="inner-box">
-                <figure className="image-box">
-                  <img src="assets/images/gallery/gallery3.jpg" alt="" />
-                </figure>
-                <div className="content-box">
-                  <h3>
-                    <a href="index.html">Completed Constraction Projects</a>
-                  </h3>
-                  <div className="link">
-                    <a href="index.html">
-                      <i className="icon-13"></i>
-                    </a>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="project-block-one">
+                <div className="inner-box">
+                  <figure className="image-box">
+                    <img src="assets/images/gallery/gallery3.jpg" alt="" />
+                  </figure>
+                  <div className="content-box">
+                    <h3>
+                      <a href="index.html">Completed Construction Projects</a>
+                    </h3>
+                    <div className="link">
+                      <a href="index.html">
+                        <i className="icon-13"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="project-block-one">
-              <div className="inner-box">
-                <figure className="image-box">
-                  <img src="assets/images/gallery/gallery1.jpg" alt="" />
-                </figure>
-                <div className="content-box">
-                  <h3>
-                    <a href="index.html">Completed Industrial Projects</a>
-                  </h3>
-                  <div className="link">
-                    <a href="index.html">
-                      <i className="icon-13"></i>
-                    </a>
+            </SwiperSlide>
+
+            {/* Add more slides as needed */}
+            <SwiperSlide>
+              <div className="project-block-one">
+                <div className="inner-box">
+                  <figure className="image-box">
+                    <img src="assets/images/gallery/gallery1.jpg" alt="" />
+                  </figure>
+                  <div className="content-box">
+                    <h3>
+                      <a href="index.html">Completed Industrial Projects</a>
+                    </h3>
+                    <div className="link">
+                      <a href="index.html">
+                        <i className="icon-13"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="project-block-one">
-              <div className="inner-box">
-                <figure className="image-box">
-                  <img src="assets/images/gallery/gallery2.jpg" alt="" />
-                </figure>
-                <div className="content-box">
-                  <h3>
-                    <a href="index.html">Handymen projects</a>
-                  </h3>
-                  <div className="link">
-                    <a href="index.html">
-                      <i className="icon-13"></i>
-                    </a>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="project-block-one">
+                <div className="inner-box">
+                  <figure className="image-box">
+                    <img src="assets/images/gallery/gallery2.jpg" alt="" />
+                  </figure>
+                  <div className="content-box">
+                    <h3>
+                      <a href="index.html">Handymen Projects</a>
+                    </h3>
+                    <div className="link">
+                      <a href="index.html">
+                        <i className="icon-13"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="project-block-one">
-              <div className="inner-box">
-                <figure className="image-box">
-                  <img src="assets/images/gallery/gallery3.jpg" alt="" />
-                </figure>
-                <div className="content-box">
-                  <h3>
-                    <a href="index.html">Handymen projects</a>
-                  </h3>
-                  <div className="link">
-                    <a href="index.html">
-                      <i className="icon-13"></i>
-                    </a>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="project-block-one">
+                <div className="inner-box">
+                  <figure className="image-box">
+                    <img src="assets/images/gallery/gallery3.jpg" alt="" />
+                  </figure>
+                  <div className="content-box">
+                    <h3>
+                      <a href="index.html">Completed Handymen Projects</a>
+                    </h3>
+                    <div className="link">
+                      <a href="index.html">
+                        <i className="icon-13"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="project-block-one">
-              <div className="inner-box">
-                <figure className="image-box">
-                  <img src="assets/images/gallery/gallery1.jpg" alt="" />
-                </figure>
-                <div className="content-box">
-                  <h3>
-                    <a href="index.html">Handymen projects</a>
-                  </h3>
-                  <div className="link">
-                    <a href="index.html">
-                      <i className="icon-13"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="project-block-one">
-              <div className="inner-box">
-                <figure className="image-box">
-                  <img src="assets/images/gallery/gallery2.jpg" alt="" />
-                </figure>
-                <div className="content-box">
-                  <h3>
-                    <a href="index.html">Handymen projects</a>
-                  </h3>
-                  <div className="link">
-                    <a href="index.html">
-                      <i className="icon-13"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="project-block-one">
-              <div className="inner-box">
-                <figure className="image-box">
-                  <img src="assets/images/gallery/gallery3.jpg" alt="" />
-                </figure>
-                <div className="content-box">
-                  <h3>
-                    <a href="index.html">Handymen projects</a>
-                  </h3>
-                  <div className="link">
-                    <a href="index.html">
-                      <i className="icon-13"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            </SwiperSlide>
+          </Swiper>
         </div>
       </section>
-      {/* <!-- project-section end -->*/}{" "}
     </>
   );
 }
