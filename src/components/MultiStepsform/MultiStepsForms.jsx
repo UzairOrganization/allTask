@@ -16,13 +16,24 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
     const [step, setStep] = useState(1)
     const [loading, setLoading] = useState(true)
     const [formConfig, setFormConfig] = useState(null)
-    const availableProviders = JSON.parse(localStorage.getItem('availableProviders'))
-    const categoryHierarchy = JSON.parse(localStorage.getItem('categoryHierarchy'))
+    const [availableProviders, setAvailableProviders] = useState(null)
+    const [categoryHierarchy, setCategoryHierarchy] = useState(null)
     const finalFormData = new FormData()
     useEffect(() => {
+        // Check if the code is running on the client-side
+        if (typeof window !== "undefined") {
+            const storedProviders = localStorage.getItem('availableProviders');
+            const storedCategoryHierarchy = localStorage.getItem('categoryHierarchy');
+
+            if (storedProviders && storedCategoryHierarchy) {
+                setAvailableProviders(JSON.parse(storedProviders));
+                setCategoryHierarchy(JSON.parse(storedCategoryHierarchy));
+            }
+        }
+
         const fetchFormConfig = async () => {
             try {
-                const response = await API.get(`/api/leads/getFormConfig/${categoryHierarchy.category}`)
+                const response = await API.get(`/api/leads/getFormConfig/${categoryHierarchy?.category}`)
                 if (response.data.success) {
                     setFormConfig(response.data.data)
                     setLoading(false)
@@ -35,9 +46,12 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
                 setLoading(false)
             }
         }
-        fetchFormConfig()
 
-    }, [])
+        if (categoryHierarchy) {
+            fetchFormConfig()
+        }
+
+    }, [categoryHierarchy])
 
 
     const next = () => setStep(prev => prev + 1)

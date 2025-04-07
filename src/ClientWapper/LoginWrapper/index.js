@@ -35,7 +35,7 @@ const LoginWrapper = () => {
     // Handle form submission
     const handleGoogleSignin = async (e) => {
         e.preventDefault();
-        window.location.href = "http://localhost:5000/auth/google";  // Corrected assignment
+        window.location.href = "http://107.22.128.80:5000/auth/google";  // Corrected assignment
     };
 
 
@@ -138,12 +138,12 @@ const LoginWrapper = () => {
                             By clicking Continue with Facebook, or Google you agree to the
                             <a href="#" className="underline"> Terms of Use</a> and
                             <a href="#" className="underline"> Privacy Policy</a>.
-                            We'll keep you logged in.
+                            We&apos;ll keep you logged in.
                         </p>
                     </div>
                 </div >
                 <div className="mt-3">
-                    <h3 className="text-center font-semibold"> Don't have an account? <span className="text-[#007D63]"> <Link href={"/register-email"}> Sign up</Link> </span></h3>
+                    <h3 className="text-center font-semibold"> Don&apos;t have an account? <span className="text-[#007D63]"> <Link href={"/register-email"}> Sign up</Link> </span></h3>
                 </div>
             </div>
         </>
