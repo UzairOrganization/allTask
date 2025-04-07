@@ -58,11 +58,7 @@
   transition: all 8000ms linear; */
 }
 
-.banner-carousel .active .slide-item .bg-layer {
-  /* -webkit-transform: scale(1.25);
-  -ms-transform: scale(1.25);
-  transform: scale(1.25); */
-}
+
 
 .banner-carousel .content-box .category-list {
   position: relative;
@@ -737,13 +733,13 @@
   width: 100%;
   background-color: #fff;
   /* border: 1px solid #ccc; */
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-  height: 400px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
   /* Limit dropdown height */
   overflow-y: auto;
   z-index: 10;
   /* padding-bottom: 10px; */
-  
+
 }
 
 .suggestion-item {
@@ -756,4 +752,9 @@
 
 .suggestion-item:hover {
   background-color: #f1f1f1;
+}
+
+.request-service {
+  font-weight: 500;
+  color: #555;
 }

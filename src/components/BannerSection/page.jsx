@@ -3,43 +3,108 @@ import { IoLocationSharp } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { debounce } from "lodash";
 import API from "@/redux/api";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { MdHomeRepairService } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { findCategoryHierarchy, getAvailableProviders } from "@/redux/slices/serviceProvider";
 
 export default function BannerSection() {
   const [query, setQuery] = useState(""); // Track the search query
   const [suggestions, setSuggestions] = useState([]); // Store the suggestions
+  const { loading: loadingRedux, availableProviders, categoryHierarchy } = useSelector((state) => state.provider)
   const [loading, setLoading] = useState(false);
+  const [hasTyped, setHasTyped] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const suggestionRefs = useRef([]);
+  const [postalCode, setPostalCode] = useState()
+  const [redirecting, setRedirecting] = useState(false)
+  const dispatch = useDispatch()
 
-  // Debounced function to handle the input change
+  useEffect(() => {
+    if (
+      selectedIndex >= 0 &&
+      suggestionRefs.current[selectedIndex]
+    ) {
+      suggestionRefs.current[selectedIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [selectedIndex]);
   const handleQueryChange = async (event) => {
-    const value = event.target.value; // Get the value from the input field
-    setQuery(value); // Update query state with the input value
+    const value = event.target.value;
+    setQuery(value);
+    setHasTyped(true);
 
     if (!value) {
-      setSuggestions([]); // Clear suggestions if query is empty
+      setSuggestions([]);
       return;
     }
 
-    setLoading(true); // Set loading to true
+    setLoading(true);
 
     try {
-      // Make the API call to fetch suggestions based on the query
       const response = await API.get("/api/category/search-subcategories", {
         params: { q: value },
       });
 
-      // Update the suggestions state with the results from the API
       setSuggestions(response.data.results);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
-      setSuggestions([]); // Clear suggestions on error
+      setSuggestions([]);
     } finally {
-      setLoading(false); // Set loading to false after the API call
+      setLoading(false);
     }
-  }; // Debounce time in milliseconds
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (postalCode && query) {
+      try {
+        // Fetch the data by calling the getAvailableProviders and findCategoryHierarchy thunks
+        const providersResponse = await dispatch(getAvailableProviders({ postalCode, subSubCategory: query }));
+        const categoryHierarchyResponse = await dispatch(findCategoryHierarchy(query));
 
+        const availableProviders = providersResponse.payload;
+        const categoryHierarchy = categoryHierarchyResponse.payload;
+
+
+
+        // Store the fetched data in localStorage
+        if (availableProviders && categoryHierarchy) {
+          try {
+            localStorage.setItem('availableProviders', JSON.stringify(availableProviders));
+            localStorage.setItem('categoryHierarchy', JSON.stringify(categoryHierarchy));
+          } catch (err) {
+            console.error("Error saving data to localStorage", err);
+          }
+        }
+        window.location.href = "/service-request"
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      }
+    } else {
+      console.error('Postal code or query missing');
+    }
+  };
+  const storeCustomServiceInLocalStorage = () => {
+    const category = {
+      category: "CustomRequest",
+      subcategory: "CustomRequest",
+      subSubcategory: "CustomRequest"
+    }
+    const availableProviders = []
+    try {
+      localStorage.setItem('categoryHierarchy', JSON.stringify(category));
+      localStorage.setItem('availableProviders', JSON.stringify(availableProviders));
+    }
+    catch (e) {
+      console.error("Error saving data to localStorage", err);
+    }
+    window.location.href = "/service-request"
+  }
   return (
     <>
+
       <section className="banner-section p_relative centred">
         <div className="banner-carousel">
           <div className="slide-item p_relative">
@@ -59,32 +124,73 @@ export default function BannerSection() {
                         type="text"
                         placeholder="What Service are you looking for?"
                         value={query}
-                        onChange={handleQueryChange} // Handle query change using debounce
+                        onChange={handleQueryChange}
+                        className="text-black"
+                        onKeyDown={(e) => {
+                          if (e.key === "ArrowDown") {
+                            e.preventDefault();
+                            setSelectedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
+                          } else if (e.key === "ArrowUp") {
+                            e.preventDefault();
+                            setSelectedIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
+                          } else if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
+                              setQuery(suggestions[selectedIndex]);
+                              setSuggestions([]);
+                              setHasTyped(false);
+                              setSelectedIndex(-1);
+                            }
+                          }
+                        }}
+
                       />
-                      {suggestions.length > 0 && query && (
+
+                      {query && (
                         <div className="suggestions-dropdown">
-                          {loading && <p>Loading...</p>}
-                          {!loading &&
+                          {loading ? (
+                            <p>Loading...</p>
+                          ) : suggestions.length > 0 ? (
                             suggestions.map((suggestion, index) => (
-                              <div key={index} className="suggestion-item">
+                              <div
+                                ref={(el) => (suggestionRefs.current[index] = el)}
+                                key={index}
+                                className={`suggestion-item ${index === selectedIndex ? "bg-gray-200" : ""
+                                  }`}
+                                onClick={() => {
+                                  setQuery(suggestion);
+                                  setSuggestions([]);
+                                  setHasTyped(false);
+                                  setSelectedIndex(-1);
+                                }}
+                              >
                                 {suggestion}
                               </div>
-                            ))}
+                            ))
+
+                          ) : hasTyped ? (
+                            <div
+                              className="suggestion-item request-service"
+                              onClick={() => {
+                                storeCustomServiceInLocalStorage()
+                              }}
+                            >
+                              <span className="flex gap-2 items-center mt-4 mb-4"><MdHomeRepairService color="gray" size={30} /> Request a Service</span>
+                            </div>
+                          ) : null}
                         </div>
                       )}
+
+
                     </div>
                     <div className="postalBar">
                       <span style={{ marginLeft: "2px" }}>
                         <IoLocationSharp size={25} />
                       </span>
-                      <input type="text" placeholder="Postcode" />
+                      <input type="text" placeholder="Postcode" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="text-black" />
                     </div>
-                    <div className="searchBtn">Search</div>
+                    <div className="searchBtn" onClick={handleSubmit}>{loadingRedux ? "Searching..." : "Search"}</div>
                   </div>
-
-                  {/* Show suggestions dropdown if suggestions exist */}
-
-
                   <div>
                     Popular: House Cleaning, Plumbing, Personal Trainers
                   </div>

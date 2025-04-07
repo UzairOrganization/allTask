@@ -6,8 +6,8 @@ export function middleware(request) {
     const url = request.nextUrl.clone(); // Clone the URL for redirection
 
     // Protected routes that require authentication (like /account, /about)
-    const protectedRoutes = ["/account", "/about","/user-profile"];
-    
+    const protectedRoutes = ["/account", "/about", "/user-profile", "/user-reuqests"];
+
     // If no token and user tries to access a protected route
     if (!token && protectedRoutes.some((route) => url.pathname.startsWith(route))) {
         url.pathname = "/login"; // Redirect to login page
@@ -26,5 +26,5 @@ export function middleware(request) {
 
 // Apply middleware to all routes, but can limit this to login/register as needed
 export const config = {
-    matcher: ["/account", "/about", "/login", "/register","/user-profile"], // Protect these routes
+    matcher: ["/account", "/about", "/login", "/register", "/user-profile", "/user-reuqests"], // Protect these routes
 };

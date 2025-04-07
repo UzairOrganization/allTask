@@ -37,7 +37,7 @@ const LoginWrapper = () => {
         e.preventDefault();
         window.location.href = "http://localhost:5000/auth/google";  // Corrected assignment
     };
-    
+
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -100,9 +100,11 @@ const LoginWrapper = () => {
                                     <Checkbox id="remember" />
                                     <Label htmlFor="remember" className={"text-[#007D63]"}>Remember me</Label>
                                 </div>
-                                <Button variant="link" className="text-sm p-0 h-auto text-[#007D63]">
-                                    Forgot password?
-                                </Button>
+                                < Link href={"/forget-password"}>
+                                    <Button variant="link" className="text-sm p-0 h-auto text-[#007D63]">
+                                        Forgot password?
+                                    </Button>
+                                </Link>
                             </div>
 
                             {/* Login Button */}
