@@ -111,10 +111,12 @@ export default function Header() {
                                                     </span>
                                                 </DropdownMenuItem>
                                             </a>
-                                            <DropdownMenuItem className="p-1">
-                                                <WorkflowIcon />
-                                                <span className="ml-2">All Requests</span>
-                                            </DropdownMenuItem>
+                                            <a href={"/user-requests"} className="text-black cursor-pointer">
+                                                <DropdownMenuItem className="p-1">
+                                                    <WorkflowIcon />
+                                                    <span className="ml-2">All Requests</span>
+                                                </DropdownMenuItem>
+                                            </a>
                                             <DropdownMenuItem className="p-1">
                                                 <MessageCircle />
                                                 <span className="ml-2">Chats</span>
@@ -146,36 +148,36 @@ export default function Header() {
                                         <Button
                                             className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md transition" style={{ backgroundColor: "red", borderRadius: 5 }} onClick={handleLogout}
                                         >
-                                        Logout
-                                    </Button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
-                </>
-                ) : (
-                <>
-                    <a
-                        href="/login"
-                        className="flex text-lg font-semibold items-center text-black hover:text-green-700"
-                    >
-                        LOGIN &nbsp;<CiLogin size={22} className="ml-1" />
-                    </a>
+                                            Logout
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                        </>
+                    ) : (
+                        <>
+                            <a
+                                href="/login"
+                                className="flex text-lg font-semibold items-center text-black hover:text-green-700"
+                            >
+                                LOGIN &nbsp;<CiLogin size={22} className="ml-1" />
+                            </a>
 
-                    <div className="btn-box">
-                        <a href="index.html" className="theme-btn btn-two">
-                            Join as Professional
-                        </a>
-                    </div>
+                            <div className="btn-box">
+                                <a href="index.html" className="theme-btn btn-two">
+                                    Join as Professional
+                                </a>
+                            </div>
 
-                    <div className="btn-box">
-                        <a href="index.html" className="theme-btn btn-two">
-                            Request a Service
-                        </a>
-                    </div>
-                </>
+                            <div className="btn-box">
+                                <a href="index.html" className="theme-btn btn-two">
+                                    Request a Service
+                                </a>
+                            </div>
+                        </>
                     )}
+                </div>
             </div>
-        </div>
         </header >
     );
 }

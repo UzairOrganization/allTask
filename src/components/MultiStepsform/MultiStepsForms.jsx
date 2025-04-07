@@ -152,8 +152,17 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
             });
 
             if (response.data.success) {
-                toast.success("")
-                // Handle success here
+                toast.success("Your Request has been submitted!", {
+                    description: "Our professionals will contact you shortly!",
+                    duration: 6000,
+                    position: "bottom-left",
+                    style: {
+                        color: "green"
+                    }
+                });
+                setTimeout(() => {
+                    window.location.href = "/"
+                }, [4000])
             } else {
                 console.error("Form submission failed:", response.data.message);
                 // Handle failure here

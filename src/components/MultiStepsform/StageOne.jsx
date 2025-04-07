@@ -7,6 +7,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Card, CardHeader, CardContent } from "../ui/card";
 import { Progress } from "../ui/progress";
+import { Checkbox } from "../ui/checkbox";
 
 const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
     const [answers, setAnswers] = useState({});
@@ -28,6 +29,24 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
             ...prev,
             [fieldName]: value,
         }));
+    };
+
+    const handleCheckboxChange = (fieldName, optionValue, isChecked) => {
+        setAnswers((prev) => {
+            const currentValues = prev[fieldName] || [];
+            let newValues;
+
+            if (isChecked) {
+                newValues = [...currentValues, optionValue];
+            } else {
+                newValues = currentValues.filter(val => val !== optionValue);
+            }
+
+            return {
+                ...prev,
+                [fieldName]: newValues
+            };
+        });
     };
 
     const handleNextQuestion = () => {
@@ -66,6 +85,9 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
                 <CardHeader className="bg-[#00725A] p-4">
                     <h2 className="text-lg md:text-xl font-semibold text-white">
                         {currentQuestion.questionText}
+                        {currentQuestion.fieldType === "checkbox" && !currentQuestion.required && (
+                            <span className="font-normal opacity-90"> (optional)</span>
+                        )}
                     </h2>
                 </CardHeader>
                 <CardContent className="p-4">
@@ -117,6 +139,31 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
                                         onChange={(e) => handleAnswerChange(currentQuestion.fieldName, e.target.value)}
                                         className="w-full p-3 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-[#00725A] focus:border-transparent"
                                     />
+                                )}
+
+                                {currentQuestion.fieldType === "checkbox" && (
+                                    <div className="space-y-2">
+                                        {currentQuestion.options.map((option, index) => (
+                                            <Label
+                                                key={index}
+                                                htmlFor={`${currentQuestion.fieldName}-${index}`}
+                                                className={`flex items-center space-x-3 p-3 border rounded-md transition-all cursor-pointer ${(answers[currentQuestion.fieldName] || []).includes(option)
+                                                    ? 'bg-[#00725A]/10 border-[#00725A] ring-1 ring-[#00725A]/20'
+                                                    : 'bg-white border-gray-200 hover:bg-[#00725A]/5 hover:border-[#00725A]/30'
+                                                    }`}
+                                            >
+                                                <Checkbox
+                                                    id={`${currentQuestion.fieldName}-${index}`}
+                                                    checked={(answers[currentQuestion.fieldName] || []).includes(option)}
+                                                    onCheckedChange={(checked) =>
+                                                        handleCheckboxChange(currentQuestion.fieldName, option, checked)
+                                                    }
+                                                    className="h-4 w-4 rounded border-gray-300 text-[#00725A] focus:ring-[#00725A]"
+                                                />
+                                                <span className="text-sm text-gray-800">{option} </span>
+                                            </Label>
+                                        ))}
+                                    </div>
                                 )}
                             </div>
                         </div>
