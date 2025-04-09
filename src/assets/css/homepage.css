@@ -7,7 +7,7 @@
 /* -------------------------------------------------- */
 /* ✅ Step 2: Now import your local CSS files         */
 /* -------------------------------------------------- */
-@import './bootstrap.css';
+/* @import './bootstrap.css'; */
 @import './module-css/banner.css';
 @import './module-css/project.css';
 @import './module-css/testimonial.css';

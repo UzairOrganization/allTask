@@ -9,9 +9,9 @@ export default function ProjectSection() {
   return (
     <>
       <section className="project-section">
-        <div className="auto-container">
-          <div className="sec-title mb_60 centred">
-            <h2>
+        <div className="auto-container" >
+          <div className="sec-title h2 mb_60 centred">
+            <h2 style={{marginBottom:60}}>
               Our Recent Projects
               <br />
               Gallery

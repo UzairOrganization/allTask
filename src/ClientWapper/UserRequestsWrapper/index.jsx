@@ -288,7 +288,7 @@ export default function UserRequestsWrapper() {
                                             return (
                                                 <div key={index} className="border rounded-lg overflow-hidden">
                                                     <img
-                                                        src={`http://107.22.128.80:5000${photo}`}
+                                                        src={`http://localhost:5000${photo}`}
                                                         alt={`Service photo ${index + 1}`}
                                                         className="w-full h-32 object-cover"
                                                     />

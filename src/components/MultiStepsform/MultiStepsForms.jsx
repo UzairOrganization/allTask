@@ -1,5 +1,4 @@
 'use client'
-
 import ProgressBar from "./ProgressBar"
 import StageOne from "./StageOne"
 import StageTwo from "./StageTwo"
@@ -16,20 +15,21 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
     const [step, setStep] = useState(1)
     const [loading, setLoading] = useState(true)
     const [formConfig, setFormConfig] = useState(null)
-    const [availableProviders, setAvailableProviders] = useState(null)
-    const [categoryHierarchy, setCategoryHierarchy] = useState(null)
+    const [categoryHierarchy, setCategoryHierarchy] = useState()
+    const [availableProviders, setAvailableProviders] = useState()
     const finalFormData = new FormData()
     useEffect(() => {
-        // Check if the code is running on the client-side
-        if (typeof window !== "undefined") {
-            const storedProviders = localStorage.getItem('availableProviders');
-            const storedCategoryHierarchy = localStorage.getItem('categoryHierarchy');
+        const storedProviders = JSON.parse(localStorage.getItem('availableProviders') || '[]');
+        const storedCategoryHierarchy = JSON.parse(localStorage.getItem('categoryHierarchy') || '{}');
 
-            if (storedProviders && storedCategoryHierarchy) {
-                setAvailableProviders(JSON.parse(storedProviders));
-                setCategoryHierarchy(JSON.parse(storedCategoryHierarchy));
-            }
-        }
+        setAvailableProviders(storedProviders);
+        setCategoryHierarchy(storedCategoryHierarchy);
+    }, []);
+
+    useEffect(() => {
+
+        // Check if the code is running on the client-side  
+
 
         const fetchFormConfig = async () => {
             try {

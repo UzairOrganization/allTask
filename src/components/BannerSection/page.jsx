@@ -7,8 +7,10 @@ import { useEffect, useRef, useState } from "react";
 import { MdHomeRepairService } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { findCategoryHierarchy, getAvailableProviders } from "@/redux/slices/serviceProvider";
+import { useRouter } from "next/navigation";
 
 export default function BannerSection() {
+  const router = useRouter()
   const [query, setQuery] = useState(""); // Track the search query
   const [suggestions, setSuggestions] = useState([]); // Store the suggestions
   const { loading: loadingRedux, availableProviders, categoryHierarchy } = useSelector((state) => state.provider)
@@ -78,7 +80,7 @@ export default function BannerSection() {
             console.error("Error saving data to localStorage", err);
           }
         }
-        window.location.href = "/service-request"
+        router.push("/service-request")
       } catch (err) {
         console.error('Error fetching data:', err);
       }
@@ -110,7 +112,7 @@ export default function BannerSection() {
           <div className="slide-item p_relative">
             <div className="auto-container">
               <div>
-                <h2 className="p_relative d_block">
+                <h2 className="p_relative h2 d_block">
                   Alltasko - Trusted Pros For Every Task.
                 </h2>
                 <div className="search-container-parent">

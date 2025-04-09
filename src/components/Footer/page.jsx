@@ -6,7 +6,7 @@ export default function Footer() {
         <div className="auto-container">
           <div className="widget-section">
             <div className="row clearfix">
-              <div className="col-lg-3 col-md-6 col-sm-12 footer-column">
+              <div className="flex flex-row col-lg-3 col-md-6 col-sm-12 footer-column">
                 <div className="footer-widget logo-widget">
                   <figure className="footer-logo">
                     <a href="index.html">

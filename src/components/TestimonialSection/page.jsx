@@ -19,8 +19,8 @@ export default function TestimonialSection() {
             style={{ backgroundImage: 'url(assets/images/shape/shape-19.png)' }}
           ></div>
         </div>
-        <div className="auto-container">
-          <div className="sec-title mb_60 centred">
+        <div className="auto-container" style={{marginBottom:40}}>
+          <div className="sec-title h2 mb_60 centred">
             <h2>Client Feedback</h2>
           </div>
 

@@ -13,6 +13,7 @@ import Trending from "@/components/TrendingServicesSections/Trending";
 import AppSection from "@/components/AppSection/AppSection";
 import { ThemeToggle } from "@/components/ThemeToggle/ThemeToogle";
 import "@/assets/css/homepage.css"
+import "./globals.css"
 export const metadata = {
   title: "AllTasko",
   icons: {
@@ -24,22 +25,22 @@ export default function Home() {
 
   return (
     <>
-      <body>
-        <div className="boxed_wrapper ltr">
-          <SearchPopup />
-          <Header />
-          <MobileMenu />
-          <BannerSection />
-          <Discover />
-          <Trending />
-          <AppSection />
-          <ProjectSection />
-          <TestimonialSection />
-          <Footer />
-        </div>
-      </body>
+
+      <div className="boxed_wrapper ltr">
+        <SearchPopup />
+        <Header />
+        <MobileMenu />
+        <BannerSection />
+        <Discover />
+        <Trending />
+        <AppSection />
+        <ProjectSection />
+        <TestimonialSection />
+        <Footer />
+      </div>
+
       {/* <ClientScripts /> */}
-      
+
     </>
   );
 }

@@ -111,12 +111,12 @@ export default function Header() {
                                                     </span>
                                                 </DropdownMenuItem>
                                             </a>
-                                            <a href={"/user-requests"} className="text-black cursor-pointer">
+                                            <Link href={"/user-requests"} className="text-black cursor-pointer">
                                                 <DropdownMenuItem className="p-1">
                                                     <WorkflowIcon />
                                                     <span className="ml-2">All Requests</span>
                                                 </DropdownMenuItem>
-                                            </a>
+                                            </Link>
                                             <DropdownMenuItem className="p-1">
                                                 <MessageCircle />
                                                 <span className="ml-2">Chats</span>
@@ -156,12 +156,12 @@ export default function Header() {
                         </>
                     ) : (
                         <>
-                            <a
+                            <Link
                                 href="/login"
                                 className="flex text-lg font-semibold items-center text-black hover:text-green-700"
                             >
                                 LOGIN &nbsp;<CiLogin size={22} className="ml-1" />
-                            </a>
+                            </Link>
 
                             <div className="btn-box">
                                 <a href="index.html" className="theme-btn btn-two">

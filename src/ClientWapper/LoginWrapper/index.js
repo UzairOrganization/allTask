@@ -35,7 +35,7 @@ const LoginWrapper = () => {
     // Handle form submission
     const handleGoogleSignin = async (e) => {
         e.preventDefault();
-        window.location.href = "http://107.22.128.80:5000/auth/google";  // Corrected assignment
+        window.location.href = "http://localhost:5000/auth/google";  // Corrected assignment
     };
 
 
