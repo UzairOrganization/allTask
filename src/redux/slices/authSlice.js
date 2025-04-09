@@ -35,6 +35,7 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
 export const checkAuthStatus = createAsyncThunk("auth/checkAuthStatus", async (_, { dispatch, rejectWithValue }) => {
     try {
         const response = await API.get("/api/users/me", { withCredentials: true });
+
         return response.data;
     } catch (error) {
         Cookies.remove("token");
@@ -107,8 +108,8 @@ const authSlice = createSlice({
             })
             .addCase(checkAuthStatus.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload;
-                state.isAuthenticated = true;
+                state.user = action.payload.user;
+                state.isAuthenticated = action.payload.isAuthenticated;
             })
             .addCase(checkAuthStatus.rejected, (state, action) => {
                 state.loading = false;
@@ -138,6 +139,7 @@ const authSlice = createSlice({
             .addCase(registerUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
+                state.isAuthenticated = true
                 state.user = action.payload;
             })
             .addCase(registerUser.rejected, (state, action) => {

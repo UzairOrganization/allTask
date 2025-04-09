@@ -97,7 +97,7 @@ export default function UserRequestsWrapper() {
 
     if (requests.length === 0) {
         return (
-            <div className="container max-w-6xl mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-[60vh] text-center">
+            <div className="container max-w-6xl mx-auto px-4 py-12 flex flex-col mt-16 items-center justify-center min-h-[90vh] text-center">
                 <div className="max-w-md space-y-6">
                     <RocketIcon className="h-16 w-16 mx-auto text-primary" />
                     <h2 className="text-3xl font-bold tracking-tight">No Service Requests Yet</h2>
@@ -117,7 +117,7 @@ export default function UserRequestsWrapper() {
     }
 
     return (
-        <div className="container max-w-6xl mx-auto px-4 py-8">
+        <div className="container max-w-6xl mx-auto px-4 mt-16 py-8">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold tracking-tight">Your Service Requests</h1>
                 <p className="text-muted-foreground mt-2">

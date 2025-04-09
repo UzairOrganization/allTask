@@ -51,9 +51,9 @@ export default function Header() {
         <header className="bg-white w-screen border-black shadow-md">
             <div className="w-[96%] m-auto p-3 justify-between flex">
                 <div className="logo w-[20%]">
-                    <a href="/">
+                    <Link href="/">
                         <img src="assets/images/logoMain.png" alt="" className="w-[150px]" />
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -103,14 +103,14 @@ export default function Header() {
                                         <DropdownMenuLabel className="p-1">My Account</DropdownMenuLabel>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuGroup>
-                                            <a href={"/user-profile"} className="text-black cursor-pointer">
+                                            <Link href={"/user-profile"} className="text-black cursor-pointer">
                                                 <DropdownMenuItem className="p-1 cursor-pointer">
                                                     <User />
                                                     <span className="ml-2">
                                                         Profile
                                                     </span>
                                                 </DropdownMenuItem>
-                                            </a>
+                                            </Link>
                                             <Link href={"/user-requests"} className="text-black cursor-pointer">
                                                 <DropdownMenuItem className="p-1">
                                                     <WorkflowIcon />

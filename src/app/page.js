@@ -27,9 +27,7 @@ export default function Home() {
     <>
 
       <div className="boxed_wrapper ltr">
-        <SearchPopup />
         <Header />
-        <MobileMenu />
         <BannerSection />
         <Discover />
         <Trending />

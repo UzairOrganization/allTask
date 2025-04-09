@@ -59,9 +59,9 @@ const LoginWrapper = () => {
     return (
         <>
             <Header />
-            <div className="min-h-[90vh]">
+            <div className="min-h-[80vh] flex flex-col justify-center items-center">
                 <div className="mt-12 overflow-hidden flex items-center justify-center">
-                    <div className="max-w-lg w-full p-8 bg-white rounded-lg shadow-md ">
+                    <div className="max-w-lg w-full p-8 bg-white rounded-lg shadow-lg border ">
                         <h1 className="text-3xl font-bold text-center text-black mb-6">
                             Welcome back
                         </h1>

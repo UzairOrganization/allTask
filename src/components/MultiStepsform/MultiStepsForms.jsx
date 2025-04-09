@@ -8,9 +8,12 @@ import StageFive from "./StageFive"
 import { toast, Toaster } from "sonner"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+
 import API from "@/redux/api"
+import { useRouter } from "next/navigation"
 
 const MultiStepsForm = ({ questions, serviceProviders }) => {
+    const navigation = useRouter()
     const [formData, setFormData] = useState({})
     const [step, setStep] = useState(1)
     const [loading, setLoading] = useState(true)
@@ -110,6 +113,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
             case 5:
                 return (
                     <StageFive
+                        Toaster={Toaster}
                         formData={formData}
                         back={back}
                         onSubmit={handleFinalSubmit}
@@ -175,7 +179,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
                     }
                 });
                 setTimeout(() => {
-                    window.location.href = "/"
+                    navigation.push("/")
                 }, [4000])
             } else {
                 console.error("Form submission failed:", response.data.message);

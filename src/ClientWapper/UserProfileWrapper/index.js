@@ -59,7 +59,7 @@ const UserProfileWrapper = () => {
         <>
             {/* <Header /> */}
             <Toaster />
-            <div className="max-w-2xl mx-auto mt-10 p-4">
+            <div className="max-w-2xl mx-auto mt-16 p-4">
                 <Card className="mb-6">
                     <CardHeader>
                         <CardTitle>User Profile</CardTitle>
