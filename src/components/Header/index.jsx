@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
 import { CiLogin } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -37,41 +37,34 @@ import {
 import { logoutUser } from "@/redux/slices/authSlice";
 import { Button } from "../ui/button";
 
-
 export default function Header() {
     const [open, setOpen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { isAuthenticated } = useSelector((state) => state.auth)
     const dispatch = useDispatch()
     const handleLogout = async () => {
         await dispatch(logoutUser())
         location.reload()
     }
+
     return (
-        <header className="bg-white w-screen border-black shadow-md">
-            <div className="w-[96%] m-auto p-3 justify-between flex">
-                <div className="logo w-[20%]">
+        <header className="bg-white w-full border-b shadow-lg">
+            <div className="w-[95%] mx-auto p-3 flex justify-between items-center">
+                {/* Logo */}
+                <div className="logo w-[150px]">
                     <Link href="/">
-                        <img src="assets/images/logoMain.png" alt="" className="w-[150px]" />
+                        <img src="assets/images/logoMain.png" alt="" className="w-full" />
                     </Link>
                 </div>
 
-                <div className="flex items-center gap-3">
-                    {/* EXPLORE (Always visible) */}
+                {/* Desktop Navigation - Hidden on mobile */}
+                <div className="hidden md:flex items-center gap-3">
                     <div
                         className="relative cursor-pointer flex items-center font-semibold text-lg text-black hover:text-green-700"
                         onClick={() => setIsOpen(!isOpen)}
                     >
                         EXPLORE &nbsp; <FaChevronDown size={16} className="ml-1" />
-                        {isOpen && (
-                            <div className="absolute w-[180px] font-normal top-8 left-0 bg-white shadow-md rounded-md p-3">
-                                <ul className="space-y-2">
-                                    <li className="hover:text-green-700">Option 1</li>
-                                    <li className="hover:text-green-700">Option 2</li>
-                                    <li className="hover:text-green-700">Option 3</li>
-                                </ul>
-                            </div>
-                        )}
                     </div>
 
                     {/* Authenticated: Show profile, notification */}
@@ -130,29 +123,6 @@ export default function Header() {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
-                            <Dialog open={open} onOpenChange={setOpen}>
-                                <DialogContent className="bg-[#dddddd] rounded-xl border-none shadow-xl">
-                                    <DialogHeader>
-                                        <DialogTitle className="text-[14px] text-left text-black  p-3 font-semibold" style={{ fontSize: 24 }}>Are you sure?</DialogTitle>
-                                        <DialogDescription className="text-sm text-gray-700 p-1" style={{ marginTop: -13 }}>
-                                            This action cannot be undone. This will logout your account from Alltasko.
-                                        </DialogDescription>
-                                    </DialogHeader>
-                                    <DialogFooter className="mt-4 flex justify-end gap-2 m-3">
-                                        <Button
-                                            onClick={() => setOpen(false)}
-                                            className="bg-white text-black hover:bg-black hover:text-white border border-gray-300 shadow-sm px-4 py-2 transition " style={{ borderRadius: 5 }}
-                                        >
-                                            Close
-                                        </Button>
-                                        <Button
-                                            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md transition" style={{ backgroundColor: "red", borderRadius: 5 }} onClick={handleLogout}
-                                        >
-                                            Logout
-                                        </Button>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
                         </>
                     ) : (
                         <>
@@ -177,7 +147,126 @@ export default function Header() {
                         </>
                     )}
                 </div>
+
+                {/* Mobile Menu Button - Visible only on mobile */}
+                <button 
+                    className="md:hidden p-2 text-gray-700"
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                >
+                    {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+                </button>
+
+                {/* Mobile Menu - Slides in from right */}
+                {mobileMenuOpen && (
+                    <div className="md:hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+                        <div className="absolute right-0 top-0 h-full w-3/4 bg-white shadow-lg p-4 overflow-y-auto">
+                            <div className="flex justify-end mb-4">
+                                <button 
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="p-2"
+                                >
+                                    <FaTimes size={24} />
+                                </button>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="border-b pb-2">
+                                    <div 
+                                        className="flex items-center font-semibold text-lg text-black"
+                                        onClick={() => setIsOpen(!isOpen)}
+                                    >
+                                        EXPLORE &nbsp; <FaChevronDown size={16} />
+                                    </div>
+                                </div>
+
+                                {isAuthenticated ? (
+                                    <>
+                                        <a 
+                                            href="index.html" 
+                                            className="block py-2 font-semibold text-lg"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            Request a Service
+                                        </a>
+                                        <Link 
+                                            href="/user-profile"
+                                            className="block py-2 font-semibold text-lg"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            Profile
+                                        </Link>
+                                        <Link 
+                                            href="/user-requests"
+                                            className="block py-2 font-semibold text-lg"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            All Requests
+                                        </Link>
+                                        <div 
+                                            className="block py-2 font-semibold text-lg cursor-pointer"
+                                            onClick={() => {
+                                                setOpen(true);
+                                                setMobileMenuOpen(false);
+                                            }}
+                                        >
+                                            Log out
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link 
+                                            href="/login"
+                                            className="block py-2 font-semibold text-lg"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            LOGIN
+                                        </Link>
+                                        <a 
+                                            href="index.html" 
+                                            className="block py-2 font-semibold text-lg"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            Join as Professional
+                                        </a>
+                                        <a 
+                                            href="index.html" 
+                                            className="block py-2 font-semibold text-lg"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            Request a Service
+                                        </a>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Logout Dialog - Same for all screens */}
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogContent className="bg-[#dddddd] rounded-xl border-none shadow-xl">
+                        <DialogHeader>
+                            <DialogTitle className="text-[14px] text-left text-black  p-3 font-semibold" style={{ fontSize: 24 }}>Are you sure?</DialogTitle>
+                            <DialogDescription className="text-sm text-gray-700 pl-3" style={{ marginTop: -16 }}>
+                                This action cannot be undone. This will logout your account from Alltasko.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="mt-4 flex justify-end gap-2 m-3">
+                            <Button
+                                onClick={() => setOpen(false)}
+                                className="bg-white text-black hover:bg-black hover:text-white border border-gray-300 shadow-sm px-4 py-2 transition " style={{ borderRadius: 5 }}
+                            >
+                                Close
+                            </Button>
+                            <Button
+                                className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md transition" style={{ backgroundColor: "red", borderRadius: 5 }} onClick={handleLogout}
+                            >
+                                Logout
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </div>
-        </header >
+        </header>
     );
 }
