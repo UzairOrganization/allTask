@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { checkAuthStatus } from "./slices/authSlice";
+import { checkAuthStatus, checkProviderAuthStatus } from "./slices/authSlice";
 
 export default function AuthProvider({ children }) {
     const dispatch = useDispatch();
@@ -9,6 +9,7 @@ export default function AuthProvider({ children }) {
     useEffect(() => {
         // auth()
         dispatch(checkAuthStatus());
+        dispatch(checkProviderAuthStatus())
     }, [dispatch]);
 
     return <>{children}</>;

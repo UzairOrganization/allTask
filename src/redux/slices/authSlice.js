@@ -4,8 +4,10 @@ import Cookies from "js-cookie";
 
 const initialState = {
     user: null,
+    provider: null,
     loading: false,
     isAuthenticated: false,
+    isProfessionalAuhtenticated: false,
     error: null,
     success: null
 };
@@ -42,6 +44,15 @@ export const checkAuthStatus = createAsyncThunk("auth/checkAuthStatus", async (_
         return rejectWithValue("Failed to fetch user details");
     }
 });
+export const checkProviderAuthStatus = createAsyncThunk("auth/checkProviderAuthStatus", async (_, { dispatch, rejectWithValue }) => {
+    try {
+        const response = await API.get("/api/service-provider/service-provider-details", { withCredentials: true })
+        return response.data
+    } catch (error) {
+        Cookies.remove("token");
+        return rejectWithValue("Failed to fetch user details");
+    }
+})
 export const registerEmail = createAsyncThunk("auth/registerEmail", async (email, { dispatch, rejectWithValue }) => {
     try {
         const response = await API.post("/api/users/send-verification", { email });
@@ -91,15 +102,18 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.user = action.payload;
                 state.isAuthenticated = true;
+                state.isProfessionalAuhtenticated = false
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
                 state.isAuthenticated = false;
+                state.isProfessionalAuhtenticated = false
             })
             .addCase(logoutUser.fulfilled, (state) => {
                 state.user = null;
                 state.isAuthenticated = false;
+                state.isProfessionalAuhtenticated = false
             })
             // Handling checkAuthStatus
             .addCase(checkAuthStatus.pending, (state) => {
@@ -110,11 +124,13 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.user = action.payload.user;
                 state.isAuthenticated = action.payload.isAuthenticated;
+                state.isProfessionalAuhtenticated = false
             })
             .addCase(checkAuthStatus.rejected, (state, action) => {
                 state.loading = false;
                 state.user = null;
                 state.isAuthenticated = false;
+                state.isProfessionalAuhtenticated = false
                 state.error = action.payload;
             })
             // register email
@@ -139,13 +155,34 @@ const authSlice = createSlice({
             .addCase(registerUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
-                state.isAuthenticated = true
+                state.isAuthenticated = true;
+                state.isProfessionalAuhtenticated = false
                 state.user = action.payload;
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
                 state.success = null;
+                state.isAuthenticated = false;
+                state.isProfessionalAuhtenticated = false
+            })
+            .addCase(checkProviderAuthStatus.pending, (state, action) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(checkProviderAuthStatus.fulfilled, (state, action) => {
+                state.isAuthenticated = false
+                state.user = null;
+                state.provider = action.payload.provider
+                state.isProfessionalAuhtenticated = action.payload.isProfessional
+            })
+            .addCase(checkProviderAuthStatus.rejected, (state, action) => {
+                state.loading = false;
+                state.user = null;
+                state.isAuthenticated = false;
+                state.isProfessionalAuhtenticated = false
+                state.provider = null
+                state.error = action.payload;
             })
     }
 });

@@ -213,7 +213,7 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
                                                     </div>
                                                     {provider.postalCode && (
                                                         <div className="flex items-center text-sm text-gray-600">
-                                                            <ZapIcon className="h-4 w-4 mr-2 text-[#00725A]" />
+                                                            {/* <ZapIcon className="h-4 w-4 mr-2 text-[#00725A]" /> */}
                                                             <span>{provider.postalCode}</span>
                                                         </div>
                                                     )}
