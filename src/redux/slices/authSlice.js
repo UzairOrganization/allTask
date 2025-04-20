@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../api";
 import Cookies from "js-cookie";
-
+import axios from "axios";
+import { API as APIURL } from "@/lib/data-service";
 const initialState = {
     user: null,
     provider: null,
@@ -46,7 +47,9 @@ export const checkAuthStatus = createAsyncThunk("auth/checkAuthStatus", async (_
 });
 export const checkProviderAuthStatus = createAsyncThunk("auth/checkProviderAuthStatus", async (_, { dispatch, rejectWithValue }) => {
     try {
-        const response = await API.get("/api/service-provider/service-provider-details", { withCredentials: true })
+        const response = await axios.get(`${APIURL}/api/service-provider/service-provider-details`, { withCredentials: true })
+        console.log(response,"response");
+        
         return response.data
     } catch (error) {
         Cookies.remove("token");

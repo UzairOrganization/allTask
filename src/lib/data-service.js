@@ -6,10 +6,11 @@ import { notFound } from "next/navigation"
 
 export async function getAllCategories(params) {
     try {
-        const data = await axios.get(`${API}/api/category/categories`)
+        const data = await axios.get(`${API}/api/category/categories`)        
         return data.data;
     } catch (error) {
-        notFound()
+        console.log(error);
+        
     }
 }
 

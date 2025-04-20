@@ -1,6 +1,16 @@
-const page = () => {
+'use client'
+import ProfessionalHeader from "@/components/Professionals/ProfessionalHeader";
+import { ProfessionalOnboarding } from "@/components/Professionals/ProfessionalOnboarding";
+
+const Page = () => {
+
+
     return (
-        <h1>Professional Dashboard</h1>
-    )
-}
-export default page
+        <>
+            <ProfessionalHeader />
+            <ProfessionalOnboarding />
+        </>
+    );
+};
+
+export default Page;

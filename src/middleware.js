@@ -79,7 +79,7 @@ import { getCookie } from "cookies-next";
 //     matcher: ["/account", "/login", "/register-email", "/about", "/user-profile", "/user-requests"], // Protect these routes
 // };
 
-// middleware.js
+middleware.js
 export async function middleware(req) {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.token || '';
@@ -116,15 +116,17 @@ export async function middleware(req) {
             // First try user verification
             if (isUserRoute) {
                 const userRes = await axios.get('http://localhost:5000/api/users/verify-route', {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true
                 });
                 if (userRes.data.valid) return NextResponse.next();
             }
 
             // Then try provider verification
             if (isProviderRoute) {
-                const providerRes = await axios.get('http://localhost:5000/api/providers/verify-route', {
-                    headers: { Authorization: `Bearer ${token}` }
+                const providerRes = await axios.get('http://localhost:5000/api/service-provider/verify-route', {
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true
                 });
                 if (providerRes.data.valid) return NextResponse.next();
             }
@@ -133,15 +135,18 @@ export async function middleware(req) {
             if (isAuthPage) {
                 // Try to determine which type of user is logged in
                 try {
-                    await axios.get('http://localhost:5000/api/users/me', {
-                        headers: { Authorization: `Bearer ${token}` }
+                    const userRes = await axios.get('http://localhost:5000/api/users/verify-route', {
+                        headers: { Authorization: `Bearer ${token}` },
+                        withCredentials: true
                     });
-                    return NextResponse.redirect(new URL('/', req.url));
+                    if (userRes.data.valid) return NextResponse.redirect(new URL('/', req.url));
+            
                 } catch (userError) {
-                    await axios.get('http://localhost:5000/api/service-provider/service-provider-details', {
-                        headers: { Authorization: `Bearer ${token}` }
+                    const providerRes = await axios.get('http://localhost:5000/api/service-provider/verify-route', {
+                        headers: { Authorization: `Bearer ${token}` },
+                        withCredentials: true
                     });
-                    return NextResponse.redirect(new URL('/professional-dashboard', req.url));
+                    if (providerRes.data.valid) return NextResponse.redirect(new URL('/professional-dashboard', req.url));
                 }
             }
 

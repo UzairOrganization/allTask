@@ -40,7 +40,7 @@ const RegisterProfessionalWrapper = () => {
     // Country-State-City data
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [selectedState, setSelectedState] = useState(null);
-
+    const [stateLoading, setStateLoading] = useState(false)
 
     const [formData, setFormData] = useState({
         name: "",
@@ -99,21 +99,29 @@ const RegisterProfessionalWrapper = () => {
 
     const handleEmailSubmit = async (e) => {
         e.preventDefault();
-        // const result = await dispatch(registerEmail(email));
-        // if (result.meta.requestStatus === "fulfilled") {
-        //     toast.success("Verification code sent!", {
-        //         description: "Check your email",
-        //         duration: 3000,
-        //         position: "bottom-left",
-        //     });
-        setStep(2);
-        // } else {
-        //     toast.error("Failed to send code", {
-        //         description: "Please try again.",
-        //         duration: 3000,
-        //         position: "bottom-left",
-        //     });
-        // }
+        setStateLoading(true)
+        try {
+            const result = await axios.post(`${API}/api/service-provider/send-verification-code`, { email });
+            console.log(result.data);
+            if (result.status === 200) {
+                toast.success("Verification code sent!", {
+                    description: "Please Check your email",
+                    duration: 3000,
+                    position: "bottom-left",
+                });
+                setStateLoading(false)
+                setStep(2);
+            }
+        }
+        catch (error) {
+            setStateLoading(false)
+            toast.error("Failed to send code", {
+                description: error?.response?.data?.message || "Please try again later.",
+                duration: 3000,
+                position: "bottom-left",
+            });
+        }
+
     };
 
     const handleInputChange = useCallback((e) => {
@@ -193,6 +201,7 @@ const RegisterProfessionalWrapper = () => {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        setStateLoading(true)
         try {
             const payload = {
                 email,
@@ -200,20 +209,22 @@ const RegisterProfessionalWrapper = () => {
                 ...formData,
                 selectedCategories: formData.selectedCategories
             };
-            console.log(formData, "formdata");
 
-            console.log(payload);
 
-            // const result = await dispatch(registerUser(payload));
-            // if (result.meta.requestStatus === "fulfilled") {
-            //     toast.success("Registration successful!", {
-            //         description: "Your account has been created",
-            //         duration: 3000,
-            //         position: "bottom-left",
-            //     });
-            //     router.push("/dashboard");
-            // }
+            const result = await axios.post(`${API}/api/service-provider/service-provider-account-creation`, payload, { withCredentials: true })
+            console.log(result);
+
+            if (result.status === 200) {
+                toast.success("Registration successful!", {
+                    description: "Your account has been created",
+                    duration: 3000,
+                    position: "bottom-left",
+                });
+                setStateLoading(false)
+                router.push("/professional-dashboard");
+            }
         } catch (error) {
+            setStateLoading(false)
             toast.error("Registration failed", {
                 description: error?.response?.data?.message || "Please try again.",
                 duration: 3000,
@@ -228,8 +239,8 @@ const RegisterProfessionalWrapper = () => {
         <>
             <Header />
             <Toaster />
-            <div className="min-h-[80vh] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-3xl mx-auto">
+            <div className="min-h-[85vh] flex flex-col justify-center items-center bg-gray-50 py-12  sm:px-6 lg:px-8">
+                <div className="w-3xl ">
                     <Card className="shadow-lg">
                         <CardHeader>
                             <CardTitle className="text-2xl font-bold text-center text-gray-800">
@@ -270,9 +281,9 @@ const RegisterProfessionalWrapper = () => {
                                     <Button
                                         type="submit"
                                         className="w-full bg-[#007D63] hover:bg-[#006a52] text-white py-2 px-4 rounded-md shadow-sm"
-                                        disabled={loading}
+                                        disabled={stateLoading}
                                     >
-                                        {loading ? "Sending..." : "Send Verification Code"}
+                                        {stateLoading ? "Sending..." : "Send Verification Code"}
                                     </Button>
 
                                 </form>
@@ -559,13 +570,13 @@ const RegisterProfessionalWrapper = () => {
                                                             <SelectValue placeholder="Select service radius" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="5">200 m</SelectItem>
-                                                            <SelectItem value="10">400 m</SelectItem>
-                                                            <SelectItem value="15">600 m</SelectItem>
-                                                            <SelectItem value="20">1000 m</SelectItem>
-                                                            <SelectItem value="25">1500 m</SelectItem>
-                                                            <SelectItem value="30">2500 m</SelectItem>
-                                                            <SelectItem value="50">5000 m</SelectItem>
+                                                            <SelectItem value="200">200 m</SelectItem>
+                                                            <SelectItem value="400">400 m</SelectItem>
+                                                            <SelectItem value="600">600 m</SelectItem>
+                                                            <SelectItem value="1000">1000 m</SelectItem>
+                                                            <SelectItem value="1500">1500 m</SelectItem>
+                                                            <SelectItem value="2500">2500 m</SelectItem>
+                                                            <SelectItem value="5000">5000 m</SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                 </div>
@@ -692,9 +703,6 @@ const RegisterProfessionalWrapper = () => {
                                     </div>
                                 </div>
                             )}
-
-
-
                             {step === 6 && (
                                 <div className="space-y-6">
                                     <div className="space-y-4">
@@ -759,9 +767,9 @@ const RegisterProfessionalWrapper = () => {
                                             type="button"
                                             onClick={handleRegister}
                                             className="bg-[#007D63] hover:bg-[#006a52] text-white"
-                                            disabled={loading}
+                                            disabled={stateLoading}
                                         >
-                                            {loading ? "Registering..." : "Complete Registration"}
+                                            {stateLoading ? "Registering..." : "Complete Registration"}
                                         </Button>
                                     </div>
                                 </div>
