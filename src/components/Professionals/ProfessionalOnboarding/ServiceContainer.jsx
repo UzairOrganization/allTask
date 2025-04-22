@@ -202,7 +202,7 @@ export function ServicesContainer() {
 
     return (
         <>
-            <Card className="border h-[400px] overflow-y-scroll border-gray-200 rounded-lg shadow-sm">
+            <Card className="border h-[400px] overflow-y-scroll border-gray-200 rounded-lg shadow-sm lg:col-span-2">
                 <Toaster />
                 <CardHeader className="border-b border-gray-200 flex flex-row justify-between items-center">
                     <div>
@@ -349,7 +349,7 @@ export function ServicesContainer() {
 
                 <CardContent className="p-6">
                     {provider?.selectedCategories?.length > 0 ? (
-                        <div className="space-y-4">
+                        <div className="space-y-2">
                             {provider.selectedCategories.map((category, index) => (
                                 <div key={index} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
                                     <div className="flex justify-between items-center">

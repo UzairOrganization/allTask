@@ -37,16 +37,16 @@ const ProfessionalHeader = () => {
 
   return (
     <header className="w-full bg-white border-b shadow-lg border-gray-200">
-      <div className="container mx-auto p-4 flex justify-between items-center">
+      <div className="border w-full p-4 flex justify-between items-center">
         {/* Logo */}
-        <div className="logo w-[160px] ml-2">
+        <div className="logo lg:max-w-[140px] 2xl:max-w-[160px] lg:ml-0 2xl:ml-2">
           <Link href="/">
             <img src="assets/images/logoMain.png" alt="Logo" className="w-full" />
           </Link>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex mr-4 items-center gap-8">
+        <nav className="hidden md:flex mr-4 items-center lg:gap-4 2xl:gap-8">
           {navItems.map((item) => (
             <div key={item.href} className="relative group">
               <Link

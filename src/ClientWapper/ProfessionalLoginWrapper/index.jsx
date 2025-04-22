@@ -1,65 +1,103 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Head from "next/head";
-import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { loginUser, checkAuthStatus } from "@/redux/slices/authSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { FaFacebook } from "react-icons/fa";
-import { AiFillGoogleCircle } from "react-icons/ai";
-import { redirect } from 'next/navigation'
-import Header from "@/components/Header/index";
 import { toast, Toaster } from "sonner";
 import Link from "next/link";
-import API from "@/redux/api";
+import axios from "axios";
+import Header from "@/components/Header/index";
+import { API } from "@/lib/data-service";
+import { useDispatch } from "react-redux";
+import { checkProviderAuthStatus } from "@/redux/slices/authSlice";
 
 const ProfessionalLoginWrapper = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     const router = useRouter();
-    const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
     const [credentials, setCredentials] = useState({
         email: "",
         password: "",
     });
+    const [loading, setLoading] = useState(false);
 
     // Handle input change
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.id]: e.target.value });
     };
 
-
     const handleLogin = async (e) => {
         e.preventDefault();
-        const result = await dispatch(loginUser(credentials));
-        if (result.meta.requestStatus === "fulfilled") {
-            router.push("/")
-        } else {
-            toast.error("Login Failed", {
-                description: "Invalid credentials. Please try again.",
-                duration: 3000, // Auto dismiss after 3 seconds
+        setLoading(true);
+
+        try {
+            const response = await axios.post(`${API}/api/service-provider/login-service-provider`, credentials, { withCredentials: true });
+            if (response.status === 200) {
+                toast.success("Login Successful", {
+                    description: "You are being redirected to your dashboard",
+                    duration: 3000,
+                    position: "bottom-left",
+                });
+                dispatch(checkProviderAuthStatus())
+                // Redirect to professional dashboard after successful login
+                router.push("/professional-dashboard");
+
+            }
+        } catch (error) {
+            let errorMessage = "Login Failed";
+
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                switch (error.response.status) {
+                    case 400:
+                        errorMessage = error.response.data.error || "Invalid credentials";
+                        break;
+                    case 404:
+                        errorMessage = "User not found";
+                        break;
+                    case 500:
+                        errorMessage = "Server error. Please try again later.";
+                        break;
+                    default:
+                        errorMessage = "An error occurred during login";
+                }
+            } else if (error.request) {
+                // The request was made but no response was received
+                errorMessage = "No response from server. Please check your connection.";
+            } else {
+                // Something happened in setting up the request
+                errorMessage = "Error setting up request";
+            }
+
+            toast.error(errorMessage, {
+                description: "Please try again",
+                duration: 3000,
                 position: "bottom-left",
                 style: {
-                    color: "red", // 🔴 Makes the title red
+                    color: "red",
                     fontWeight: "bold",
                 },
             });
+        } finally {
+            setLoading(false);
         }
     };
+
     return (
         <>
             <Header />
+            <Toaster />
             <div className="min-h-[80vh] flex flex-col justify-center items-center">
                 <div className="mt-12 w-5xl overflow-hidden flex items-center justify-center">
                     <div className="max-w-lg w-full p-8 bg-white rounded-lg shadow-lg border ">
                         <h1 className="text-3xl font-bold text-center text-black mb-6">
                             Professional Login
                         </h1>
-                        <Toaster />
+
                         {/* Login Form */}
                         <form onSubmit={handleLogin}>
                             {/* Email Field */}
@@ -94,7 +132,7 @@ const ProfessionalLoginWrapper = () => {
                                     <Checkbox id="remember" />
                                     <Label htmlFor="remember" className={"text-[#007D63]"}>Remember me</Label>
                                 </div>
-                                < Link href={"/forget-password"}>
+                                <Link href={"/forget-password"}>
                                     <Button variant="link" className="text-sm p-0 h-auto text-[#007D63]">
                                         Forgot password?
                                     </Button>
@@ -102,28 +140,22 @@ const ProfessionalLoginWrapper = () => {
                             </div>
 
                             {/* Login Button */}
-                            <Button type="submit" className="bg-[#007D63] w-full mb-2 hover:bg-[#47796f] cursor-pointer" disabled={loading}>
+                            <Button
+                                type="submit"
+                                className="bg-[#007D63] w-full mb-2 hover:bg-[#47796f] cursor-pointer"
+                                disabled={loading}
+                            >
                                 {loading ? "Logging in..." : "Log in"}
                             </Button>
                         </form>
-
-                        {/* Separator
-                        <div className="relative mb-6">
-                            <Separator />
-                            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2 text-sm text-gray-500">
-                                OR
-                            </span>
-                        </div> */}
-
-                        {/* Social Login Buttons */}
-                    
                     </div>
-                </div >
+                </div>
                 <div className="mt-3">
-                    <h3 className="text-center font-semibold"> Join us as Professional.<span className="text-[#007D63]"> <Link href={"/register-email"}> Create Account </Link> </span></h3>
+                    <h3 className="text-center font-semibold"> Join us as Professional.<span className="text-[#007D63]"> <Link href={"/register-professional"}> Create Account </Link> </span></h3>
                 </div>
             </div>
         </>
     )
 }
-export default ProfessionalLoginWrapper
+
+export default ProfessionalLoginWrapper;

@@ -1,10 +1,11 @@
 import ProfessionalHeader from "@/components/Professionals/ProfessionalHeader"
+import ChatPage from "./ChatApp"
 
 const page = () => {
     return (
         <>
             <ProfessionalHeader />
-            <h1> My Responses</h1>
+            <ChatPage />
         </>
     )
 }

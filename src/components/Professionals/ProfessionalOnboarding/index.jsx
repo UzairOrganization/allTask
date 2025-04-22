@@ -6,18 +6,126 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { CheckCircle } from "lucide-react"
+import { CheckCircle, ChevronRight, Edit, Info, Crown, User, Upload, X } from "lucide-react"
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ChevronRight, Edit, Info } from "lucide-react"
 import { ServicesContainer } from "./ServiceContainer";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
+// FileUpload component
+const FileUpload = ({ onFileUpload, accept, uploading }) => {
+    const [file, setFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+            setPreviewUrl(URL.createObjectURL(selectedFile));
+            onFileUpload(selectedFile);
+        }
+    };
+
+    const handleRemove = () => {
+        setFile(null);
+        setPreviewUrl(null);
+    };
+
+    return (
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+            {previewUrl ? (
+                <div className="relative">
+                    {file.type.startsWith('image/') ? (
+                        <img src={previewUrl} alt="Preview" className="h-40 mx-auto mb-4 rounded-md" />
+                    ) : (
+                        <div className="h-40 flex items-center justify-center bg-gray-100 rounded-md mb-4">
+                            <span className="text-gray-500">{file.name}</span>
+                        </div>
+                    )}
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="absolute -top-3 -right-3 bg-white rounded-full p-1 shadow-sm"
+                        onClick={handleRemove}
+                    >
+                        <X className="h-4 w-4 text-gray-500" />
+                    </Button>
+                </div>
+            ) : (
+                <>
+                    <div className="flex flex-col items-center justify-center space-y-2">
+                        <Upload className="h-8 w-8 text-gray-400" />
+                        <div className="flex text-sm text-gray-600">
+                            <Label htmlFor="file-upload" className="relative cursor-pointer rounded-md font-medium text-green-600 hover:text-green-500">
+                                <span>Upload a file</span>
+                                <input
+                                    id="file-upload"
+                                    name="file-upload"
+                                    type="file"
+                                    className="sr-only"
+                                    onChange={handleFileChange}
+                                    accept={accept}
+                                    disabled={uploading}
+                                />
+                            </Label>
+                            <p className="pl-1">or drag and drop</p>
+                        </div>
+                        <p className="text-xs text-gray-500">{accept}</p>
+                    </div>
+                </>
+            )}
+            {uploading && (
+                <div className="mt-4">
+                    <Progress value={50} className="h-2" />
+                    <p className="text-sm text-gray-500 mt-1">Uploading...</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
 export function ProfessionalOnboarding() {
     const [dateTime, setDateTime] = useState("");
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { provider } = useSelector(state => state.auth);
+
+    // Form state
+    const [formData, setFormData] = useState({
+        name: provider?.name || "",
+        email: provider?.email || "",
+        about: provider?.about || "",
+        contactInfo: provider?.contactInfo || "",
+        country: provider?.country || "",
+        state: provider?.state || "",
+        city: provider?.city || "",
+        postalCode: provider?.postalCode || "",
+        verificationDocument: provider?.verificationDocument || null,
+    });
+
+    const [documentUploading, setDocumentUploading] = useState(false);
+    const [rejectionReason, setRejectionReason] = useState(provider?.reasonOfRejection || "");
+    const [holdReason, setHoldReason] = useState(provider?.reasonOfHold || "");
+
     useEffect(() => {
         const updateTime = () => {
             const now = new Date();
@@ -34,11 +142,62 @@ export function ProfessionalOnboarding() {
             setDateTime(`${dayName}, ${day} ${month} ${hours}:${minutes}${ampm}`);
         };
 
-        updateTime(); // call immediately
-        const interval = setInterval(updateTime, 60000); // update every minute
+        updateTime();
+        const interval = setInterval(updateTime, 60000);
 
-        return () => clearInterval(interval); // cleanup on unmount
+        return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        if (provider) {
+            setFormData({
+                name: provider.name || "",
+                email: provider.email || "",
+                about: provider.about || "",
+                contactInfo: provider.contactInfo || "",
+                country: provider.country || "",
+                state: provider.state || "",
+                city: provider.city || "",
+                postalCode: provider.postalCode || "",
+                verificationDocument: provider.verificationDocument || null,
+            });
+            setRejectionReason(provider.reasonOfRejection || "");
+            setHoldReason(provider.reasonOfHold || "");
+        }
+    }, [provider]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleDocumentUpload = async (file) => {
+        setDocumentUploading(true);
+        try {
+            // Simulate upload
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            setFormData(prev => ({
+                ...prev,
+                verificationDocument: URL.createObjectURL(file)
+            }));
+        } catch (error) {
+            console.error("Upload failed:", error);
+        } finally {
+            setDocumentUploading(false);
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Handle form submission here
+        console.log("Form submitted:", formData);
+        // You would typically dispatch an action here to update the provider's profile
+        setIsDialogOpen(false);
+    };
+
     return (
         <div className="w-full my-4 max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm">
             <div className="mb-8">
@@ -105,7 +264,7 @@ export function ProfessionalOnboarding() {
                     <AccordionTrigger className="hover:no-underline">
                         <div className="flex items-center space-x-3">
                             <CheckCircle className="h-5 w-5 text-green-600" />
-                            <span className="text-left font-medium">4. You get hired.</span>
+                            <span className="text-left font-medium">5. You get hired.</span>
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="pl-10 text-gray-600">
@@ -114,136 +273,275 @@ export function ProfessionalOnboarding() {
                 </AccordionItem>
             </Accordion>
 
-
             <div className="container mx-auto px-4 py-6">
                 <h1 className="text-3xl font-bold text-gray-900 mb-8">Profile Overview</h1>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {/* Profile Completion */}
-                    <Card className="border border-gray-200 rounded-lg shadow-sm">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+                    {/* Profile Completion Card */}
+                    <Card className="border border-gray-200 rounded-lg shadow-sm h-full flex flex-col">
                         <CardHeader className="border-b border-gray-200">
-                            <h2 className="text-xl font-semibold text-gray-800">Profile Status</h2>
+                            <div className="flex items-center space-x-4">
+                                {provider?.profilePicture ? (
+                                    <img
+                                        src={provider.profilePicture}
+                                        alt="Profile"
+                                        className="h-12 w-12 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                                        <User className="h-6 w-6 text-gray-400" />
+                                    </div>
+                                )}
+                                <div>
+                                    <h2 className="text-xl font-semibold text-gray-800">
+                                        {provider?.name || "Your Profile"}
+                                    </h2>
+                                    <p className="text-sm text-gray-500">Service Provider</p>
+                                </div>
+                            </div>
                         </CardHeader>
-                        <CardContent className="p-6">
-                            <div className="space-y-4">
+                        <CardContent className="p-6 flex-grow">
+                            <div className="space-y-4 h-full flex flex-col">
                                 <div>
                                     <p className="text-gray-600 mb-2">Your profile is 97% complete</p>
                                     <Progress value={97} className="h-2 bg-gray-200" />
                                 </div>
-                                <p className="text-gray-700">
-                                    Completing your profile is a great way to appeal to customers
+                                <p className="text-gray-700 flex-grow">
+                                    Completing your profile increases your visibility by up to 3× and helps you get more clients.
                                 </p>
-                                <Button variant="outline" className="border-green-700 text-green-700">
-                                    <Edit className="mr-2 h-4 w-4" />
-                                    Edit profile
-                                </Button>
+
+                                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                                    <DialogTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            className="border-green-700 text-green-700 mt-auto w-full"
+                                        >
+                                            <Edit className="mr-2 h-4 w-4" />
+                                            Complete Profile
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+                                        <DialogHeader>
+                                            <DialogTitle>Complete Your Profile</DialogTitle>
+                                        </DialogHeader>
+
+                                        <form onSubmit={handleSubmit} className="space-y-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="name">Full Name</Label>
+                                                    <Input
+                                                        id="name"
+                                                        name="name"
+                                                        value={formData.name}
+                                                        onChange={handleInputChange}
+                                                        required
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="email">Email</Label>
+                                                    <Input
+                                                        id="email"
+                                                        name="email"
+                                                        type="email"
+                                                        value={formData.email}
+                                                        onChange={handleInputChange}
+                                                        required
+                                                        disabled
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-2 md:col-span-2">
+                                                    <Label htmlFor="about">About You</Label>
+                                                    <Textarea
+                                                        id="about"
+                                                        name="about"
+                                                        value={formData.about}
+                                                        onChange={handleInputChange}
+                                                        rows={4}
+                                                        placeholder="Tell potential clients about your experience and expertise"
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="contactInfo">Contact Number</Label>
+                                                    <Input
+                                                        id="contactInfo"
+                                                        name="contactInfo"
+                                                        value={formData.contactInfo}
+                                                        onChange={handleInputChange}
+                                                        required
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="country">Country</Label>
+                                                    <Select
+                                                        value={formData.country}
+                                                        onValueChange={(value) => setFormData({ ...formData, country: value })}
+                                                    >
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Select country" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="United States">United States</SelectItem>
+                                                            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                                                            <SelectItem value="Canada">Canada</SelectItem>
+                                                            <SelectItem value="Australia">Australia</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="state">State</Label>
+                                                    <Input
+                                                        id="state"
+                                                        name="state"
+                                                        value={formData.state}
+                                                        onChange={handleInputChange}
+                                                        required
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="city">City</Label>
+                                                    <Input
+                                                        id="city"
+                                                        name="city"
+                                                        value={formData.city}
+                                                        onChange={handleInputChange}
+                                                        required
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="postalCode">Postal Code</Label>
+                                                    <Input
+                                                        id="postalCode"
+                                                        name="postalCode"
+                                                        value={formData.postalCode}
+                                                        onChange={handleInputChange}
+                                                        required
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-2 md:col-span-2">
+                                                    <Label>Verification Document</Label>
+                                                    {formData.verificationDocument ? (
+                                                        <div className="flex items-center gap-4">
+                                                            {formData.verificationDocument.startsWith('data:') ||
+                                                                formData.verificationDocument.startsWith('http') ? (
+                                                                <img
+                                                                    src={formData.verificationDocument}
+                                                                    alt="Verification document"
+                                                                    className="h-20 w-20 object-cover rounded-md"
+                                                                />
+                                                            ) : (
+                                                                <div className="h-20 w-20 bg-gray-100 rounded-md flex items-center justify-center">
+                                                                    <span className="text-xs text-gray-500">Document</span>
+                                                                </div>
+                                                            )}
+                                                            <Button
+                                                                variant="outline"
+                                                                onClick={() => setFormData({ ...formData, verificationDocument: null })}
+                                                            >
+                                                                Change Document
+                                                            </Button>
+                                                        </div>
+                                                    ) : (
+                                                        <FileUpload
+                                                            onFileUpload={handleDocumentUpload}
+                                                            accept="image/*,.pdf"
+                                                            uploading={documentUploading}
+                                                        />
+                                                    )}
+                                                    <p className="text-sm text-gray-500 mt-2">
+                                                        Kindly upload a PDF containing all relevant documents that verify your professional expertise and the services you provide.
+                                                    </p>
+                                                </div>
+
+                                                {provider?.status === 'rejected' && rejectionReason && (
+                                                    <div className="space-y-2 md:col-span-2">
+                                                        <Label>Reason for Rejection</Label>
+                                                        <div className="p-4 bg-red-50 rounded-md border border-red-200">
+                                                            <p className="text-red-700">{rejectionReason}</p>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {provider?.status === 'onHold' && holdReason && (
+                                                    <div className="space-y-2 md:col-span-2">
+                                                        <Label>Account On Hold - Reason</Label>
+                                                        <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200">
+                                                            <p className="text-yellow-700">{holdReason}</p>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="flex justify-end gap-4">
+                                                <Button
+                                                    variant="outline"
+                                                    type="button"
+                                                    onClick={() => setIsDialogOpen(false)}
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <Button type="submit" className="bg-green-700 hover:bg-green-800">
+                                                    Save Changes
+                                                </Button>
+                                            </div>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* Starter Pack Offer */}
-                    <Card className="border rounded-lg shadow-sm bg-green-50 border-green-100">
-                        <CardHeader className="border-b border-green-200">
-                            <h2 className="text-xl font-semibold text-gray-800">GET STARTED PACK OFFER</h2>
+                    {/* Professional Plus Card */}
+                    <Card className="border rounded-lg shadow-sm bg-gradient-to-br from-green-50 to-green-100 border-green-200 h-full flex flex-col">
+                        <CardHeader className="border-b border-green-200 bg-green-100/50">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-xl font-semibold text-gray-800">PROFESSIONAL PLUS</h2>
+                                <Badge variant="outline" className="border-green-600 text-green-600">
+                                    RECOMMENDED
+                                </Badge>
+                            </div>
                         </CardHeader>
-                        <CardContent className="p-6">
-                            <div className="space-y-4">
-                                <h3 className="font-bold text-lg">Starter pack offer</h3>
-                                <ul className="space-y-2 text-gray-700">
-                                    <li className="flex items-start gap-2">
-                                        <span>•</span>
-                                        <span>Respond to up to 10 customers</span>
+                        <CardContent className="p-6 flex-grow flex flex-col">
+                            <div className="space-y-4 flex-grow">
+                                <div className="flex items-end gap-2">
+                                    <span className="text-3xl font-bold">$199</span>
+                                    <span className="text-gray-600">/year</span>
+                                </div>
+                                <ul className="space-y-3 text-gray-700">
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                        <span><strong>Platform Choice Badges</strong> - Stand out as a verified top professional</span>
                                     </li>
-                                    <li className="flex items-start gap-2">
-                                        <span>•</span>
-                                        <span>20% OFF and a get hired guarantee</span>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                        <span><strong>Priority Placement</strong> - Appear in top spots for relevant searches</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                        <span><strong>3× More Visibility</strong> - Get seen by more potential clients</span>
                                     </li>
                                 </ul>
-                                <Button className="bg-green-700 hover:bg-green-800">
-                                    <Info className="mr-2 h-4 w-4" />
-                                    More info
+                            </div>
+                            <div className="pt-4">
+                                <Button className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg">
+                                    <Crown className="mr-2 h-5 w-5" />
+                                    Upgrade Now
                                 </Button>
+                                <p className="text-center text-sm text-gray-500 mt-2">
+                                    30-day money back guarantee
+                                </p>
                             </div>
                         </CardContent>
                     </Card>
 
                     {/* Services Section */}
-                    {/* <Card className="border border-gray-200 rounded-lg shadow-sm">
-                        <CardHeader className="border-b border-gray-200">
-                            <h2 className="text-xl font-semibold text-gray-800">Services</h2>
-                            <p className="text-gray-600 text-sm">You'll receive leads in these categories</p>
-                        </CardHeader>
-                        <CardContent className="p-6">
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <span className="font-medium">Mobile Software Development</span>
-                                    <Badge variant="outline" className="text-green-700 border-green-700">
-                                        Active
-                                    </Badge>
-                                </div>
-
-                                <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                                    <div>
-                                        <h3 className="font-medium">Software Testing</h3>
-                                    </div>
-                                    <Badge className="bg-green-100 text-green-700">
-                                        +15
-                                    </Badge>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card> */}
-                    <ServicesContainer/>
-
-                    {/* Locations Section */}
-                    <Card className="border border-gray-200 rounded-lg shadow-sm">
-                        <CardHeader className="border-b border-gray-200">
-                            <h2 className="text-xl font-semibold text-gray-800">Locations</h2>
-                            <p className="text-gray-600 text-sm">You're receiving customers within</p>
-                        </CardHeader>
-                        <CardContent className="p-6">
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-2">
-                                    <span className="font-medium">Nationwide</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="font-medium">Ilford</span>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Leads Overview */}
-                    {/* <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">
-                        <CardHeader className="border-b border-gray-200">
-                            <h2 className="text-xl font-semibold text-gray-800">Leads Overview</h2>
-                        </CardHeader>
-                        <CardContent className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="space-y-2">
-                                <p className="text-gray-600">Estimated leads per day</p>
-                                <h3 className="text-2xl font-bold text-green-700">97</h3>
-                            </div>
-                            <div className="space-y-2">
-                                <p className="text-gray-600">Sending new leads to</p>
-                                <div className="flex items-center gap-2">
-                                    <span className="font-medium">hamza.hashm@devocra.com</span>
-                                    <Button variant="link" className="text-green-700 p-0 h-auto">
-                                        Change
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <p className="text-gray-600">Unread leads</p>
-                                <div className="flex items-center gap-2">
-                                    <h3 className="text-2xl font-bold">82</h3>
-                                    <Button variant="outline" className="border-green-700 text-green-700">
-                                        View
-                                    </Button>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card> */}
-
-                    
+                    <ServicesContainer />
 
                     {/* Response Rate */}
                     <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">
@@ -264,7 +562,6 @@ export function ProfessionalOnboarding() {
                     </Card>
                 </div>
             </div>
-
         </div>
     )
 }

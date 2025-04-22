@@ -79,85 +79,88 @@ import { getCookie } from "cookies-next";
 //     matcher: ["/account", "/login", "/register-email", "/about", "/user-profile", "/user-requests"], // Protect these routes
 // };
 
-middleware.js
+// middleware.js
+
+
 export async function middleware(req) {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.token || '';
 
-    // Auth pages
-    const authPages = ['/login', '/professional-login', '/register-email', '/register-professional', '/forget-password'];
+    const authPages = [
+        '/login', '/professional-login', '/register-email',
+        '/register-professional', '/forget-password'
+    ];
     const isAuthPage = authPages.includes(req.nextUrl.pathname);
 
-    // User protected routes
     const userRoutes = [
-        '/about',
-        '/user-profile',
-        '/user-requests'
+        '/about', '/user-profile', '/user-requests',
     ];
 
-    // Provider protected routes
     const providerRoutes = [
         '/professional-dashboard',
         // '/provider-requests',
         // '/provider-profile'
     ];
 
-    // Check if current route is protected
     const isUserRoute = userRoutes.some(route => req.nextUrl.pathname.startsWith(route));
     const isProviderRoute = providerRoutes.some(route => req.nextUrl.pathname.startsWith(route));
+    const isRoot = req.nextUrl.pathname === '/';
 
-    // If no token and trying to access protected route
     if (!token && (isUserRoute || isProviderRoute)) {
-        return NextResponse.redirect(new URL('/login', req.url));
+        const redirectTo = isProviderRoute ? '/professional-login' : '/login';
+        return NextResponse.redirect(new URL(redirectTo, req.url));
     }
 
     if (token) {
         try {
-            // First try user verification
-            if (isUserRoute) {
+            let isUserValid = false;
+            let isProviderValid = false;
+
+            // Check user token
+            try {
                 const userRes = await axios.get('http://localhost:5000/api/users/verify-route', {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true
                 });
-                if (userRes.data.valid) return NextResponse.next();
-            }
+                isUserValid = userRes.data.valid;
+            } catch (_) {}
 
-            // Then try provider verification
-            if (isProviderRoute) {
+            // Check provider token
+            try {
                 const providerRes = await axios.get('http://localhost:5000/api/service-provider/verify-route', {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true
                 });
-                if (providerRes.data.valid) return NextResponse.next();
+                isProviderValid = providerRes.data.valid;
+            } catch (_) {}
+
+            // Redirect providers away from /
+            if (isRoot && isProviderValid) {
+                return NextResponse.redirect(new URL('/professional-dashboard', req.url));
             }
 
-            // If on auth page but already authenticated
+            // Restrict user routes
+            if (isUserRoute && isUserValid) return NextResponse.next();
+            if (isProviderRoute && isProviderValid) return NextResponse.next();
+
+            // Auth pages — redirect if already authenticated
             if (isAuthPage) {
-                // Try to determine which type of user is logged in
-                try {
-                    const userRes = await axios.get('http://localhost:5000/api/users/verify-route', {
-                        headers: { Authorization: `Bearer ${token}` },
-                        withCredentials: true
-                    });
-                    if (userRes.data.valid) return NextResponse.redirect(new URL('/', req.url));
-            
-                } catch (userError) {
-                    const providerRes = await axios.get('http://localhost:5000/api/service-provider/verify-route', {
-                        headers: { Authorization: `Bearer ${token}` },
-                        withCredentials: true
-                    });
-                    if (providerRes.data.valid) return NextResponse.redirect(new URL('/professional-dashboard', req.url));
-                }
+                if (isUserValid) return NextResponse.redirect(new URL('/', req.url));
+                if (isProviderValid) return NextResponse.redirect(new URL('/professional-dashboard', req.url));
             }
 
-            // If no verification passed for protected route
-            if (isUserRoute || isProviderRoute) {
+            // Unauthorized access to provider route
+            if (isProviderRoute && !isProviderValid) {
+                return NextResponse.redirect(new URL('/professional-login', req.url));
+            }
+
+            // Unauthorized access to user route
+            if (isUserRoute && !isUserValid) {
                 return NextResponse.redirect(new URL('/login', req.url));
             }
 
         } catch (error) {
             console.error('Authentication check failed:', error);
-            // Clear invalid token
             const response = NextResponse.redirect(new URL('/login', req.url));
             response.cookies.delete('token');
             return response;
@@ -169,8 +172,9 @@ export async function middleware(req) {
 
 export const config = {
     matcher: [
+        '/', 
         '/about', '/user-profile', '/user-requests',
         '/professional-dashboard',
-        '/login', '/professional-login', '/register-email', '/register-professional', '/forget-password'
+        '/login', '/professional-login', '/register-email', '/register-professional', '/forget-password',
     ],
 };
