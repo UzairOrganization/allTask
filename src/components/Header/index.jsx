@@ -134,9 +134,9 @@ export default function Header() {
                             </Link>
 
                             <div className="btn-box">
-                                <a href="index.html" className="theme-btn btn-two">
+                                <Link href="/professional-login" className="theme-btn btn-two">
                                     Join as Professional
-                                </a>
+                                </Link>
                             </div>
 
                             <div className="btn-box">
@@ -221,13 +221,13 @@ export default function Header() {
                                         >
                                             LOGIN
                                         </Link>
-                                        <a 
-                                            href="index.html" 
+                                        <Link
+                                            href="/professional-login" 
                                             className="block py-2 font-semibold text-lg"
                                             onClick={() => setMobileMenuOpen(false)}
                                         >
                                             Join as Professional
-                                        </a>
+                                        </Link>
                                         <a 
                                             href="index.html" 
                                             className="block py-2 font-semibold text-lg"
