@@ -370,7 +370,7 @@ const LeadDetailView = ({ lead, onBack }) => {
                             <h4 className="font-medium mb-2">Service Details</h4>
                             <div className="space-y-2">
                                 {Object.entries(lead.details || {})
-                                    .filter(([key]) => key !== 'customer' && key !== 'kind')
+                                    .filter(([key]) => key !== 'customer' && key !== 'kind' && key != 'isPurchased' && key != 'purchasedPrice')
                                     .map(([key, value]) => (
                                         <p key={key}>
                                             <span className="font-medium capitalize">
@@ -401,7 +401,7 @@ const LeadDetailView = ({ lead, onBack }) => {
 
                         <div className="grid grid-cols-2 gap-4 mb-6">
                             <div>
-                                <p className="text-sm text-gray-500">Project Budget</p>
+                                <p className="text-sm text-gray-500">Lead Price</p>
                                 <p className="font-medium">{lead.credits}</p>
                             </div>
                             <div>
