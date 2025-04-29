@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User, Smartphone, Menu, X } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   Accordion,
@@ -17,23 +17,25 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
+import { logoutUser } from "@/redux/slices/authSlice";
+import { useRouter } from 'next/navigation'
 const ProfessionalHeader = () => {
   const pathname = usePathname();
   const { provider } = useSelector(state => state.auth);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const dispatch = useDispatch()
+  const router = useRouter()
   const navItems = [
     { href: "/professional-dashboard", label: "Dashboard" },
     { href: "/leads", label: "Leads" },
     { href: "/my-responses", label: "My Responses" },
-    { href: "/settings", label: "Settings" }
+    { href: "/help", label: "Help" }
   ];
 
-  useEffect(() => {
-    console.log(provider);
-
-  })
+  const logoutHandler = async () => {
+    await dispatch(logoutUser())
+    router.push("/")
+  }
 
   return (
     <header className="w-full bg-white border-b shadow-lg border-gray-200">
@@ -41,7 +43,7 @@ const ProfessionalHeader = () => {
         {/* Logo */}
         <div className="logo w-[120px] lg:max-w-[140px] 2xl:max-w-[160px] lg:ml-0 2xl:ml-2">
           <Link href="/">
-            <img src="assets/images/logoMain.png" alt="Logo" className="w-full" />
+            <img src="/assets/images/logoMain.png" alt="Logo" className="w-full" />
           </Link>
         </div>
 
@@ -82,15 +84,17 @@ const ProfessionalHeader = () => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 mt-2 shadow-lg rounded-md border border-gray-200">
-              <DropdownMenuItem className="flex items-center gap-3 p-3 hover:bg-green-50 cursor-pointer">
-                <User className="h-4 w-4 text-green-700" />
-                <span>View public profile</span>
-              </DropdownMenuItem>
+              <Link href={`/professional/${provider?.name}`}>
+                <DropdownMenuItem className="flex items-center gap-3 p-3 hover:bg-green-50 cursor-pointer">
+                  <User className="h-4 w-4 text-green-700" />
+                  <span>View public profile</span>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem className="flex items-center gap-3 p-3 hover:bg-green-50 cursor-pointer">
                 <Smartphone className="h-4 w-4 text-green-700" />
                 <span>Alltasko App</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-3 p-3 text-red-600 hover:bg-red-50 cursor-pointer">
+              <DropdownMenuItem onClick={logoutHandler} className="flex items-center gap-3 p-3 text-red-600 hover:bg-red-50 cursor-pointer">
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </DropdownMenuItem>
@@ -174,13 +178,13 @@ const ProfessionalHeader = () => {
                     <Smartphone className="h-5 w-5" />
                     <span>Alltasko App</span>
                   </Link>
-                  <Link
-                    href="#"
+                  <div
+                    onClick={logoutHandler}
                     className="flex items-center gap-3 py-2 text-red-600 hover:text-red-700"
                   >
                     <LogOut className="h-5 w-5" />
                     <span>Logout</span>
-                  </Link>
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

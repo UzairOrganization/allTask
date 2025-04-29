@@ -54,7 +54,7 @@ export default function Header() {
                 {/* Logo */}
                 <div className="logo w-[150px]">
                     <Link href="/">
-                        <img src="assets/images/logoMain.png" alt="" className="w-full" />
+                        <img src="/assets/images/logoMain.png" alt="" className="w-full" />
                     </Link>
                 </div>
 

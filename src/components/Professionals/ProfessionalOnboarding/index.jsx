@@ -6,7 +6,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { CheckCircle, ChevronRight, Edit, Info, Crown, User, Upload, X } from "lucide-react"
+import { CheckCircle, ChevronRight, Edit, Info, Crown, User, Upload, X, ClockIcon } from "lucide-react"
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
@@ -31,6 +31,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import axios from "axios";
+import { API } from "@/lib/data-service";
+import { Toaster, toast } from "sonner";
 
 // FileUpload component
 const FileUpload = ({ onFileUpload, accept, uploading }) => {
@@ -108,7 +111,7 @@ export function ProfessionalOnboarding() {
     const [dateTime, setDateTime] = useState("");
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { provider } = useSelector(state => state.auth);
-
+    const [profileUpdating, setProfileUpdateing] = useState(false)
     // Form state
     const [formData, setFormData] = useState({
         name: provider?.name || "",
@@ -176,392 +179,437 @@ export function ProfessionalOnboarding() {
 
     const handleDocumentUpload = async (file) => {
         setDocumentUploading(true);
+
         try {
-            // Simulate upload
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setFormData(prev => ({
-                ...prev,
-                verificationDocument: URL.createObjectURL(file)
-            }));
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await axios.post(`${API}/api/service-provider/verification-documents/${provider._id}`, formData, { withCredentials: true });
+
+            if (response.status === 200) {
+                setFormData(prev => ({
+                    ...prev,
+                    verificationDocument: response?.data.serviceProvider.verificationDocument,
+                    status: 'pending'
+                }));
+                toast.success("Document Uploaded Successfully", {
+                    description: "Your Verification Document has been successfully uploaded",
+                    duration: 3000,
+                    position: "bottom-left",
+                })
+            } else {
+                throw new Error('Upload failed');
+
+            }
         } catch (error) {
-            console.error("Upload failed:", error);
+            console.error('Error uploading document:', error);
+            toast.error("Error Uploading Documents", {
+                description: "Something went wrong!",
+                duration: 3000,
+                position: "bottom-left",
+            })
+            // Show error toast/notification
         } finally {
             setDocumentUploading(false);
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission here
-        console.log("Form submitted:", formData);
-        // You would typically dispatch an action here to update the provider's profile
-        setIsDialogOpen(false);
+        setProfileUpdateing(true)
+        try {
+            const response = await axios.put(`${API}/api/service-provider/update-provider-profile`, { about: formData.about }, { withCredentials: true });
+            console.log(response);
+
+            if (response.status === 200) {
+                setFormData(prev => ({
+                    ...prev,
+                    about: response?.data.provider.about,
+                    status: 'pending'
+                }));
+                toast.success("Profile Updated Successfully!", {
+                    description: "Your Profile has been updated.",
+                    duration: 3000,
+                    position: "bottom-left",
+                })
+            } else {
+                throw new Error('update failed');
+
+            }
+        } catch (error) {
+            console.error('Error uploading document:', error);
+            toast.error("Error Updating Profile!", {
+                description: "Something went wrong. Try again later.",
+                duration: 3000,
+                position: "bottom-left",
+            })
+            // Show error toast/notification
+        } finally {
+            setIsDialogOpen(false);
+            setProfileUpdateing(false);
+        }
     };
 
     return (
-        <div className="w-full my-4 max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm">
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">Hello, {provider?.name}!</h1>
-                <p className="text-gray-500">{dateTime}</p>
-            </div>
+        <>
 
-            <div className="mb-8 p-6 bg-green-50 rounded-lg border border-green-100">
-                <h3 className="text-lg font-medium text-green-800 mb-2">Welcome to Our Platform, {provider?.name}</h3>
-                <p className="text-green-700">
-                    We're excited to help you grow your business. Here's how it works:
-                </p>
-            </div>
+            <Toaster />
+            <div className="w-full my-4 max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+                <div className="mb-8">
+                    <h1 className="text-2xl font-bold text-gray-900">Hello, {provider?.name}!</h1>
+                    <p className="text-gray-500">{dateTime}</p>
+                </div>
 
-            <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                    <AccordionTrigger className="hover:no-underline">
-                        <div className="flex items-center space-x-3">
-                            <CheckCircle className="h-5 w-5 text-green-600" />
-                            <span className="text-left font-medium">1. Customers tell us what they need</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-10 text-gray-600">
-                        Customers answer specific questions about their requirements, helping us match you with the most relevant opportunities.
-                    </AccordionContent>
-                </AccordionItem>
+                <div className="mb-8 p-6 bg-green-50 rounded-lg border border-green-100">
+                    <h3 className="text-lg font-medium text-green-800 mb-2">Welcome to Our Platform, {provider?.name}</h3>
+                    <p className="text-green-700">
+                        We're excited to help you grow your business. Here's how it works:
+                    </p>
+                </div>
 
-                <AccordionItem value="item-2">
-                    <AccordionTrigger className="hover:no-underline">
-                        <div className="flex items-center space-x-3">
-                            <CheckCircle className="h-5 w-5 text-green-600" />
-                            <span className="text-left font-medium">2. We send you matching leads</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-10 text-gray-600">
-                        You receive leads that match your preferences instantly by email and on the app, so you never miss an opportunity.
-                    </AccordionContent>
-                </AccordionItem>
+                <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger className="hover:no-underline">
+                            <div className="flex items-center space-x-3">
+                                <CheckCircle className="h-5 w-5 text-green-600" />
+                                <span className="text-left font-medium">1. Customers tell us what they need</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-10 text-gray-600">
+                            Customers answer specific questions about their requirements, helping us match you with the most relevant opportunities.
+                        </AccordionContent>
+                    </AccordionItem>
 
-                <AccordionItem value="item-3">
-                    <AccordionTrigger className="hover:no-underline">
-                        <div className="flex items-center space-x-3">
-                            <CheckCircle className="h-5 w-5 text-green-600" />
-                            <span className="text-left font-medium">3. You choose leads you like</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-10 text-gray-600">
-                        Review leads and select those that fit your business. Get customer contact details right away for the leads you choose.
-                    </AccordionContent>
-                </AccordionItem>
+                    <AccordionItem value="item-2">
+                        <AccordionTrigger className="hover:no-underline">
+                            <div className="flex items-center space-x-3">
+                                <CheckCircle className="h-5 w-5 text-green-600" />
+                                <span className="text-left font-medium">2. We send you matching leads</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-10 text-gray-600">
+                            You receive leads that match your preferences instantly by email and on the app, so you never miss an opportunity.
+                        </AccordionContent>
+                    </AccordionItem>
 
-                <AccordionItem value="item-4">
-                    <AccordionTrigger className="hover:no-underline">
-                        <div className="flex items-center space-x-3">
-                            <CheckCircle className="h-5 w-5 text-green-600" />
-                            <span className="text-left font-medium">4. You contact the customer</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-10 text-gray-600">
-                        Reach out directly to the customer to discuss their needs and provide your services. Build your client base with qualified leads.
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-5">
-                    <AccordionTrigger className="hover:no-underline">
-                        <div className="flex items-center space-x-3">
-                            <CheckCircle className="h-5 w-5 text-green-600" />
-                            <span className="text-left font-medium">5. You get hired.</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-10 text-gray-600">
-                        There's no commission and nothing more to pay.
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
+                    <AccordionItem value="item-3">
+                        <AccordionTrigger className="hover:no-underline">
+                            <div className="flex items-center space-x-3">
+                                <CheckCircle className="h-5 w-5 text-green-600" />
+                                <span className="text-left font-medium">3. You choose leads you like</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-10 text-gray-600">
+                            Review leads and select those that fit your business. Get customer contact details right away for the leads you choose.
+                        </AccordionContent>
+                    </AccordionItem>
 
-            <div className="container mx-auto px-4 py-6">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Profile Overview</h1>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-                    {/* Profile Completion Card */}
-                    <Card className="border border-gray-200 rounded-lg shadow-sm h-full flex flex-col">
-                        <CardHeader className="border-b border-gray-200">
-                            <div className="flex items-center space-x-4">
-                                {provider?.profilePicture ? (
-                                    <img
-                                        src={provider.profilePicture}
-                                        alt="Profile"
-                                        className="h-12 w-12 rounded-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
-                                        <User className="h-6 w-6 text-gray-400" />
+                    <AccordionItem value="item-4">
+                        <AccordionTrigger className="hover:no-underline">
+                            <div className="flex items-center space-x-3">
+                                <CheckCircle className="h-5 w-5 text-green-600" />
+                                <span className="text-left font-medium">4. You contact the customer</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-10 text-gray-600">
+                            Reach out directly to the customer to discuss their needs and provide your services. Build your client base with qualified leads.
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-5">
+                        <AccordionTrigger className="hover:no-underline">
+                            <div className="flex items-center space-x-3">
+                                <CheckCircle className="h-5 w-5 text-green-600" />
+                                <span className="text-left font-medium">5. You get hired.</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-10 text-gray-600">
+                            There's no commission and nothing more to pay.
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+
+                <div className="container mx-auto px-4 py-6">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-8">Profile Overview</h1>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+                        {/* Profile Completion Card */}
+                        <Card className="border border-gray-200 rounded-lg shadow-sm h-full flex flex-col">
+                            <CardHeader className="border-b border-gray-200">
+                                <div className="flex items-center space-x-4">
+                                    {provider?.profilePicture ? (
+                                        <img
+                                            src={provider.profilePicture}
+                                            alt="Profile"
+                                            className="h-12 w-12 rounded-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                                            <User className="h-6 w-6 text-gray-400" />
+                                        </div>
+                                    )}
+                                    <div>
+                                        <h2 className="text-xl font-semibold text-gray-800">
+                                            {provider?.name || "Your Profile"}
+                                        </h2>
+                                        <p className="text-sm text-gray-500">Service Professional</p>
                                     </div>
-                                )}
-                                <div>
-                                    <h2 className="text-xl font-semibold text-gray-800">
-                                        {provider?.name || "Your Profile"}
-                                    </h2>
-                                    <p className="text-sm text-gray-500">Service Provider</p>
                                 </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="p-6 flex-grow">
-                            <div className="space-y-4 h-full flex flex-col">
-                                <div>
-                                    <p className="text-gray-600 mb-2">Your profile is 97% complete</p>
-                                    <Progress value={97} className="h-2 bg-gray-200" />
-                                </div>
-                                <p className="text-gray-700 flex-grow">
-                                    Completing your profile increases your visibility by up to 3× and helps you get more clients.
-                                </p>
+                            </CardHeader>
+                            <CardContent className="p-6 flex-grow">
+                                <div className="space-y-4 h-full flex flex-col">
+                                    <div>
+                                        <p className="text-gray-600 mb-2">Your profile is 97% complete</p>
+                                        <Progress value={97} className="h-2 bg-gray-200" />
+                                    </div>
+                                    <p className="text-gray-700 flex-grow">
+                                        Completing your profile increases your visibility by up to 3× and helps you get more clients.
+                                    </p>
 
-                                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                                    <DialogTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            className="border-green-700 text-green-700 mt-auto w-full"
-                                        >
-                                            <Edit className="mr-2 h-4 w-4" />
-                                            Complete Profile
-                                        </Button>
-                                    </DialogTrigger>
-                                    <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-                                        <DialogHeader>
-                                            <DialogTitle>Complete Your Profile</DialogTitle>
-                                        </DialogHeader>
+                                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                                        <DialogTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                className="border-green-700 text-green-700 mt-auto w-full"
+                                            >
+                                                <Edit className="mr-2 h-4 w-4" />
+                                                Complete Profile
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+                                            <DialogHeader>
+                                                <DialogTitle>Complete Your Profile</DialogTitle>
+                                            </DialogHeader>
 
-                                        <form onSubmit={handleSubmit} className="space-y-6">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="name">Full Name</Label>
-                                                    <Input
-                                                        id="name"
-                                                        name="name"
-                                                        value={formData.name}
-                                                        onChange={handleInputChange}
-                                                        required
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="email">Email</Label>
-                                                    <Input
-                                                        id="email"
-                                                        name="email"
-                                                        type="email"
-                                                        value={formData.email}
-                                                        onChange={handleInputChange}
-                                                        required
-                                                        disabled
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-2 md:col-span-2">
-                                                    <Label htmlFor="about">About You</Label>
-                                                    <Textarea
-                                                        id="about"
-                                                        name="about"
-                                                        value={formData.about}
-                                                        onChange={handleInputChange}
-                                                        rows={4}
-                                                        placeholder="Tell potential clients about your experience and expertise"
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="contactInfo">Contact Number</Label>
-                                                    <Input
-                                                        id="contactInfo"
-                                                        name="contactInfo"
-                                                        value={formData.contactInfo}
-                                                        onChange={handleInputChange}
-                                                        required
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="country">Country</Label>
-                                                    <Select
-                                                        value={formData.country}
-                                                        onValueChange={(value) => setFormData({ ...formData, country: value })}
-                                                    >
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select country" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="United States">United States</SelectItem>
-                                                            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-                                                            <SelectItem value="Canada">Canada</SelectItem>
-                                                            <SelectItem value="Australia">Australia</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="state">State</Label>
-                                                    <Input
-                                                        id="state"
-                                                        name="state"
-                                                        value={formData.state}
-                                                        onChange={handleInputChange}
-                                                        required
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="city">City</Label>
-                                                    <Input
-                                                        id="city"
-                                                        name="city"
-                                                        value={formData.city}
-                                                        onChange={handleInputChange}
-                                                        required
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="postalCode">Postal Code</Label>
-                                                    <Input
-                                                        id="postalCode"
-                                                        name="postalCode"
-                                                        value={formData.postalCode}
-                                                        onChange={handleInputChange}
-                                                        required
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-2 md:col-span-2">
-                                                    <Label>Verification Document</Label>
-                                                    {formData.verificationDocument ? (
-                                                        <div className="flex items-center gap-4">
-                                                            {formData.verificationDocument.startsWith('data:') ||
-                                                                formData.verificationDocument.startsWith('http') ? (
-                                                                <img
-                                                                    src={formData.verificationDocument}
-                                                                    alt="Verification document"
-                                                                    className="h-20 w-20 object-cover rounded-md"
-                                                                />
-                                                            ) : (
-                                                                <div className="h-20 w-20 bg-gray-100 rounded-md flex items-center justify-center">
-                                                                    <span className="text-xs text-gray-500">Document</span>
-                                                                </div>
-                                                            )}
-                                                            <Button
-                                                                variant="outline"
-                                                                onClick={() => setFormData({ ...formData, verificationDocument: null })}
-                                                            >
-                                                                Change Document
-                                                            </Button>
-                                                        </div>
-                                                    ) : (
-                                                        <FileUpload
-                                                            onFileUpload={handleDocumentUpload}
-                                                            accept="image/*,.pdf"
-                                                            uploading={documentUploading}
+                                            <form className="space-y-6">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="name">Full Name</Label>
+                                                        <Input
+                                                            id="name"
+                                                            name="name"
+                                                            value={formData.name}
+                                                            onChange={handleInputChange}
+                                                            required
+                                                            disabled
                                                         />
+                                                    </div>
+
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="email">Email</Label>
+                                                        <Input
+                                                            id="email"
+                                                            name="email"
+                                                            type="email"
+                                                            value={formData.email}
+                                                            onChange={handleInputChange}
+                                                            required
+                                                            disabled
+                                                        />
+                                                    </div>
+
+                                                    <div className="space-y-2 md:col-span-2">
+                                                        <Label htmlFor="about">About You</Label>
+                                                        <Textarea
+                                                            id="about"
+                                                            name="about"
+                                                            value={formData.about}
+                                                            onChange={handleInputChange}
+                                                            rows={4}
+                                                            placeholder="Tell potential clients about your experience and expertise"
+                                                        />
+                                                    </div>
+
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="contactInfo">Contact Number</Label>
+
+                                                        <h3 className="text-gray-800 text-sm p-1">{formData.contactInfo}</h3>
+                                                    </div>
+
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="country">Country</Label>
+
+                                                        <h3 className="text-gray-800 text-sm p-1">{formData.country}</h3>
+                                                    </div>
+
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="state">State</Label>
+
+                                                        <h3 className="text-gray-800 text-sm p-1">{formData.state}</h3>
+                                                    </div>
+
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="city">City</Label>
+
+                                                        <h3 className="text-gray-800 text-sm p-1">{formData.city}</h3>
+                                                    </div>
+
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="postalCode">Postal Code</Label>
+
+                                                        <h3 className="text-gray-800 text-sm p-1">{formData.postalCode}</h3>
+                                                    </div>
+
+                                                    <div className="space-y-2 md:col-span-2">
+                                                        <Label>Verification Document</Label>
+                                                        {formData.verificationDocument ? (
+                                                            <div className="flex flex-col gap-4">
+                                                                <div className="flex items-center gap-4">
+                                                                    {formData.verificationDocument.startsWith('data:') ||
+                                                                        formData.verificationDocument.startsWith('http') ? (
+                                                                        <img
+                                                                            src={formData.verificationDocument}
+                                                                            alt="Verification document"
+                                                                            className="h-20 w-20 object-cover rounded-md"
+                                                                        />
+                                                                    ) : (
+                                                                        <div className="h-20 w-20 bg-gray-100 rounded-md flex items-center justify-center">
+                                                                            <span className="text-xs text-gray-500">Document</span>
+                                                                        </div>
+                                                                    )}
+                                                                    <div className="flex gap-2">
+                                                                        <Button
+                                                                            variant="outline"
+                                                                            onClick={() => {
+                                                                                // Open document in new tab if it's a URL
+                                                                                if (formData.verificationDocument) {
+                                                                                    window.open(API + "/" + formData.verificationDocument, '_blank');
+                                                                                }
+                                                                            }}
+                                                                        >
+                                                                            View Document
+                                                                        </Button>
+                                                                        <Button
+                                                                            variant="outline"
+                                                                            onClick={() => setFormData({ ...formData, verificationDocument: null })}
+                                                                        >
+                                                                            Replace Document
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                                {formData.status === 'pending' && (
+                                                                    <div className="flex items-center gap-2 text-sm text-yellow-600">
+                                                                        <ClockIcon className="h-4 w-4" />
+                                                                        <span>Verification under review</span>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                <FileUpload
+                                                                    onFileUpload={handleDocumentUpload}
+                                                                    accept=".pdf"
+                                                                    uploading={documentUploading}
+                                                                />
+                                                                <p className="text-sm text-gray-500 mt-2">
+                                                                    Kindly upload a PDF containing all relevant documents that verify your professional expertise and the services you provide.
+                                                                </p>
+                                                            </>
+                                                        )}
+                                                    </div>
+
+                                                    {provider?.status === 'rejected' && rejectionReason && (
+                                                        <div className="space-y-2 md:col-span-2">
+                                                            <Label>Reason for Rejection</Label>
+                                                            <div className="p-4 bg-red-50 rounded-md border border-red-200">
+                                                                <p className="text-red-700">{rejectionReason}</p>
+                                                            </div>
+                                                        </div>
                                                     )}
-                                                    <p className="text-sm text-gray-500 mt-2">
-                                                        Kindly upload a PDF containing all relevant documents that verify your professional expertise and the services you provide.
-                                                    </p>
+
+                                                    {provider?.status === 'onHold' && holdReason && (
+                                                        <div className="space-y-2 md:col-span-2">
+                                                            <Label>Account On Hold - Reason</Label>
+                                                            <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200">
+                                                                <p className="text-yellow-700">{holdReason}</p>
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
 
-                                                {provider?.status === 'rejected' && rejectionReason && (
-                                                    <div className="space-y-2 md:col-span-2">
-                                                        <Label>Reason for Rejection</Label>
-                                                        <div className="p-4 bg-red-50 rounded-md border border-red-200">
-                                                            <p className="text-red-700">{rejectionReason}</p>
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                {provider?.status === 'onHold' && holdReason && (
-                                                    <div className="space-y-2 md:col-span-2">
-                                                        <Label>Account On Hold - Reason</Label>
-                                                        <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200">
-                                                            <p className="text-yellow-700">{holdReason}</p>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <div className="flex justify-end gap-4">
-                                                <Button
-                                                    variant="outline"
-                                                    type="button"
-                                                    onClick={() => setIsDialogOpen(false)}
-                                                >
-                                                    Cancel
-                                                </Button>
-                                                <Button type="submit" className="bg-green-700 hover:bg-green-800">
-                                                    Save Changes
-                                                </Button>
-                                            </div>
-                                        </form>
-                                    </DialogContent>
-                                </Dialog>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Professional Plus Card */}
-                    <Card className="border rounded-lg shadow-sm bg-gradient-to-br from-green-50 to-green-100 border-green-200 h-full flex flex-col">
-                        <CardHeader className="border-b border-green-200 bg-green-100/50">
-                            <div className="flex justify-between items-center">
-                                <h2 className="text-xl font-semibold text-gray-800">PROFESSIONAL PLUS</h2>
-                                <Badge variant="outline" className="border-green-600 text-green-600">
-                                    RECOMMENDED
-                                </Badge>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="p-6 flex-grow flex flex-col">
-                            <div className="space-y-4 flex-grow">
-                                <div className="flex items-end gap-2">
-                                    <span className="text-3xl font-bold">$199</span>
-                                    <span className="text-gray-600">/year</span>
+                                                <div className="flex justify-end gap-4">
+                                                    <Button
+                                                        variant="outline"
+                                                        type="button"
+                                                        onClick={() => setIsDialogOpen(false)}
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                    <Button type="submit" onClick={handleSubmit} className="bg-green-700 hover:bg-green-800" disabled={profileUpdating}>
+                                                        {profileUpdating ? "Updating..." : "Save Changes"}
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        </DialogContent>
+                                    </Dialog>
                                 </div>
-                                <ul className="space-y-3 text-gray-700">
-                                    <li className="flex items-start gap-3">
-                                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                        <span><strong>Platform Choice Badges</strong> - Stand out as a verified top professional</span>
-                                    </li>
-                                    <li className="flex items-start gap-3">
-                                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                        <span><strong>Priority Placement</strong> - Appear in top spots for relevant searches</span>
-                                    </li>
-                                    <li className="flex items-start gap-3">
-                                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                        <span><strong>3× More Visibility</strong> - Get seen by more potential clients</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="pt-4">
-                                <Button className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg">
-                                    <Crown className="mr-2 h-5 w-5" />
-                                    Upgrade Now
-                                </Button>
-                                <p className="text-center text-sm text-gray-500 mt-2">
-                                    30-day money back guarantee
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
+                            </CardContent>
+                        </Card>
 
-                    {/* Services Section */}
-                    <ServicesContainer />
-
-                    {/* Response Rate */}
-                    <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">
-                        <CardHeader className="border-b border-gray-200">
-                            <h2 className="text-xl font-semibold text-gray-800">Response Rate</h2>
-                        </CardHeader>
-                        <CardContent className="p-6">
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                <div>
-                                    <p className="text-gray-600">Estimated 87 leads per day</p>
-                                    <p className="text-gray-700">You haven't responded to any leads yet.</p>
+                        {/* Professional Plus Card */}
+                        <Card className="border rounded-lg shadow-sm bg-gradient-to-br from-green-50 to-green-100 border-green-200 h-full flex flex-col">
+                            <CardHeader className="border-b border-green-200 bg-green-100/50">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-xl font-semibold text-gray-800">PROFESSIONAL PLUS</h2>
+                                    <Badge variant="outline" className="border-green-600 text-green-600">
+                                        RECOMMENDED
+                                    </Badge>
                                 </div>
-                                <Button variant="outline" className="border-green-700 text-green-700">
-                                    View responses
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
+                            </CardHeader>
+                            <CardContent className="p-6 flex-grow flex flex-col">
+                                <div className="space-y-4 flex-grow">
+                                    <div className="flex items-end gap-2">
+                                        <span className="text-3xl font-bold">$199</span>
+                                        <span className="text-gray-600">/year</span>
+                                    </div>
+                                    <ul className="space-y-3 text-gray-700">
+                                        <li className="flex items-start gap-3">
+                                            <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                            <span><strong>Platform Choice Badges</strong> - Stand out as a verified top professional</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                            <span><strong>Priority Placement</strong> - Appear in top spots for relevant searches</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                            <span><strong>3× More Visibility</strong> - Get seen by more potential clients</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="pt-4">
+                                    <Button className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg">
+                                        <Crown className="mr-2 h-5 w-5" />
+                                        Upgrade Now
+                                    </Button>
+                                    <p className="text-center text-sm text-gray-500 mt-2">
+                                        30-day money back guarantee
+                                    </p>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Services Section */}
+                        <ServicesContainer />
+
+                        {/* Response Rate */}
+                        <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">
+                            <CardHeader className="border-b border-gray-200">
+                                <h2 className="text-xl font-semibold text-gray-800">Response Rate</h2>
+                            </CardHeader>
+                            <CardContent className="p-6">
+                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                    <div>
+                                        <p className="text-gray-600">Estimated 87 leads per day</p>
+                                        <p className="text-gray-700">You haven't responded to any leads yet.</p>
+                                    </div>
+                                    <Button variant="outline" className="border-green-700 text-green-700">
+                                        View responses
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

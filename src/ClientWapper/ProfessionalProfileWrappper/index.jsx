@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API } from "@/lib/data-service";
 
-import { Rating } from '@smastrom/react-rating'
+import { Rating, ThinStar } from '@smastrom/react-rating'
 
 import '@smastrom/react-rating/style.css'
 import {
@@ -16,7 +16,7 @@ import {
     // Progress,
     // Textarea
 } from "@/components/ui/dialog";
-import {Avatar, AvatarFallback, AvatarImage,} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage, } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input";
 
 import {
@@ -65,9 +65,8 @@ export default function ProfessionalProfile({ name }) {
     const handleReviewSubmit = async () => {
         setIsSubmitting(true);
         try {
-            const response = await axios.post(`${API}/api/reviews`, {
-                ...reviewData,
-                professionalId: professional._id
+            const response = await axios.post(`${API}/api/service-provider/add-provider-review/${professional._id}`, {
+                ...reviewData
             });
 
             if (response.status === 201) {
@@ -99,23 +98,16 @@ export default function ProfessionalProfile({ name }) {
 
     // Error state
     if (error) return (
-        <div className="container mx-auto px-4 py-8">
-            <Card className="border-red-200 bg-red-50">
+        <div className="container mx-auto max-w-6xl px-4 py-8">
+            <Card className="border-green-200 bg-green-50">
                 <CardHeader>
                     <div className="flex items-center gap-3">
-                        <AlertCircle className="h-6 w-6 text-red-700" />
-                        <CardTitle className="text-red-700">Error Loading Profile</CardTitle>
+                        <AlertCircle className="h-6 w-6 text-green-700" />
+                        <CardTitle className="text-green-700">Profile Not Found</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-red-700 mb-4">{error}</p>
-                    <Button
-                        variant="outline"
-                        className="border-green-700 text-green-700 hover:bg-green-50"
-                        onClick={() => window.location.reload()}
-                    >
-                        Try Again
-                    </Button>
+                    <p className="text-green-700">The professional you're looking for doesn't exist.</p>
                 </CardContent>
             </Card>
         </div>
@@ -123,7 +115,7 @@ export default function ProfessionalProfile({ name }) {
 
     // Not found state
     if (!professional) return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto max-w-6xl px-4 py-8">
             <Card className="border-green-200 bg-green-50">
                 <CardHeader>
                     <div className="flex items-center gap-3">
@@ -139,7 +131,7 @@ export default function ProfessionalProfile({ name }) {
     );
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto max-w-6xl px-4 py-8">
             {/* Profile Header */}
             <div className="flex flex-col md:flex-row gap-8 mb-8">
                 <div className="flex-shrink-0">
@@ -300,9 +292,9 @@ export default function ProfessionalProfile({ name }) {
                                                 value={reviewData.rating}
                                                 onChange={(rating) => setReviewData({ ...reviewData, rating })}
                                                 itemStyles={{
-                                                    itemShapes: Star,
+                                                    itemShapes: ThinStar,
                                                     activeFillColor: '#15803d', // green-700
-                                                    inactiveFillColor: '#d1fae5', // green-100
+                                                    inactiveFillColor: '#D7D7D7', // green-100
                                                 }}
                                             />
                                         </div>
