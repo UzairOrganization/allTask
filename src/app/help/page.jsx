@@ -108,7 +108,7 @@ const HelpPage = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 list-disc">
+                <ul className="space-y-2 list-disc pl-6">
                   {category.topics.map((topic, i) => (
                     <li key={i} className="text-sm hover:text-green-700 cursor-pointer transition-colors">
                       {topic}

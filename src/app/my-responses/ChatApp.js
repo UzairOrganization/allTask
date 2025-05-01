@@ -82,7 +82,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex  bg-gray-50 h-[90vh]">
       {/* Left Sidebar - Inbox */}
       <div className={`${activeChat ? 'hidden md:block' : 'block'} w-full md:w-80 bg-white border-r border-gray-200 flex flex-col`}>
         <div className="p-4 border-b border-gray-200">
@@ -132,7 +132,7 @@ const ChatPage = () => {
 
       {/* Main Chat Area */}
       {activeChat ? (
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col h-[90vh]">
           {/* Chat Header */}
           <div className="p-4 border-b border-gray-200 bg-white flex items-center">
             <button 

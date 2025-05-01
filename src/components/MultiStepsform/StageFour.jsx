@@ -257,7 +257,6 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
                             </Button>
                             <Button
                                 type="submit"
-                                disabled={selectedProviders.length === 0}
                                 className="px-6 py-3 text-base bg-[#00725A] hover:bg-[#00634A] text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
                             >
                                 {selectedProviders.length > 1

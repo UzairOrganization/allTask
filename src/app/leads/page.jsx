@@ -1,11 +1,14 @@
 'use client'
 import ProfessionalHeader from "@/components/Professionals/ProfessionalHeader"
 import { useState, useEffect } from 'react';
-import { Search, Bell, Mail, CreditCard, User, ChevronDown, CheckCircle } from 'lucide-react';
+import { Search, Bell, Mail, CreditCard, User, ChevronDown, CheckCircle,MapPin } from 'lucide-react';
 import axios from 'axios';
 import { API } from "@/lib/data-service";
 import { useSelector } from "react-redux";
-
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibFbf1ijemDQ1TkHwjsb5oJ2AG3ePLAi8Np9FLNZsmz4N2CA4sKEhn00vHNOmlYC");
+import { Elements } from '@stripe/react-stripe-js';
 const Page = () => {
     const [activeTab, setActiveTab] = useState('all');
     const [selectedLead, setSelectedLead] = useState(null);
@@ -241,10 +244,12 @@ const Page = () => {
                 {/* Main Content */}
                 <div className="flex-1 overflow-auto">
                     {selectedLead ? (
-                        <LeadDetailView
-                            lead={selectedLead}
-                            onBack={() => setSelectedLead(null)}
-                        />
+                        <Elements stripe={stripePromise}>
+                            <LeadDetailView
+                                lead={selectedLead}
+                                onBack={() => setSelectedLead(null)}
+                            />
+                        </Elements>
                     ) : loading ? (
                         <div className="flex justify-center items-center h-full">
                             <div className="text-center">
@@ -330,97 +335,217 @@ const LeadCard = ({ lead, onClick }) => {
 };
 
 const LeadDetailView = ({ lead, onBack }) => {
+    const stripe = useStripe();
+    const elements = useElements();
+    const [paymentProcessing, setPaymentProcessing] = useState(false);
+    const [paymentError, setPaymentError] = useState(null);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+    const handlePaymentSubmit = async (event) => {
+        event.preventDefault();
+        if (!stripe || !elements) return;
+
+        setPaymentProcessing(true);
+        setPaymentError(null);
+
+        try {
+            // 1. Create payment method
+            const { error: stripeError, paymentMethod } = await stripe.createPaymentMethod({
+                type: 'card',
+                card: elements.getElement(CardElement),
+            });
+
+            if (stripeError) throw stripeError;
+
+            // 2. Initiate payment
+            const response = await axios.post(`${API}/api/payments/initiate`, {
+                serviceRequestId: lead.id,
+                paymentMethod: paymentMethod.id
+            }, { withCredentials: true });
+
+            // 3. Confirm payment
+            if (response.data.clientSecret) {
+                const { error: confirmError } = await stripe.confirmCardPayment(
+                    response.data.clientSecret
+                );
+                if (confirmError) throw confirmError;
+                setPaymentSuccess(true);
+            }
+        } catch (err) {
+            setPaymentError(err.message);
+        } finally {
+            setPaymentProcessing(false);
+        }
+    };
+
+    if (paymentSuccess) {
+        return (
+            <div className="max-w-2xl mx-auto p-6">
+                <div className="bg-white rounded-xl shadow-md overflow-hidden border border-green-100">
+                    <div className="p-8 text-center">
+                        <div className="flex justify-center mb-6">
+                            <CheckCircle className="h-12 w-12 text-green-500" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h2>
+                        <p className="text-gray-600 mb-6">You've successfully accepted this lead.</p>
+                        <button
+                            onClick={onBack}
+                            className="w-full max-w-xs mx-auto py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                        >
+                            Back to Leads
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="p-6">
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                <div className="p-6 border-b border-gray-200 bg-green-50">
+        <div className="max-w-6xl mx-auto p-6">
+            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                {/* Header Section */}
+                <div className="p-6 bg-gradient-to-r from-green-50 to-green-100 border-b border-green-200">
                     <div className="flex justify-between items-start">
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900">{lead.name}</h2>
-                            <p className="text-lg text-gray-600">{lead.location}</p>
+                            <div className="flex items-center mt-2">
+                                <MapPin className="h-5 w-5 text-gray-500 mr-1" />
+                                <p className="text-gray-600">{lead.location}</p>
+                            </div>
                         </div>
                         {lead.verified && (
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                Verified Client
+                                Verified
                             </span>
                         )}
                     </div>
                 </div>
 
-                <div className="p-6">
-                    <div className="mb-6">
-                        <div className="flex items-center mb-2">
-                            <div className={`h-3 w-3 rounded-full mr-2 ${lead.status.includes('High') ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
-                            <span className="text-lg font-medium text-gray-700">{lead.status}</span>
+                {/* Status and Service Section */}
+                <div className="p-6 border-b border-gray-200">
+                    <div className="flex items-center mb-4">
+                        <div className={`h-3 w-3 rounded-full mr-2 ${lead.status.includes('High') ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                        <span className="font-medium text-gray-700">{lead.status}</span>
+                    </div>
+                    
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{lead.service}</h3>
+                    <p className="text-gray-600 mb-6">{lead.description}</p>
+
+                    {lead.requested && (
+                        <div className="p-4 bg-green-50 rounded-lg border border-green-200 mb-6">
+                            <h4 className="font-medium text-green-800 mb-1">Client Requested You Specifically</h4>
+                            <p className="text-sm text-green-700">This client asked for you by name.</p>
                         </div>
+                    )}
+                </div>
 
-                        <div className="mb-6">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2">{lead.service}</h3>
-                            <p className="text-gray-600">{lead.description}</p>
-                        </div>
-
-                        {lead.requested && (
-                            <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
-                                <h4 className="font-medium text-green-800 mb-1">Client Requested You Specifically</h4>
-                                <p className="text-sm text-green-700">This client asked for you by name based on your profile and reviews.</p>
-                            </div>
-                        )}
-
-                        <div className="mb-6">
-                            <h4 className="font-medium mb-2">Service Details</h4>
-                            <div className="space-y-2">
-                                {Object.entries(lead.details || {})
-                                    .filter(([key]) => key !== 'customer' && key !== 'kind' && key != 'isPurchased' && key != 'purchasedPrice')
-                                    .map(([key, value]) => (
-                                        <p key={key}>
-                                            <span className="font-medium capitalize">
-                                                {key.replace(/([A-Z])/g, ' $1').trim()}:
-                                            </span>{' '}
-                                            {value}
-                                        </p>
-                                    ))}
-
-                            </div>
-                        </div>
-
-                        {lead.photos && lead.photos.length > 0 && (
-                            <div className="mb-6">
-                                <h4 className="font-medium mb-2">Photos</h4>
-                                <div className="flex flex-wrap gap-2">
-                                    {lead.photos.map((photo, index) => (
-                                        <img
-                                            key={index}
-                                            src={`${API}${photo}`}
-                                            alt={`Lead photo ${index + 1}`}
-                                            className="h-24 w-24 object-cover rounded-md"
-                                        />
-                                    ))}
+                {/* Details Section */}
+                <div className="p-6 border-b border-gray-200">
+                    <h4 className="font-medium text-lg mb-4">Service Details</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        {Object.entries(lead.details || {})
+                            .filter(([key]) => !['customer', 'kind', 'isPurchased', 'purchasedPrice'].includes(key))
+                            .map(([key, value]) => (
+                                <div key={key} className="bg-gray-50 p-3 rounded-lg">
+                                    <p className="text-sm font-medium text-gray-500 capitalize">
+                                        {key.replace(/([A-Z])/g, ' $1').trim()}
+                                    </p>
+                                    <p className="text-gray-800">{value}</p>
                                 </div>
-                            </div>
-                        )}
+                            ))}
+                    </div>
 
+                    {lead.photos?.length > 0 && (
+                        <>
+                            <h4 className="font-medium text-lg mb-3">Photos</h4>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+                                {lead.photos.map((photo, index) => (
+                                    <img
+                                        key={index}
+                                        src={`${API}${photo}`}
+                                        alt={`Lead photo ${index + 1}`}
+                                        className="h-32 w-full object-cover rounded-lg"
+                                    />
+                                ))}
+                            </div>
+                        </>
+                    )}
+                </div>
+
+                {/* Payment Section */}
+                <div className="p-6">
+                    {paymentError && (
+                        <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">
+                            {paymentError}
+                        </div>
+                    )}
+
+                    <div className="bg-gray-50 p-6 rounded-xl mb-6">
+                        <h4 className="font-medium text-lg mb-4">Payment Details</h4>
+                        
                         <div className="grid grid-cols-2 gap-4 mb-6">
                             <div>
                                 <p className="text-sm text-gray-500">Lead Price</p>
-                                <p className="font-medium">{lead.credits}</p>
+                                <p className="text-xl font-bold text-green-600">{lead.credits}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500">Timeline</p>
                                 <p className="font-medium">ASAP</p>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="flex space-x-4">
-                        <button className="flex-1 py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-700 hover:bg-green-800">
-                            {lead.requested ? 'Already Accepted' : `Accept Lead (${lead.credits})`}
-                        </button>
-                        <button
-                            onClick={onBack}
-                            className="flex-1 py-3 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                        >
-                            Back to List
-                        </button>
+                        <form onSubmit={handlePaymentSubmit}>
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Card Details
+                                </label>
+                                <div className="p-3 border border-gray-300 rounded-lg bg-white">
+                                    <CardElement
+                                        options={{
+                                            style: {
+                                                base: {
+                                                    fontSize: '16px',
+                                                    color: '#424770',
+                                                    '::placeholder': {
+                                                        color: '#aab7c4',
+                                                    },
+                                                },
+                                                invalid: {
+                                                    color: '#9e2146',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex space-x-4">
+                                <button
+                                    type="submit"
+                                    disabled={!stripe || paymentProcessing}
+                                    className="flex-1 py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    {paymentProcessing ? (
+                                        <span className="flex items-center justify-center">
+                                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Processing...
+                                        </span>
+                                    ) : (
+                                        `Pay ${lead.credits}`
+                                    )}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={onBack}
+                                    className="flex-1 py-3 px-6 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                                >
+                                    Back to List
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
