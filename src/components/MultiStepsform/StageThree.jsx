@@ -33,6 +33,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
             });
         }
         setIsLoading(false);
+        
     }, [isAuthenticated, user]);
 
     // Check form validity whenever customerDetails changes

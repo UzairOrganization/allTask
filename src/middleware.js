@@ -160,9 +160,7 @@ export async function middleware(req) {
             }
 
         } catch (error) {
-            console.error('Authentication check failed:', error);
             const response = NextResponse.redirect(new URL('/login', req.url));
-            response.cookies.delete('token');
             return response;
         }
     }

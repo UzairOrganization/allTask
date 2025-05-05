@@ -1,7 +1,7 @@
 "use client";
 
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +18,10 @@ const UserProfileWrapper = () => {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [loading, setLoading] = useState(false);
-
+    useEffect(()=>{
+        console.log(user);
+        
+    },[user])
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         setLoading(true);
