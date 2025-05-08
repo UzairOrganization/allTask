@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, User, Smartphone, Menu, X } from "lucide-react";
+import { LogOut, User, Smartphone, Menu, X, Backpack } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import {
@@ -88,6 +88,12 @@ const ProfessionalHeader = () => {
                 <DropdownMenuItem className="flex items-center gap-3 p-3 hover:bg-green-50 cursor-pointer">
                   <User className="h-4 w-4 text-green-700" />
                   <span>View public profile</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href={`/purchased-leads`}>
+                <DropdownMenuItem className="flex items-center gap-3 p-3 hover:bg-green-50 cursor-pointer">
+                  <Backpack className="h-4 w-4 text-green-700" />
+                  <span>Purchased Leads</span>
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuItem className="flex items-center gap-3 p-3 hover:bg-green-50 cursor-pointer">
@@ -170,6 +176,13 @@ const ProfessionalHeader = () => {
                   >
                     <User className="h-5 w-5" />
                     <span>View public profile</span>
+                  </Link>
+                  <Link
+                    href="#"
+                    className="flex items-center gap-3 py-2 text-gray-800 hover:text-green-700"
+                  >
+                    <Backpack className="h-5 w-5" />
+                    <span>Purchased Leads</span>
                   </Link>
                   <Link
                     href="#"

@@ -41,18 +41,15 @@ export const checkAuthStatus = createAsyncThunk("auth/checkAuthStatus", async (_
 
         return response.data;
     } catch (error) {
-        Cookies.remove("token");
         return rejectWithValue("Failed to fetch user details");
     }
 });
 export const checkProviderAuthStatus = createAsyncThunk("auth/checkProviderAuthStatus", async (_, { dispatch, rejectWithValue }) => {
     try {
         const response = await axios.get(`${APIURL}/api/service-provider/service-provider-details`, { withCredentials: true })
-        console.log(response,"response");
         
         return response.data
     } catch (error) {
-        Cookies.remove("token");
         return rejectWithValue("Failed to fetch user details");
     }
 })

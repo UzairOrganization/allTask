@@ -1,7 +1,7 @@
 'use client'
 import ProfessionalHeader from "@/components/Professionals/ProfessionalHeader"
 import { useState, useEffect } from 'react';
-import { Search, Bell, Mail, CreditCard, User, ChevronDown, CheckCircle,MapPin } from 'lucide-react';
+import { Search, Bell, Mail, CreditCard, User, ChevronDown, CheckCircle, MapPin } from 'lucide-react';
 import axios from 'axios';
 import { API } from "@/lib/data-service";
 import { useSelector } from "react-redux";
@@ -244,12 +244,10 @@ const Page = () => {
                 {/* Main Content */}
                 <div className="flex-1 overflow-auto">
                     {selectedLead ? (
-                        <Elements stripe={stripePromise}>
-                            <LeadDetailView
-                                lead={selectedLead}
-                                onBack={() => setSelectedLead(null)}
-                            />
-                        </Elements>
+                        <LeadDetailView
+                            lead={selectedLead}
+                            onBack={() => setSelectedLead(null)}
+                        />
                     ) : loading ? (
                         <div className="flex justify-center items-center h-full">
                             <div className="text-center">
@@ -284,7 +282,7 @@ const Page = () => {
                         </div>
                     )}
                 </div>
-            </div>
+            </div >
         </>
     );
 };
@@ -335,45 +333,32 @@ const LeadCard = ({ lead, onClick }) => {
 };
 
 const LeadDetailView = ({ lead, onBack }) => {
-    const stripe = useStripe();
-    const elements = useElements();
     const [paymentProcessing, setPaymentProcessing] = useState(false);
     const [paymentError, setPaymentError] = useState(null);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
 
     const handlePaymentSubmit = async (event) => {
         event.preventDefault();
-        if (!stripe || !elements) return;
-
         setPaymentProcessing(true);
         setPaymentError(null);
 
         try {
-            // 1. Create payment method
-            const { error: stripeError, paymentMethod } = await stripe.createPaymentMethod({
-                type: 'card',
-                card: elements.getElement(CardElement),
-            });
-
-            if (stripeError) throw stripeError;
-
-            // 2. Initiate payment
+            // 1. Initiate checkout session
             const response = await axios.post(`${API}/api/payments/initiate`, {
-                serviceRequestId: lead.id,
-                paymentMethod: paymentMethod.id
+                serviceRequestId: lead.id
             }, { withCredentials: true });
 
-            // 3. Confirm payment
-            if (response.data.clientSecret) {
-                const { error: confirmError } = await stripe.confirmCardPayment(
-                    response.data.clientSecret
-                );
-                if (confirmError) throw confirmError;
-                setPaymentSuccess(true);
+            // 2. Redirect to Stripe Checkout using Stripe.js
+            const { error } = (await stripePromise).redirectToCheckout({
+                sessionId: response.data.sessionId
+            });
+
+            if (error) {
+                throw error;
             }
+
         } catch (err) {
-            setPaymentError(err.message);
-        } finally {
+            setPaymentError(err.response?.data?.error || err.message);
             setPaymentProcessing(false);
         }
     };
@@ -427,7 +412,7 @@ const LeadDetailView = ({ lead, onBack }) => {
                         <div className={`h-3 w-3 rounded-full mr-2 ${lead.status.includes('High') ? 'bg-green-500' : 'bg-yellow-500'}`} />
                         <span className="font-medium text-gray-700">{lead.status}</span>
                     </div>
-                    
+
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">{lead.service}</h3>
                     <p className="text-gray-600 mb-6">{lead.description}</p>
 
@@ -482,7 +467,7 @@ const LeadDetailView = ({ lead, onBack }) => {
 
                     <div className="bg-gray-50 p-6 rounded-xl mb-6">
                         <h4 className="font-medium text-lg mb-4">Payment Details</h4>
-                        
+
                         <div className="grid grid-cols-2 gap-4 mb-6">
                             <div>
                                 <p className="text-sm text-gray-500">Lead Price</p>
@@ -493,59 +478,33 @@ const LeadDetailView = ({ lead, onBack }) => {
                                 <p className="font-medium">ASAP</p>
                             </div>
                         </div>
-
-                        <form onSubmit={handlePaymentSubmit}>
-                            <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Card Details
-                                </label>
-                                <div className="p-3 border border-gray-300 rounded-lg bg-white">
-                                    <CardElement
-                                        options={{
-                                            style: {
-                                                base: {
-                                                    fontSize: '16px',
-                                                    color: '#424770',
-                                                    '::placeholder': {
-                                                        color: '#aab7c4',
-                                                    },
-                                                },
-                                                invalid: {
-                                                    color: '#9e2146',
-                                                },
-                                            },
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="flex space-x-4">
-                                <button
-                                    type="submit"
-                                    disabled={!stripe || paymentProcessing}
-                                    className="flex-1 py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                                >
-                                    {paymentProcessing ? (
-                                        <span className="flex items-center justify-center">
-                                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            Processing...
-                                        </span>
-                                    ) : (
-                                        `Pay ${lead.credits}`
-                                    )}
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={onBack}
-                                    className="flex-1 py-3 px-6 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
-                                >
-                                    Back to List
-                                </button>
-                            </div>
-                        </form>
+                        <div className="flex space-x-4">
+                            <button
+                                type="submit"
+                                disabled={paymentProcessing}
+                                className="flex-1 py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                onClick={handlePaymentSubmit}
+                            >
+                                {paymentProcessing ? (
+                                    <span className="flex items-center justify-center">
+                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Processing...
+                                    </span>
+                                ) : (
+                                    `Pay ${lead.credits}`
+                                )}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={onBack}
+                                className="flex-1 py-3 px-6 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                                Back to List
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

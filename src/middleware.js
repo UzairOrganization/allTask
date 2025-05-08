@@ -170,7 +170,7 @@ export async function middleware(req) {
 
 export const config = {
     matcher: [
-        '/', 
+        '/',
         '/about', '/user-profile', '/user-requests',
         '/professional-dashboard',
         '/login', '/professional-login', '/register-email', '/register-professional', '/forget-password',
