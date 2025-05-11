@@ -25,7 +25,9 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (credentials, 
         return rejectWithValue(error.response?.data?.message || "Login failed");
     }
 });
-
+export const professionalLogout = createAsyncThunk("professional/logout", async () => {
+    Cookies.remove("token");
+})
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
     Cookies.remove("token");
     await fetch("https://api.alltasko.com/auth/logout", {
@@ -47,7 +49,7 @@ export const checkAuthStatus = createAsyncThunk("auth/checkAuthStatus", async (_
 export const checkProviderAuthStatus = createAsyncThunk("auth/checkProviderAuthStatus", async (_, { dispatch, rejectWithValue }) => {
     try {
         const response = await axios.get(`${APIURL}/api/service-provider/service-provider-details`, { withCredentials: true })
-        
+
         return response.data
     } catch (error) {
         return rejectWithValue("Failed to fetch user details");

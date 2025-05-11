@@ -17,7 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { logoutUser } from "@/redux/slices/authSlice";
+import { logoutUser, professionalLogout } from "@/redux/slices/authSlice";
 import { useRouter } from 'next/navigation'
 import { API } from "@/lib/data-service";
 const ProfessionalHeader = () => {
@@ -34,8 +34,8 @@ const ProfessionalHeader = () => {
   ];
 
   const logoutHandler = async () => {
-    await dispatch(logoutUser())
-    router.push("/")
+    await dispatch(professionalLogout())
+    location.reload()
   }
 
   return (
