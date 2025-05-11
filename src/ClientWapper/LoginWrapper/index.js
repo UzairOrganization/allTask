@@ -16,7 +16,8 @@ import { redirect } from 'next/navigation'
 import Header from "@/components/Header/index";
 import { toast, Toaster } from "sonner";
 import Link from "next/link";
-import API from "@/redux/api";
+import axios from "axios";
+import { API } from "@/lib/data-service";
 
 const LoginWrapper = () => {
     const dispatch = useDispatch();
@@ -41,8 +42,9 @@ const LoginWrapper = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const result = await dispatch(loginUser(credentials));
-        if (result.meta.requestStatus === "fulfilled") {
+        const result = await axios.post(`${API}/api/users/login`, credentials, { withCredentials: true });
+        const data = result.data;
+        if (result.status === 200) {
             router.push("/")
         } else {
             toast.error("Login Failed", {

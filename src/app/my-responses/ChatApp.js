@@ -82,7 +82,6 @@ const ChatPage = () => {
     const fetchConversations = async () => {
       setLoading(true);
       try {
-        console.log('Fetching conversations...');
         const response = await axios.get(`${API}/api/conversations/provider/conversations`, {
           withCredentials: true
         });
