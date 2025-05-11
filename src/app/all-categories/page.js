@@ -26,7 +26,7 @@ export default async function page({ searchParams }) {
                             <FaRocket className="h-5 w-5 text-primary" />
                             <AlertTitle className="text-lg font-semibold">No Services Available</AlertTitle>
                             <AlertDescription className="mt-2 text-muted-foreground">
-                                We currently don't have any services listed. Please check back later or contact support for more information.
+                                We currently don&apos;t have any services listed. Please check back later or contact support for more information.
                             </AlertDescription>
                         </Alert>
 
