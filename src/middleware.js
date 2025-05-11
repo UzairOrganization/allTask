@@ -3,8 +3,9 @@ import axios from 'axios';
 import cookie from 'cookie';
 
 export async function middleware(req) {
-    // Parse cookies and get the token
-    const cookies = cookie.parse(req.headers.get('cookie') || '');
+    // Ensure the cookies are defined before parsing
+    const cookiesHeader = req.headers.get('cookie');
+    const cookies = cookiesHeader ? cookie.parse(cookiesHeader) : {};
     const token = cookies.token || '';
 
     // Define routes
@@ -44,7 +45,7 @@ export async function middleware(req) {
             try {
                 const userRes = await axios.get('https://api.alltasko.com/api/users/verify-route', {
                     headers: {
-                        cookie: req.headers.get('cookie') || '',
+                        cookie: cookiesHeader || '',
                     },
                     withCredentials: true,  // Ensure cookies are sent in the request
                 });
@@ -55,7 +56,7 @@ export async function middleware(req) {
             try {
                 const providerRes = await axios.get('https://api.alltasko.com/api/service-provider/verify-route', {
                     headers: {
-                        cookie: req.headers.get('cookie') || '',
+                        cookie: cookiesHeader || '',
                     },
                     withCredentials: true,  // Ensure cookies are sent in the request
                 });
