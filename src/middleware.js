@@ -1,12 +1,13 @@
-import { NextResponse } from "next/server";
-import axios from "axios";
+import { NextResponse } from 'next/server';
+import axios from 'axios';
 import cookie from 'cookie';
-import { getCookie } from "cookies-next";
 
 export async function middleware(req) {
+    // Parse cookies and get the token
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.token || '';
 
+    // Define routes
     const authPages = [
         '/login', '/professional-login', '/register-email',
         '/register-professional', '/forget-password'
@@ -28,6 +29,7 @@ export async function middleware(req) {
     const isProviderRoute = providerRoutes.some(route => req.nextUrl.pathname.startsWith(route));
     const isRoot = req.nextUrl.pathname === '/';
 
+    // Redirect if no token and trying to access protected route
     if (!token && (isUserRoute || isProviderRoute)) {
         const redirectTo = isProviderRoute ? '/professional-login' : '/login';
         return NextResponse.redirect(new URL(redirectTo, req.url));
@@ -38,39 +40,38 @@ export async function middleware(req) {
             let isUserValid = false;
             let isProviderValid = false;
 
-            // Check user token
+            // Validate user token
             try {
-                const userRes = await fetch('https://api.alltasko.com/api/users/verify-route', {
+                const userRes = await axios.get('https://api.alltasko.com/api/users/verify-route', {
                     headers: {
                         cookie: req.headers.get('cookie') || '',
                     },
-                    credentials: 'include'
+                    withCredentials: true,  // Ensure cookies are sent in the request
                 });
-                const userData = await userRes.json();
-                isUserValid = userData.valid;
-            } catch (_) { }
+                isUserValid = userRes.data.valid;
+            } catch (_) { /* Handle user validation failure */ }
 
-            // Check provider token
+            // Validate provider token
             try {
-                const providerRes = await fetch('https://api.alltasko.com/api/service-provider/verify-route', {
+                const providerRes = await axios.get('https://api.alltasko.com/api/service-provider/verify-route', {
                     headers: {
                         cookie: req.headers.get('cookie') || '',
                     },
+                    withCredentials: true,  // Ensure cookies are sent in the request
                 });
-                const providerData = await providerRes.json();
-                isProviderValid = providerData.valid;
-            } catch (_) { }
+                isProviderValid = providerRes.data.valid;
+            } catch (_) { /* Handle provider validation failure */ }
 
-            // Redirect providers away from /
+            // Redirect if provider tries to access the root page
             if (isRoot && isProviderValid) {
                 return NextResponse.redirect(new URL('/professional-dashboard', req.url));
             }
 
-            // Restrict user routes
+            // Allow access to user routes if valid
             if (isUserRoute && isUserValid) return NextResponse.next();
             if (isProviderRoute && isProviderValid) return NextResponse.next();
 
-            // Auth pages — redirect if already authenticated
+            // Redirect already authenticated users on auth pages
             if (isAuthPage) {
                 if (isUserValid) return NextResponse.redirect(new URL('/', req.url));
                 if (isProviderValid) return NextResponse.redirect(new URL('/professional-dashboard', req.url));
@@ -87,6 +88,7 @@ export async function middleware(req) {
             }
 
         } catch (error) {
+            console.error("Middleware Error:", error);
             const response = NextResponse.redirect(new URL('/login', req.url));
             return response;
         }
