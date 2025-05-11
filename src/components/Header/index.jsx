@@ -60,12 +60,12 @@ export default function Header() {
 
                 {/* Desktop Navigation - Hidden on mobile */}
                 <div className="hidden md:flex items-center gap-3">
-                    <div
+                    {/* <div
                         className="relative cursor-pointer flex items-center font-semibold text-lg text-black hover:text-green-700"
                         onClick={() => setIsOpen(!isOpen)}
                     >
                         EXPLORE &nbsp; <FaChevronDown size={16} className="ml-1" />
-                    </div>
+                    </div> */}
 
                     {/* Authenticated: Show profile, notification */}
                     {isAuthenticated ? (
@@ -110,10 +110,12 @@ export default function Header() {
                                                     <span className="ml-2">All Requests</span>
                                                 </DropdownMenuItem>
                                             </Link>
-                                            <DropdownMenuItem className="p-1">
-                                                <MessageCircle />
-                                                <span className="ml-2">Chats</span>
-                                            </DropdownMenuItem>
+                                            <Link href={"/user-chat"} className="text-black cursor-pointer">
+                                                <DropdownMenuItem className="p-1">
+                                                    <MessageCircle />
+                                                    <span className="ml-2">Chats</span>
+                                                </DropdownMenuItem>
+                                            </Link>
                                         </DropdownMenuGroup>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem className="p-1 cursor-pointer" onClick={() => setOpen(true)}>
@@ -149,7 +151,7 @@ export default function Header() {
                 </div>
 
                 {/* Mobile Menu Button - Visible only on mobile */}
-                <button 
+                <button
                     className="md:hidden p-2 text-gray-700"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
@@ -161,7 +163,7 @@ export default function Header() {
                     <div className="md:hidden fixed inset-0 z-50 bg-black bg-opacity-50">
                         <div className="absolute right-0 top-0 h-full w-3/4 bg-white shadow-lg p-4 overflow-y-auto">
                             <div className="flex justify-end mb-4">
-                                <button 
+                                <button
                                     onClick={() => setMobileMenuOpen(false)}
                                     className="p-2"
                                 >
@@ -170,39 +172,39 @@ export default function Header() {
                             </div>
 
                             <div className="space-y-4">
-                                <div className="border-b pb-2">
-                                    <div 
+                                {/* <div className="border-b pb-2">
+                                    <div
                                         className="flex items-center font-semibold text-lg text-black"
                                         onClick={() => setIsOpen(!isOpen)}
                                     >
                                         EXPLORE &nbsp; <FaChevronDown size={16} />
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {isAuthenticated ? (
                                     <>
-                                        <a 
-                                            href="index.html" 
+                                        <a
+                                            href="index.html"
                                             className="block py-2 font-semibold text-lg"
                                             onClick={() => setMobileMenuOpen(false)}
                                         >
                                             Request a Service
                                         </a>
-                                        <Link 
+                                        <Link
                                             href="/user-profile"
                                             className="block py-2 font-semibold text-lg"
                                             onClick={() => setMobileMenuOpen(false)}
                                         >
                                             Profile
                                         </Link>
-                                        <Link 
+                                        <Link
                                             href="/user-requests"
                                             className="block py-2 font-semibold text-lg"
                                             onClick={() => setMobileMenuOpen(false)}
                                         >
                                             All Requests
                                         </Link>
-                                        <div 
+                                        <div
                                             className="block py-2 font-semibold text-lg cursor-pointer"
                                             onClick={() => {
                                                 setOpen(true);
@@ -214,7 +216,7 @@ export default function Header() {
                                     </>
                                 ) : (
                                     <>
-                                        <Link 
+                                        <Link
                                             href="/login"
                                             className="block py-2 font-semibold text-lg"
                                             onClick={() => setMobileMenuOpen(false)}
@@ -222,14 +224,14 @@ export default function Header() {
                                             LOGIN
                                         </Link>
                                         <Link
-                                            href="/professional-login" 
+                                            href="/professional-login"
                                             className="block py-2 font-semibold text-lg"
                                             onClick={() => setMobileMenuOpen(false)}
                                         >
                                             Join as Professional
                                         </Link>
-                                        <a 
-                                            href="index.html" 
+                                        <a
+                                            href="index.html"
                                             className="block py-2 font-semibold text-lg"
                                             onClick={() => setMobileMenuOpen(false)}
                                         >

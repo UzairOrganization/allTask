@@ -1,4 +1,4 @@
-export const API = "http://localhost:5000"
+export const API = "https://api.alltasko.com"
 
 import axios from "axios"
 import { notFound } from "next/navigation"

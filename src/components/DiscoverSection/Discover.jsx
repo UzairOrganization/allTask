@@ -5,6 +5,7 @@ import { LuDrill } from "react-icons/lu";
 import { MdCleaningServices, MdHomeRepairService } from "react-icons/md";
 import { FaTree } from "react-icons/fa6";
 import Image from "next/image";
+import Link from "next/link";
 const items = [
   { id: 1, Icon: FaTools, label: "Assembly" },
   { id: 2, Icon: LuDrill, label: "Mounting" },
@@ -38,7 +39,7 @@ const Discover = () => {
               //   selected == id
               //     ? "0 0 5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 0, 0, 0.3), 0 0 60px rgba(0, 0, 0, 0.3)"
               //     : "none",
-              
+
             }}
           >
             <Icon size={30} color={selected === id ? "white" : "black"} />
@@ -247,6 +248,13 @@ const Discover = () => {
             </div>
           </>
         )}
+      </div>
+      <div className="pt-16 flex justify-center items-center">
+        <div className="btn-box ">
+          <Link href="/all-categories" className="theme-btn btn-two">
+            View All Services
+          </Link>
+        </div>
       </div>
     </>
   );

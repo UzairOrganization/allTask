@@ -179,7 +179,7 @@ const SearchBar = () => {
                 <div
                     ref={inputRef}
                     className={`flex items-center border rounded-full overflow-hidden transition-all duration-300 ${isFocused
-                        ? "ring-2 ring-primary/50 border-primary shadow-lg"
+                        ? "ring-2 ring-primary/50 shadow-lg"
                         : "border-gray-300 hover:border-gray-400"
                         }`}
                 >
@@ -196,7 +196,7 @@ const SearchBar = () => {
                         onBlur={() => setTimeout(() => setIsFocused(false), 200)}
                         onKeyDown={handleKeyDown}
                         placeholder="Search for plumbing, cleaning and more.."
-                        className="w-full text-sm py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400"
+                        className="w-full text-sm outline-none py-3 bg-transparent text-gray-700 placeholder-gray-400 h-full"
                     />
                     {searchQuery && (
                         <button

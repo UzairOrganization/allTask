@@ -42,7 +42,7 @@ const ProfessionalLoginWrapper = () => {
                     duration: 3000,
                     position: "bottom-left",
                 });
-                dispatch(checkProviderAuthStatus())
+                // dispatch(checkProviderAuthStatus())
                 // Redirect to professional dashboard after successful login
                 router.push("/professional-dashboard");
 

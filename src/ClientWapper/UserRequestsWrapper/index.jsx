@@ -288,7 +288,7 @@ export default function UserRequestsWrapper() {
                                             return (
                                                 <div key={index} className="border rounded-lg overflow-hidden">
                                                     <img
-                                                        src={`http://localhost:5000${photo}`}
+                                                        src={`https://api.alltasko.com${photo}`}
                                                         alt={`Service photo ${index + 1}`}
                                                         className="w-full h-32 object-cover"
                                                     />

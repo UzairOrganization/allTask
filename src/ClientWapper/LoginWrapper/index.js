@@ -35,7 +35,7 @@ const LoginWrapper = () => {
     // Handle form submission
     const handleGoogleSignin = async (e) => {
         e.preventDefault();
-        window.location.href = "http://localhost:5000/auth/google";  // Corrected assignment
+        window.location.href = "https://api.alltasko.com/auth/google";  // Corrected assignment
     };
 
 
@@ -127,10 +127,10 @@ const LoginWrapper = () => {
                                 <AiFillGoogleCircle className="w-6 h-6" />
                                 Continue with Google
                             </Button>
-                            <Button variant="outline" className="w-full gap-2" >
+                            {/* <Button variant="outline" className="w-full gap-2" >
                                 <FaFacebook className="w-6 h-6" />
                                 Continue with Facebook
-                            </Button>
+                            </Button> */}
                         </div>
 
                         {/* Terms Notice */}

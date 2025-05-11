@@ -34,7 +34,8 @@ import {
 import axios from "axios";
 import { API } from "@/lib/data-service";
 import { Toaster, toast } from "sonner";
-
+import { useDispatch } from "react-redux";
+import { checkProviderAuthStatus } from "@/redux/slices/authSlice";
 // FileUpload component
 const FileUpload = ({ onFileUpload, accept, uploading }) => {
     const [file, setFile] = useState(null);
@@ -112,6 +113,8 @@ export function ProfessionalOnboarding() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { provider } = useSelector(state => state.auth);
     const [profileUpdating, setProfileUpdateing] = useState(false)
+    const [profilePictureUploading, setProfilePictureUploading] = useState(false);
+    const dispatch = useDispatch()
     // Form state
     const [formData, setFormData] = useState({
         name: provider?.name || "",
@@ -219,7 +222,6 @@ export function ProfessionalOnboarding() {
         setProfileUpdateing(true)
         try {
             const response = await axios.put(`${API}/api/service-provider/update-provider-profile`, { about: formData.about }, { withCredentials: true });
-            console.log(response);
 
             if (response.status === 200) {
                 setFormData(prev => ({
@@ -337,7 +339,7 @@ export function ProfessionalOnboarding() {
                                 <div className="flex items-center space-x-4">
                                     {provider?.profilePicture ? (
                                         <img
-                                            src={provider.profilePicture}
+                                            src={API + provider.profilePicture}
                                             alt="Profile"
                                             className="h-12 w-12 rounded-full object-cover"
                                         />
@@ -356,12 +358,9 @@ export function ProfessionalOnboarding() {
                             </CardHeader>
                             <CardContent className="p-6 flex-grow">
                                 <div className="space-y-4 h-full flex flex-col">
-                                    <div>
-                                        <p className="text-gray-600 mb-2">Your profile is 97% complete</p>
-                                        <Progress value={97} className="h-2 bg-gray-200" />
-                                    </div>
+
                                     <p className="text-gray-700 flex-grow">
-                                        Completing your profile increases your visibility by up to 3× and helps you get more clients.
+                                        Completing your profile increases your visibility and helps you get more clients.
                                     </p>
 
                                     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -381,6 +380,63 @@ export function ProfessionalOnboarding() {
 
                                             <form className="space-y-6">
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    <div className="space-y-2 md:col-span-2">
+                                                        <Label>Profile Picture</Label>
+                                                        <div className="flex items-center gap-6">
+                                                            <div className="relative">
+                                                                {provider?.profilePicture ? (
+                                                                    <img
+                                                                        src={API + provider.profilePicture}
+                                                                        alt="Profile"
+                                                                        className="h-24 w-24 rounded-full object-cover"
+                                                                    />
+                                                                ) : (
+                                                                    <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center">
+                                                                        <User className="h-12 w-12 text-gray-400" />
+                                                                    </div>
+                                                                )}
+                                                                {profilePictureUploading && (
+                                                                    <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
+                                                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <FileUpload
+                                                                    onFileUpload={async (file) => {
+                                                                        setProfilePictureUploading(true);
+                                                                        try {
+                                                                            const formData = new FormData();
+                                                                            formData.append('profilePicture', file);
+
+                                                                            const response = await axios.post(
+                                                                                `${API}/api/service-provider/upload-profile`,
+                                                                                formData,
+                                                                                { withCredentials: true }
+                                                                            );
+
+                                                                            if (response.data.success) {
+                                                                                // Update the provider data in your state/context
+                                                                                dispatch(checkProviderAuthStatus())
+                                                                                toast.success("Profile picture updated successfully");
+                                                                            }
+
+                                                                        } catch (error) {
+                                                                            toast.error("Failed to upload profile picture");
+                                                                            console.error(error);
+                                                                        } finally {
+                                                                            setProfilePictureUploading(false);
+                                                                        }
+                                                                    }}
+                                                                    accept="image/*"
+                                                                    uploading={profilePictureUploading}
+                                                                />
+                                                                <p className="text-sm text-gray-500 mt-2">
+                                                                    Recommended size: 500x500 pixels. Max file size: 5MB.
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div className="space-y-2">
                                                         <Label htmlFor="name">Full Name</Label>
                                                         <Input
@@ -591,7 +647,7 @@ export function ProfessionalOnboarding() {
                         <ServicesContainer />
 
                         {/* Response Rate */}
-                        <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">
+                        {/* <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">
                             <CardHeader className="border-b border-gray-200">
                                 <h2 className="text-xl font-semibold text-gray-800">Response Rate</h2>
                             </CardHeader>
@@ -606,7 +662,7 @@ export function ProfessionalOnboarding() {
                                     </Button>
                                 </div>
                             </CardContent>
-                        </Card>
+                        </Card> */}
                     </div>
                 </div>
             </div>

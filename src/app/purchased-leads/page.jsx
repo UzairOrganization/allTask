@@ -23,19 +23,19 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { API } from '@/lib/data-service'
 import axios from 'axios'
 import ProfessionalHeader from '@/components/Professionals/ProfessionalHeader'
+import { useRouter } from 'next/navigation'
 
 export default function PurchasedLeadsPage() {
     const [payments, setPayments] = useState([])
     const [loading, setLoading] = useState(true)
     const [selectedPayment, setSelectedPayment] = useState(null)
-
+    const navigation = useRouter()
     useEffect(() => {
         const fetchPayments = async () => {
             try {
                 setLoading(true)
                 const res = await axios.get(`${API}/api/payments`, { withCredentials: true })
                 // if (res.success) setPayments(res.data.result)
-                console.log(res.data.result);
                 setPayments(res.data.result)
 
             } finally {
@@ -61,8 +61,7 @@ export default function PurchasedLeadsPage() {
     }
 
     const renderServiceDetails = (serviceRequest) => {
-        if (!serviceRequest) return null
-
+        if (!serviceRequest) return null;
         // Format purchased date consistently
         const formatPurchaseDate = (dateString) => {
             if (!dateString) return 'N/A';
@@ -91,7 +90,31 @@ export default function PurchasedLeadsPage() {
             'status', 'createdAt', 'updatedAt', '__v', 'kind',
             'purchasedBy', 'isPurchased', 'purchasedPrice', "purchasedDate" // Now handled separately
         ]
+        const handleStartConversation = async () => {
+            try {
+                const result = await axios.post(
+                    `${API}/api/conversations`,
+                    {
+                        leadId: serviceRequest._id,
+                        customerId: serviceRequest.customer // Make sure this is the customer's ID
+                    },
+                    {
+                        withCredentials: true // Sends cookies automatically
+                    }
+                );
 
+                navigation.push("/my-responses")
+                return result.data; // Return the new conversation object
+
+            } catch (error) {
+                console.error('Failed to start conversation:', error.response?.data || error.message);
+                if (error.response?.status === 400) {
+                    return { existingConversation: true, conversation: error.response.data };
+                }
+
+                throw error;
+            }
+        }
         const serviceQuestions = Object.entries(serviceRequest)
             .filter(([key, value]) =>
                 !excludedFields.includes(key) &&
@@ -168,14 +191,18 @@ export default function PurchasedLeadsPage() {
                         </div>
                     </div>
                 )}
-                <div className=''>
-                    <Button
-                        className="bg-green-700 hover:bg-green-800 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out transform hover:scale-105"
-                    >
-                        Start Conversation
-                        <ChevronRight className="h-4 w-4 ml-2" />
-                    </Button>
-                </div>
+                {serviceRequest.isPurchased && (
+
+                    <div className=''>
+                        <Button
+                            onClick={handleStartConversation}
+                            className="bg-green-700 cursor-pointer hover:bg-green-800 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out transform hover:scale-105"
+                        >
+                            Start Conversation
+                            <ChevronRight className="h-4 w-4 ml-2" />
+                        </Button>
+                    </div>
+                )}
             </div>
         )
     }

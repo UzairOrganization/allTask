@@ -136,7 +136,7 @@ export default function ProfessionalProfile({ name }) {
             <div className="flex flex-col md:flex-row gap-8 mb-8">
                 <div className="flex-shrink-0">
                     <Avatar className="h-32 w-32 md:h-40 md:w-40 border-4 border-green-700">
-                        <AvatarImage src={professional?.profilePicture} />
+                        <AvatarImage src={API + professional?.profilePicture} />
                         <AvatarFallback className="bg-green-100 text-green-800 text-4xl font-bold">
                             {(professional?.name?.charAt(0) || 'P').toUpperCase()}
                         </AvatarFallback>
@@ -187,14 +187,14 @@ export default function ProfessionalProfile({ name }) {
                         <p className="mt-4 text-gray-600">{professional.about}</p>
                     )}
 
-                    <div className="mt-4 flex flex-wrap gap-4">
+                    {/* <div className="mt-4 flex flex-wrap gap-4">
                         {professional?.contactInfo && (
                             <div className="flex items-center gap-2 text-gray-700">
                                 <Phone className="w-4 h-4 text-green-700" />
                                 <span>{professional.contactInfo}</span>
                             </div>
                         )}
-                    </div>
+                    </div> */}
                 </div>
             </div>
 

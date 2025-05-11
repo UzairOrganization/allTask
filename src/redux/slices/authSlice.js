@@ -28,7 +28,7 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (credentials, 
 
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
     Cookies.remove("token");
-    await fetch("http://localhost:5000/auth/logout", {
+    await fetch("https://api.alltasko.com/auth/logout", {
         method: "GET",
         credentials: "include", // To ensure cookies are sent
     });

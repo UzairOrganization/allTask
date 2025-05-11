@@ -158,7 +158,7 @@ const Page = () => {
                     {/* Services Section */}
                     <div className="p-4 border-b border-gray-200">
                         <h3 className="text-sm font-medium text-gray-700 mb-2">Your Services</h3>
-                        <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                        <div className="space-y-2 max-h-[600px] overflow-y-auto">
                             {servicesLoading ? (
                                 <div className="flex justify-center py-4">
                                     <PulseLoader color="#16a34a" size={8} />
@@ -193,52 +193,7 @@ const Page = () => {
                         </div>
                     </div>
 
-                    {/* Credits */}
-                    <div className="p-4 border-b border-gray-200">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <CreditCard className="h-5 w-5 text-green-700 mr-2" />
-                                <span className="text-sm font-medium text-gray-700">Your Credits</span>
-                            </div>
-                            <span className="text-sm font-bold text-green-700">120</span>
-                        </div>
-                    </div>
-
-                    {/* Notifications */}
-                    <div className="p-4 border-b border-gray-200">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <Bell className="h-5 w-5 text-green-700 mr-2" />
-                                <span className="text-sm font-medium text-gray-700">Notifications</span>
-                            </div>
-                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">3 new</span>
-                        </div>
-                    </div>
-
-                    {/* Messages */}
-                    <div className="p-4 border-b border-gray-200">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <Mail className="h-5 w-5 text-green-700 mr-2" />
-                                <span className="text-sm font-medium text-gray-700">Messages</span>
-                            </div>
-                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">5 unread</span>
-                        </div>
-                    </div>
-
-                    {/* User Profile */}
-                    <div className="mt-auto p-4 border-t border-gray-200">
-                        <div className="flex items-center">
-                            <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                                <User className="h-5 w-5 text-gray-500" />
-                            </div>
-                            <div className="flex-1">
-                                <p className="text-sm font-medium text-gray-900">Your Name</p>
-                                <p className="text-xs text-gray-500">Professional</p>
-                            </div>
-                            <ChevronDown className="h-4 w-4 text-gray-500" />
-                        </div>
-                    </div>
+                   
                 </div>
 
                 {/* Main Content */}
