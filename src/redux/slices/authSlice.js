@@ -16,10 +16,9 @@ const initialState = {
 
 export const loginUser = createAsyncThunk("auth/loginUser", async (credentials, { rejectWithValue }) => {
     try {
-        const response = await axios.post(`${API}/api/users/login`, credentials, { withCredentials: true });
+        const response = await axios.post(`${APIURL}/api/users/login`, credentials, { withCredentials: true });
         const data = response.data;
 
-        Cookies.set("token", data.token, { path: "/" });
         return data.user;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Login failed");

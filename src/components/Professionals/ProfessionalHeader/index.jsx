@@ -34,8 +34,18 @@ const ProfessionalHeader = () => {
   ];
 
   const logoutHandler = async () => {
-    await dispatch(professionalLogout())
-    location.reload()
+    try {
+      await fetch(`${API}/api/service-provider/logout`, {
+        method: 'GET',
+        credentials: 'include', // Required for cookies
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest' // CSRF protection
+        }
+      });
+      window.location.href = '/professional-login';
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
   }
 
   return (
