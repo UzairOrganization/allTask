@@ -18,10 +18,7 @@ const UserProfileWrapper = () => {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    useEffect(()=>{
-        console.log(user);
-        
-    },[user])
+   
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         setLoading(true);

@@ -28,7 +28,7 @@ export const professionalLogout = createAsyncThunk("professional/logout", async 
     Cookies.remove("token");
 })
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
-    Cookies.remove("token");
+   
     await fetch("https://api.alltasko.com/auth/logout", {
         method: "GET",
         credentials: "include", // To ensure cookies are sent
@@ -101,7 +101,7 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload;
+                state.user = action.payload.user;
                 state.isAuthenticated = true;
                 state.isProfessionalAuhtenticated = false
             })

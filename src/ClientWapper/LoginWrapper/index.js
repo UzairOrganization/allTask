@@ -43,6 +43,7 @@ const LoginWrapper = () => {
         e.preventDefault();
         const result = await dispatch(loginUser(credentials));
         if (result.meta.requestStatus === "fulfilled") {
+          
             router.push("/")
         } else {
             toast.error("Login Failed", {

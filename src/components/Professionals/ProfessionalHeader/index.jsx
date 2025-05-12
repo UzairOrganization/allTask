@@ -20,6 +20,7 @@ import {
 import { logoutUser, professionalLogout } from "@/redux/slices/authSlice";
 import { useRouter } from 'next/navigation'
 import { API } from "@/lib/data-service";
+import axios from 'axios';
 const ProfessionalHeader = () => {
   const pathname = usePathname();
   const { provider } = useSelector(state => state.auth);
@@ -33,20 +34,17 @@ const ProfessionalHeader = () => {
     { href: "/help", label: "Help" }
   ];
 
+
+
   const logoutHandler = async () => {
     try {
-      await fetch(`${API}/api/service-provider/logout`, {
-        method: 'GET',
-        credentials: 'include', // Required for cookies
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest' // CSRF protection
-        }
-      });
+      await dispatch(logoutUser())
       window.location.href = '/professional-login';
     } catch (err) {
       console.error('Logout failed:', err);
     }
-  }
+  };
+
 
   return (
     <header className="w-full bg-white border-b shadow-lg border-gray-200">
@@ -111,7 +109,7 @@ const ProfessionalHeader = () => {
                 <Smartphone className="h-4 w-4 text-green-700" />
                 <span>Alltasko App</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={logoutHandler} className="flex items-center gap-3 p-3 text-red-600 hover:bg-red-50 cursor-pointer">
+              <DropdownMenuItem onClick={() => logoutHandler()} className="flex items-center gap-3 p-3 text-red-600 hover:bg-red-50 cursor-pointer">
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </DropdownMenuItem>
