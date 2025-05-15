@@ -36,6 +36,7 @@ import { API } from "@/lib/data-service";
 import { Toaster, toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { checkProviderAuthStatus } from "@/redux/slices/authSlice";
+import PDFUpload from "@/components/PDFUpload/PDFUpload";
 // FileUpload component
 const FileUpload = ({ onFileUpload, accept, uploading }) => {
     const [file, setFile] = useState(null);
@@ -170,6 +171,8 @@ export function ProfessionalOnboarding() {
             setRejectionReason(provider.reasonOfRejection || "");
             setHoldReason(provider.reasonOfHold || "");
         }
+        console.log(provider);
+        
     }, [provider]);
 
     const handleInputChange = (e) => {
@@ -182,7 +185,6 @@ export function ProfessionalOnboarding() {
 
     const handleDocumentUpload = async (file) => {
         setDocumentUploading(true);
-
         try {
             const formData = new FormData();
             formData.append('file', file);
@@ -386,7 +388,7 @@ export function ProfessionalOnboarding() {
                                                             <div className="relative">
                                                                 {provider?.profilePicture ? (
                                                                     <img
-                                                                        src={API + provider.profilePicture}
+                                                                        src={provider.profilePicture == null ? "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3DlfHx8fGVufDB8fHx8fA%3D%3D" : API + provider.profilePicture}
                                                                         alt="Profile"
                                                                         className="h-24 w-24 rounded-full object-cover"
                                                                     />
@@ -408,19 +410,15 @@ export function ProfessionalOnboarding() {
                                                                         try {
                                                                             const formData = new FormData();
                                                                             formData.append('profilePicture', file);
-
                                                                             const response = await axios.post(
                                                                                 `${API}/api/service-provider/upload-profile`,
                                                                                 formData,
                                                                                 { withCredentials: true }
                                                                             );
-
                                                                             if (response.data.success) {
-                                                                                // Update the provider data in your state/context
                                                                                 dispatch(checkProviderAuthStatus())
                                                                                 toast.success("Profile picture updated successfully");
                                                                             }
-
                                                                         } catch (error) {
                                                                             toast.error("Failed to upload profile picture");
                                                                             console.error(error);
@@ -527,7 +525,7 @@ export function ProfessionalOnboarding() {
                                                                             onClick={() => {
                                                                                 // Open document in new tab if it's a URL
                                                                                 if (formData.verificationDocument) {
-                                                                                    window.open(API + "/" + formData.verificationDocument, '_blank');
+                                                                                    window.open(API + formData.verificationDocument, '_blank');
                                                                                 }
                                                                             }}
                                                                         >
@@ -550,10 +548,10 @@ export function ProfessionalOnboarding() {
                                                             </div>
                                                         ) : (
                                                             <>
-                                                                <FileUpload
+                                                                <PDFUpload
                                                                     onFileUpload={handleDocumentUpload}
-                                                                    accept=".pdf"
-                                                                    uploading={documentUploading}
+                                                                    maxSize={5 * 1024 * 1024} // 5MB
+                                                                    multiple={false} // Assuming single file upload
                                                                 />
                                                                 <p className="text-sm text-gray-500 mt-2">
                                                                     Kindly upload a PDF containing all relevant documents that verify your professional expertise and the services you provide.

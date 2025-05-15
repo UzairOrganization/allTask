@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 import * as cookie from 'cookie'; // Ensure cookie is imported correctly
+import { API } from './lib/data-service';
 
 export async function middleware(req) {
     try {
@@ -45,7 +46,7 @@ export async function middleware(req) {
 
                 // Validate user token
                 try {
-                    const userRes = await axios.get('https://api.alltasko.com/api/users/verify-route', {
+                    const userRes = await axios.get(`${API}/api/users/verify-route`, {
                         headers: {
                             cookie: cookiesHeader || '',
                         },
@@ -58,7 +59,7 @@ export async function middleware(req) {
 
                 // Validate provider token
                 try {
-                    const providerRes = await axios.get('https://api.alltasko.com/api/service-provider/verify-route', {
+                    const providerRes = await axios.get(`${API}/api/service-provider/verify-route`, {
                         headers: {
                             cookie: cookiesHeader || '',
                         },

@@ -16,7 +16,8 @@ import { redirect } from 'next/navigation'
 import Header from "@/components/Header/index";
 import { toast, Toaster } from "sonner";
 import Link from "next/link";
-import API from "@/redux/api";
+// import API from "@/redux/api";
+import { API } from "@/lib/data-service";
 
 const LoginWrapper = () => {
     const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const LoginWrapper = () => {
     // Handle form submission
     const handleGoogleSignin = async (e) => {
         e.preventDefault();
-        window.location.href = "https://api.alltasko.com/auth/google";  // Corrected assignment
+        window.location.href = `${API}/auth/google`;  // Corrected assignment
     };
 
 

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerEmail, registerUser } from "@/redux/slices/authSlice";
+import { checkProviderAuthStatus, registerEmail, registerUser } from "@/redux/slices/authSlice";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -220,6 +220,7 @@ const RegisterProfessionalWrapper = () => {
                     duration: 3000,
                     position: "bottom-left",
                 });
+                dispatch(checkProviderAuthStatus())
                 setStateLoading(false)
                 router.push("/professional-dashboard");
             }

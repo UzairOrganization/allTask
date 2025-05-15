@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import API from "@/redux/api"
+
 import {
     Card, CardHeader, CardTitle, CardDescription, CardContent,
     CardFooter
@@ -21,6 +21,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
+import { API } from '@/lib/data-service'
 
 export default function UserRequestsWrapper() {
     const [requests, setRequests] = useState([])
@@ -288,7 +289,7 @@ export default function UserRequestsWrapper() {
                                             return (
                                                 <div key={index} className="border rounded-lg overflow-hidden">
                                                     <img
-                                                        src={`https://api.alltasko.com${photo}`}
+                                                        src={`${API}${photo}`}
                                                         alt={`Service photo ${index + 1}`}
                                                         className="w-full h-32 object-cover"
                                                     />

@@ -29,7 +29,7 @@ export const professionalLogout = createAsyncThunk("professional/logout", async 
 })
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
    
-    await fetch("https://api.alltasko.com/auth/logout", {
+    await fetch(`${APIURL}/auth/logout`, {
         method: "GET",
         credentials: "include", // To ensure cookies are sent
     });

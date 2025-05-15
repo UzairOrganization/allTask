@@ -21,7 +21,7 @@ const page = () => {
     console.log('Initializing socket connection...');
     setSocketStatus('connecting');
 
-    socketRef.current = io('https://api.alltasko.com', {
+    socketRef.current = io(`${API}`, {
       withCredentials: true,
       autoConnect: true,
       reconnection: true,

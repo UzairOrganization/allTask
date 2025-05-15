@@ -1,4 +1,6 @@
-export const API = "https://api.alltasko.com"
+const NODE_ENV = "development"
+
+export const API = NODE_ENV === "production" ? "https://api.alltasko.com" : "http://localhost:5000"
 
 import axios from "axios"
 import { notFound } from "next/navigation"
