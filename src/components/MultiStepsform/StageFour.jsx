@@ -181,7 +181,7 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
                                             <div className="flex-shrink-0">
                                                 <div className="relative h-24 w-24 rounded-full overflow-hidden border-2 border-[#00725A]/30">
                                                     <img
-                                                        src={API + provider?.profilePicture || '/placeholder-user.jpg'}
+                                                        src={API + provider?.profilePicture || '/assets/images/avatar.png'}
                                                         alt={provider.name}
                                                         fill
                                                         className="object-cover"
@@ -232,7 +232,7 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
 
                                                 {provider.about && (
                                                     <p className="mt-4 text-gray-600">
-                                                        {provider.about}
+                                                        {provider.about.slice(0,150)}...
                                                     </p>
                                                 )}
 
