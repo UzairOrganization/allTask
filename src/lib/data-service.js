@@ -1,6 +1,6 @@
 const NODE_ENV = "production"
 
-export const API = NODE_ENV === "production" ? "https://api.alltasko.com" : "http://localhost:5000"
+export const API = "https://api.alltasko.com"
 
 import axios from "axios"
 import { notFound } from "next/navigation"
@@ -8,11 +8,11 @@ import { notFound } from "next/navigation"
 
 export async function getAllCategories(params) {
     try {
-        const data = await axios.get(`${API}/api/category/categories`)        
+        const data = await axios.get(`${API}/api/category/categories`)
         return data.data;
     } catch (error) {
         console.log(error);
-        
+
     }
 }
 
