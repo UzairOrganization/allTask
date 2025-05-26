@@ -1,4 +1,4 @@
-const NODE_ENV = "development"
+const NODE_ENV = "production"
 
 export const API = NODE_ENV === "production" ? "https://api.alltasko.com" : "http://localhost:5000"
 
