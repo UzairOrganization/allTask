@@ -20,6 +20,7 @@ import {
     DialogClose
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
+import AdminHeader from "@/components/AdminHeader";
 export default function AdminDashboard() {
     const [statsData, setStatsData] = useState();
     const [paymentsData, setPaymentsData] = useState([]);
@@ -105,6 +106,8 @@ export default function AdminDashboard() {
         }
     }
     return (
+        <>
+        <AdminHeader/>
         <div className="flex flex-col min-h-screen bg-gray-50">
             {/* Header */}
             <header className="bg-green-700 text-white p-6 shadow-md">
@@ -343,5 +346,6 @@ export default function AdminDashboard() {
 
             </main>
         </div>
+        </>
     );
 }

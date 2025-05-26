@@ -24,7 +24,8 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
     useEffect(() => {
         const storedProviders = JSON.parse(localStorage.getItem('availableProviders') || '[]');
         const storedCategoryHierarchy = JSON.parse(localStorage.getItem('categoryHierarchy') || '{}');
-
+        console.log(storedProviders);
+        
         setAvailableProviders(storedProviders);
         setCategoryHierarchy(storedCategoryHierarchy);
     }, []);

@@ -7,7 +7,7 @@ import { Card, CardHeader, CardContent } from '../ui/card';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { User, Mail, Home, MapPin, Phone } from 'lucide-react';
+import { User, Mail, Home, MapPin, Phone, PhoneCall } from 'lucide-react';
 
 const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
     const { isAuthenticated, user } = useSelector(state => state.auth);
@@ -16,6 +16,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
         email: '',
         address: '',
         zipCode: '',
+        phoneNo: '',
         contactPreference: ''
     });
     const [isLoading, setIsLoading] = useState(true);
@@ -29,11 +30,12 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
                 email: user.email || '',
                 address: user.address || '',
                 zipCode: user.zipCode || '',
+                phoneNo: user.phoneNo || '',
                 contactPreference: user.contactPreference || ''
             });
         }
         setIsLoading(false);
-        
+
     }, [isAuthenticated, user]);
 
     // Check form validity whenever customerDetails changes
@@ -43,6 +45,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
             customerDetails.email &&
             customerDetails.address &&
             customerDetails.zipCode &&
+            customerDetails.phoneNo &&
             customerDetails.contactPreference
         );
         setIsFormValid(isValid);
@@ -74,6 +77,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
         finalFormData.append("customerDetails[email]", customerDetails.email)
         finalFormData.append("customerDetails[address]", customerDetails.address)
         finalFormData.append("customerDetails[zipCode]", customerDetails.zipCode)
+        finalFormData.append('customerDetails[phoneNo]', customerDetails.phoneNo)
         finalFormData.append("customerDetails[contactPreference]", customerDetails.contactPreference)
         isAuthenticated && finalFormData.append("customer", user._id)
         setFormData(updatedFormData)
@@ -160,6 +164,21 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
                                     name="zipCode"
                                     type="text"
                                     value={customerDetails.zipCode}
+                                    onChange={handleChange}
+                                    required
+                                    className="focus:ring-[#00725A] focus:border-[#00725A]"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="phoneNo" className="flex items-center gap-2">
+                                    <PhoneCall className="h-4 w-4 text-[#00725A]" />
+                                    Phone Number
+                                </Label>
+                                <Input
+                                    id="phoneNo"
+                                    name="phoneNo"
+                                    type="text"
+                                    value={customerDetails.phoneNo}
                                     onChange={handleChange}
                                     required
                                     className="focus:ring-[#00725A] focus:border-[#00725A]"

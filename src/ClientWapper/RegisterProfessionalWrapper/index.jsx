@@ -69,20 +69,7 @@ const RegisterProfessionalWrapper = () => {
         fetchCategories();
     }, []);
 
-    // Fetch subcategories when category is selected
-    useEffect(() => {
-        if (selectedCategory) {
-            const fetchSubcategories = async () => {
-                try {
-                    const response = await axios.get(`${API}/api/category/sub-cat/${selectedCategory}`);
-                    setSubcategories(response.data);
-                } catch (error) {
-                    toast.error("Failed to load subcategories");
-                }
-            };
-            fetchSubcategories();
-        }
-    }, [selectedCategory]);
+
 
     // Update states when country changes
     const states = useMemo(() => {
@@ -561,7 +548,7 @@ const RegisterProfessionalWrapper = () => {
                                                 {/* Service Radius Input */}
                                                 <div>
                                                     <Label className="block text-sm font-medium text-gray-700">
-                                                        Service Radius (in Meters)
+                                                        Service Radius (in miles)
                                                     </Label>
                                                     <Select
                                                         onValueChange={(value) => setServiceRadius(parseInt(value))}
@@ -582,53 +569,7 @@ const RegisterProfessionalWrapper = () => {
                                                     </Select>
                                                 </div>
 
-                                                <Label className="block text-sm font-medium text-gray-700">
-                                                    Select Subcategories
-                                                </Label>
-                                                <div className="space-y-4">
-                                                    {subcategories.map((subcat) => (
-                                                        <div key={subcat.subcategory} className="space-y-2">
-                                                            <div className="flex items-center space-x-2">
-                                                                <Checkbox
-                                                                    id={`subcat-${subcat.subcategory}`}
-                                                                    checked={selectedSubcategories.includes(subcat.subcategory)}
-                                                                    onCheckedChange={() => handleSubcategoryToggle(subcat.subcategory)}
-                                                                />
-                                                                <label
-                                                                    htmlFor={`subcat-${subcat.subcategory}`}
-                                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                                >
-                                                                    {subcat.subcategory}
-                                                                </label>
-                                                            </div>
 
-                                                            {selectedSubcategories.includes(subcat.subcategory) && subcat.subSubcategories.length > 0 && (
-                                                                <div className="ml-6 space-y-2">
-                                                                    <Label className="text-xs font-medium text-gray-500">
-                                                                        Select specific services:
-                                                                    </Label>
-                                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                                                        {subcat.subSubcategories.map((subSub) => (
-                                                                            <div key={subSub} className="flex items-center space-x-2">
-                                                                                <Checkbox
-                                                                                    id={`subsub-${subcat.subcategory}-${subSub}`}
-                                                                                    checked={selectedSubSubcategories[subcat.subcategory]?.includes(subSub) || false}
-                                                                                    onCheckedChange={() => handleSubSubcategoryToggle(subcat.subcategory, subSub)}
-                                                                                />
-                                                                                <label
-                                                                                    htmlFor={`subsub-${subcat.subcategory}-${subSub}`}
-                                                                                    className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                                                >
-                                                                                    {subSub}
-                                                                                </label>
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
                                             </div>
                                         )}
 
@@ -636,7 +577,7 @@ const RegisterProfessionalWrapper = () => {
                                             type="button"
                                             onClick={handleAddService}
                                             className="bg-[#007D63] hover:bg-[#006a52] text-white"
-                                            disabled={!selectedCategory || selectedSubcategories.length === 0 || !servicePostalCode || !serviceRadius}
+                                            disabled={!selectedCategory || !servicePostalCode || !serviceRadius}
                                         >
                                             Add Service
                                         </Button>

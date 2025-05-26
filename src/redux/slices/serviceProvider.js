@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import API from "../api";
-
+import axios from "axios";
+import { API } from "@/lib/data-service";
 const initialState = {
     providers: [],
     hierarchy: null,
@@ -10,10 +10,10 @@ const initialState = {
 
 export const getAvailableProviders = createAsyncThunk(
     'providers/getAvailableProviders',
-    async ({ postalCode, subSubCategory }, thunkAPI) => {
+    async ({ postalCode, category }, thunkAPI) => {
         try {
-            const response = await API.get('/api/service-provider/get-available-provider-by-postal-code', {
-                params: { postalCode, subSubCategory },
+            const response = await axios.get(`${API}/api/service-provider/get-available-provider-by-postal-code`, {
+                params: { postalCode, category },
             });
             
             return response.data;
@@ -26,7 +26,7 @@ export const findCategoryHierarchy = createAsyncThunk(
     'category/findCategoryHierarchy',
     async (subSubcategory, thunkAPI) => {
         try {
-            const response = await API.post('/api/category/find-hierarchy', { subSubcategory });
+            const response = await axios.post(`${API}/api/category/find-hierarchy`, { subSubcategory });
             return response.data;
 
         } catch (err) {
@@ -50,7 +50,7 @@ const providerSlice = createSlice({
             })
             .addCase(getAvailableProviders.fulfilled, (state, action) => {
                 state.loading = false;
-                state.providers = action.payload;
+                state.providers = action.payload.filteredProviders;
             })
             .addCase(getAvailableProviders.rejected, (state, action) => {
                 state.loading = false;

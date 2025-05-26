@@ -21,11 +21,11 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
                 // Load providers from localStorage with enhanced data
                 const providers = JSON.parse(localStorage.getItem('availableProviders')) || [];
 
-                if (providers.length === 0) {
+                if (providers.filteredProviders.length === 0) {
                     setNoProvidersFound(true);
                 } else {
                     // Enhance providers with calculated ratings
-                    const enhancedProviders = providers.map(provider => {
+                    const enhancedProviders = providers.filteredProviders.map(provider => {
                         const reviews = provider.reviews || [];
                         const ratingCount = reviews.length;
                         const sumRating = reviews.reduce((total, review) => total + (review.rating || 0), 0);
@@ -180,13 +180,19 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
                                             {/* Profile Image */}
                                             <div className="flex-shrink-0">
                                                 <div className="relative h-24 w-24 rounded-full overflow-hidden border-2 border-[#00725A]/30">
-                                                    <img
-                                                        src={API + provider?.profilePicture || '/assets/images/avatar.png'}
-                                                        alt={provider.name}
-                                                        fill
-                                                        className="object-cover"
-                                                        sizes="96px"
-                                                    />
+                                                    {provider?.profilePicture ? (
+                                                        <img
+                                                            src={API + provider.profilePicture}
+                                                            alt={provider.name}
+                                                            className="h-full w-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <div className="h-full w-full bg-[#00725A] flex items-center justify-center">
+                                                            <span className="text-white text-4xl font-bold">
+                                                                {provider?.name?.charAt(0).toUpperCase() || 'U'}
+                                                            </span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
 
@@ -232,7 +238,7 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
 
                                                 {provider.about && (
                                                     <p className="mt-4 text-gray-600">
-                                                        {provider.about.slice(0,150)}...
+                                                        {provider.about.slice(0, 150)}...
                                                     </p>
                                                 )}
 

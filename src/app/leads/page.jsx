@@ -23,7 +23,6 @@ const Page = () => {
         if (provider?._id) {
             setProviderId(provider._id);
             fetchLeads(provider._id);
-            fetchServices(provider._id);
         }
     }, [provider]); // Watch for changes in provider
 
@@ -42,6 +41,7 @@ const Page = () => {
 
             setAllLeads(allLeads);
             setYourLeads(yourLeads);
+            
         } catch (error) {
             console.error("Error fetching leads:", error);
         } finally {
@@ -49,19 +49,6 @@ const Page = () => {
         }
     };
 
-    const fetchServices = async (id) => {
-        try {
-            setServicesLoading(true);
-            const response = await axios.get(`${API}/api/leads/get-subsubcategories-leads-of-provider/${id}`);
-            if (response.data.leadsCount) {
-                setServices(response.data.leadsCount);
-            }
-        } catch (error) {
-            console.error("Error fetching services:", error);
-        } finally {
-            setServicesLoading(false);
-        }
-    };
 
     const leadsToShow = activeTab === 'all' ? allLeads : yourLeads;
 
@@ -72,7 +59,7 @@ const Page = () => {
             location: lead.customerDetails?.address || 'Location not specified',
             status: "High hiring intent",
             verified: true,
-            service: lead.serviceTypeSubSubCategory,
+            service: lead.serviceType,
             description: getDynamicDescription(lead),
             credits: '$' + 15,
             requested: lead.serviceProvider?.includes(providerId),
@@ -84,7 +71,7 @@ const Page = () => {
     };
 
     const getDynamicDescription = (lead) => {
-        return lead.issueDescription ||
+        return lead.additionalNotes ||
             lead.areaDescription ||
             lead.itemsDescription ||
             lead.shortDescription ||
@@ -155,45 +142,6 @@ const Page = () => {
                         </button>
                     </div>
 
-                    {/* Services Section */}
-                    <div className="p-4 border-b border-gray-200">
-                        <h3 className="text-sm font-medium text-gray-700 mb-2">Your Services</h3>
-                        <div className="space-y-2 max-h-[600px] overflow-y-auto">
-                            {servicesLoading ? (
-                                <div className="flex justify-center py-4">
-                                    <PulseLoader color="#16a34a" size={8} />
-                                </div>
-                            ) : services.length > 0 ? (
-                                services.map((service) => (
-                                    <div
-                                        key={service.subSubCategory}
-                                        className="flex items-center justify-between py-1 px-2 hover:bg-gray-50 rounded"
-                                    >
-                                        <div className="flex items-center">
-                                            <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                                            <span className="text-sm truncate">
-                                                {service.subSubCategory}
-                                            </span>
-                                        </div>
-                                        <span
-                                            className={`text-xs px-2 py-1 rounded-full ${service.count > 0
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-gray-100 text-gray-800'
-                                                }`}
-                                        >
-                                            {service.count}
-                                        </span>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="text-center py-2">
-                                    <span className="text-sm text-gray-500">No services found</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                   
                 </div>
 
                 {/* Main Content */}
@@ -252,7 +200,7 @@ const LeadCard = ({ lead, onClick }) => {
                 <div className="flex justify-between items-start">
                     <div>
                         <h3 className="font-bold text-gray-900">{lead.name}</h3>
-                        <p className="text-sm text-gray-600">{lead.location}</p>
+                        {/* <p className="text-sm text-gray-600">{lead.location}</p> */}
                     </div>
                     {lead.verified && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -348,10 +296,6 @@ const LeadDetailView = ({ lead, onBack }) => {
                     <div className="flex justify-between items-start">
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900">{lead.name}</h2>
-                            <div className="flex items-center mt-2">
-                                <MapPin className="h-5 w-5 text-gray-500 mr-1" />
-                                <p className="text-gray-600">{lead.location}</p>
-                            </div>
                         </div>
                         {lead.verified && (
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">

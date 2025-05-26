@@ -67,7 +67,6 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
             finalFormData.append(key, typeof value === "string" ? value : JSON.stringify(value));
         });
         setFormData(answers);
-        setFormSubmitted(true);
     };
 
     if (!formConfig) {
@@ -194,6 +193,7 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
                                     type="submit"
                                     disabled={!allQuestionsAnswered}
                                     className="px-4 py-2 text-sm bg-[#00725A] hover:bg-[#00634A] text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
+                                    onClick={() => setFormSubmitted(true)}
                                 >
                                     Submit Answers
                                 </Button>

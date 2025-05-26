@@ -63,7 +63,7 @@ export default function BannerSection() {
     if (postalCode && query) {
       try {
         // Fetch the data by calling the getAvailableProviders and findCategoryHierarchy thunks
-        const providersResponse = await dispatch(getAvailableProviders({ postalCode, subSubCategory: query }));
+        const providersResponse = await dispatch(getAvailableProviders({ postalCode, category: query }));
         const categoryHierarchyResponse = await dispatch(findCategoryHierarchy(query));
 
         const availableProviders = providersResponse.payload;

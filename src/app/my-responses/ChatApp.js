@@ -17,7 +17,6 @@ const ChatPage = () => {
 
   // Initialize socket connection
   useEffect(() => {
-    console.log('Initializing socket connection...');
     setSocketStatus('connecting');
 
     socketRef.current = io(`${API}`, {
@@ -98,7 +97,6 @@ const ChatPage = () => {
   // Join conversation when activeChat changes
   useEffect(() => {
     if (activeChat && socketStatus === 'connected') {
-      console.log(activeChat);
       joinConversation(activeChat);
     }
   }, [activeChat, socketStatus]);
@@ -183,7 +181,7 @@ const ChatPage = () => {
                   </h3>
                 </div>
                 <p className="text-xs text-green-700 font-medium truncate">
-                  {conversation.lead.serviceTypeSubSubCategory}
+                  {conversation.lead.serviceType}
                 </p>
               </div>
               <ChevronRight className="h-5 w-5 text-gray-400 ml-2" />
@@ -211,7 +209,7 @@ const ChatPage = () => {
             <div className="flex-1 ml-2">
               <h2 className="font-bold text-gray-900">{activeChat.user.name}</h2>
               <p className="text-xs text-gray-500">
-                {activeChat.lead.serviceTypeSubSubCategory}
+                {activeChat.lead.serviceType}
               </p>
             </div>
           </div>

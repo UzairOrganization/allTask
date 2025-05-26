@@ -13,7 +13,8 @@ import {
     AlertCircle,
     ChevronLeft,
     Calendar,
-    ChevronRight
+    ChevronRight,
+    PhoneCall 
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -80,6 +81,7 @@ export default function PurchasedLeadsPage() {
             { label: 'Name', value: serviceRequest.customerDetails?.name, icon: <User className="h-4 w-4" /> },
             { label: 'Email', value: serviceRequest.customerDetails?.email, icon: <Mail className="h-4 w-4" /> },
             { label: 'Address', value: serviceRequest.customerDetails?.address, icon: <MapPin className="h-4 w-4" /> },
+            { label: 'Phone No', value: serviceRequest.customerDetails?.phoneNo, icon: <PhoneCall className="h-4 w-4" /> },
             { label: 'Contact Preference', value: serviceRequest.customerDetails?.contactPreference, icon: <Phone className="h-4 w-4" /> },
             { label: 'Purchased Date', value: formatPurchaseDate(serviceRequest.purchasedDate), icon: <Calendar className="h-4 w-4" /> }
         ].filter(detail => detail.value) // Only show if value exists
@@ -88,7 +90,7 @@ export default function PurchasedLeadsPage() {
         const excludedFields = [
             '_id', 'customer', 'serviceProvider', 'photos',
             'status', 'createdAt', 'updatedAt', '__v', 'kind',
-            'purchasedBy', 'isPurchased', 'purchasedPrice', "purchasedDate" // Now handled separately
+            'purchasedBy', 'isPurchased', 'purchasedPrice', "purchasedDate","serviceTypeSubSubCategory","serviceTypeSubCategory" // Now handled separately
         ]
         const handleStartConversation = async () => {
             try {
@@ -250,7 +252,7 @@ export default function PurchasedLeadsPage() {
                                             >
                                                 <TableCell className="text-center align-middle">
                                                     <div className="font-medium mx-auto">
-                                                        {payment.serviceRequest?.serviceTypeSubSubCategory || 'Service'}
+                                                        {payment.serviceRequest?.serviceType || 'Service'}
                                                     </div>
                                                     <div className="text-sm text-gray-500 ">
                                                         {new Date(payment.serviceRequest?.createdAt).toLocaleDateString()}

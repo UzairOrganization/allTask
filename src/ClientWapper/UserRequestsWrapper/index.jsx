@@ -22,6 +22,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import { API } from '@/lib/data-service'
+import axios from 'axios'
 
 export default function UserRequestsWrapper() {
     const [requests, setRequests] = useState([])
@@ -33,7 +34,7 @@ export default function UserRequestsWrapper() {
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                const response = await API.get("/api/leads/getUserRequest", { withCredentials: true })
+                const response = await axios.get(`${API}/api/leads/getUserRequest`, { withCredentials: true })
                 setRequests(response.data)
             } catch (err) {
                 setRequests([])
@@ -134,16 +135,13 @@ export default function UserRequestsWrapper() {
                                 {getServiceIcon(request.serviceType)}
                                 <div>
                                     <CardTitle className="capitalize">
-                                        {request.serviceTypeSubSubCategory}
+                                        {request.serviceType}
                                     </CardTitle>
                                     <CardDescription className="mt-1">
                                         {request.customerDetails.address}
                                     </CardDescription>
                                 </div>
                             </div>
-                            <Badge variant={getStatusVariant(request.status)}>
-                                {request.status}
-                            </Badge>
                         </CardHeader>
                         <CardContent>
                             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
@@ -151,14 +149,7 @@ export default function UserRequestsWrapper() {
                                     <CalendarIcon className="mr-1 h-4 w-4" />
                                     {formatDate(request.createdAt)}
                                 </div>
-                                {/* {request.serviceProvider && request.serviceProvider.length > 0 && (
-                                    <div className="flex items-center">
-                                        <span className="mr-1">Provider:</span>
-                                        <span className="font-medium text-foreground">
-                                            {request.serviceProvider[0].name}
-                                        </span>
-                                    </div>
-                                )} */}
+                               
                             </div>
 
                             <div className="mt-4 flex space-x-3">
@@ -203,20 +194,12 @@ export default function UserRequestsWrapper() {
                                         <p className="text-sm text-muted-foreground">Service Type</p>
                                         <p className="font-medium">{selectedRequest.serviceType}</p>
                                     </div>
-                                    <div>
-                                        <p className="text-sm text-muted-foreground">Sub Category</p>
-                                        <p className="font-medium">{selectedRequest.serviceTypeSubCategory}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-muted-foreground">Specific Category</p>
-                                        <p className="font-medium">{selectedRequest.serviceTypeSubSubCategory}</p>
-                                    </div>
-                                    <div>
+                                    {/* <div>
                                         <p className="text-sm text-muted-foreground">Status</p>
                                         <Badge variant={getStatusVariant(selectedRequest.status)}>
                                             {selectedRequest.status}
                                         </Badge>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
 
@@ -237,6 +220,7 @@ export default function UserRequestsWrapper() {
                                         <p className="text-sm text-muted-foreground">Contact Preference</p>
                                         <p className="font-medium">{selectedRequest.customerDetails.contactPreference}</p>
                                     </div>
+                                    
                                     <div className="col-span-2">
                                         <p className="text-sm text-muted-foreground flex items-center gap-1">
                                             <MapPinIcon className="h-4 w-4" /> Address
