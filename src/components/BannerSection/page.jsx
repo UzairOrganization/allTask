@@ -2,12 +2,14 @@
 import { IoLocationSharp } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { debounce } from "lodash";
-import API from "@/redux/api";
+
 import { useEffect, useRef, useState } from "react";
 import { MdHomeRepairService } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { findCategoryHierarchy, getAvailableProviders } from "@/redux/slices/serviceProvider";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { API } from "@/lib/data-service";
 
 export default function BannerSection() {
   const router = useRouter()
@@ -46,7 +48,7 @@ export default function BannerSection() {
     setLoading(true);
 
     try {
-      const response = await API.get("/api/category/search-subcategories", {
+      const response = await axios.get(`${API}/api/category/search-subcategories`, {
         params: { q: value },
       });
 

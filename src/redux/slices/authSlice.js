@@ -38,7 +38,7 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
 });
 export const checkAuthStatus = createAsyncThunk("auth/checkAuthStatus", async (_, { dispatch, rejectWithValue }) => {
     try {
-        const response = await API.get("/api/users/me", { withCredentials: true });
+        const response = await axios.get(`${APIURL}/api/users/me`, { withCredentials: true });
 
         return response.data;
     } catch (error) {
@@ -56,7 +56,7 @@ export const checkProviderAuthStatus = createAsyncThunk("auth/checkProviderAuthS
 })
 export const registerEmail = createAsyncThunk("auth/registerEmail", async (email, { dispatch, rejectWithValue }) => {
     try {
-        const response = await API.post("/api/users/send-verification", { email });
+        const response = await axios.post(`${APIURL}/api/users/send-verification`, { email });
         return response.data
     } catch (e) {
         return rejectWithValue("Error Sending email.")
@@ -66,7 +66,7 @@ export const registerUser = createAsyncThunk(
     "auth/registerUser",
     async ({ email, verificationCode, name, password }, { rejectWithValue }) => {
         try {
-            const response = await API.post("/api/users/verify-and-register", {
+            const response = await axios.post(`${APIURL}/api/users/verify-and-register`, {
                 email,
                 verificationCode,
                 name,

@@ -1,3 +1,4 @@
+import { API } from '@/lib/data-service';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -6,7 +7,7 @@ export const fetchHierarchy = createAsyncThunk(
   'category/fetchHierarchy',
   async (subSubcategory, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/category/find-hierarchy', {
+      const response = await axios.post(`${API}/api/category/find-hierarchy`, {
         subSubcategory,
       });
       return response.data;

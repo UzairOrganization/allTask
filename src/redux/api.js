@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const NODE_ENV = "development"
+const NODE_ENV = "production"
 const API = axios.create({
     baseURL: NODE_ENV === "production" ?  "https://api.alltasko.com/" : "http://localhost:5000/",
     headers: { "Content-Type": "application/json" },
