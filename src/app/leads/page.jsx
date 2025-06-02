@@ -41,7 +41,7 @@ const Page = () => {
 
             setAllLeads(allLeads);
             setYourLeads(yourLeads);
-            
+
         } catch (error) {
             console.error("Error fetching leads:", error);
         } finally {
@@ -191,6 +191,7 @@ const Page = () => {
 };
 
 const LeadCard = ({ lead, onClick }) => {
+    console.log(lead);
     return (
         <div
             className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
@@ -200,7 +201,6 @@ const LeadCard = ({ lead, onClick }) => {
                 <div className="flex justify-between items-start">
                     <div>
                         <h3 className="font-bold text-gray-900">{lead.name}</h3>
-                        {/* <p className="text-sm text-gray-600">{lead.location}</p> */}
                     </div>
                     {lead.verified && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -212,8 +212,8 @@ const LeadCard = ({ lead, onClick }) => {
 
             <div className="p-4">
                 <div className="flex items-center mb-3">
-                    <div className={`h-2 w-2 rounded-full mr-2 ${lead.status.includes('High') ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
-                    <span className="text-sm font-medium text-gray-700">{lead.status}</span>
+                    <div className={`h-2 w-2 rounded-full mr-2  bg-yellow-500`}></div>
+                    <span className="text-sm font-medium text-gray-700 capitalize">{lead.status}</span>
                 </div>
 
                 <div className="mb-4">
@@ -343,14 +343,25 @@ const LeadDetailView = ({ lead, onBack }) => {
                         <>
                             <h4 className="font-medium text-lg mb-3">Photos</h4>
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-                                {lead.photos.map((photo, index) => (
-                                    <img
-                                        key={index}
-                                        src={`${API}${photo}`}
-                                        alt={`Lead photo ${index + 1}`}
-                                        className="h-32 w-full object-cover rounded-lg"
-                                    />
-                                ))}
+                                {lead.photos.map((photo, index) => {
+                                    // Extract the filename from the photo URL/path
+                                    const fileName = photo.split('/').pop();
+
+                                    return (
+                                        <div
+                                            key={index}
+                                            onClick={() => window.open(`${API}${photo}`, '_blank')}
+                                            className="border border-gray-200 rounded-lg p-3 cursor-pointer hover:bg-gray-50 transition-colors flex items-center justify-center"
+                                        >
+                                            <div className="text-center truncate w-full" title={fileName}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                <span className="text-sm mt-1 block truncate">{fileName}</span>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </>
                     )}

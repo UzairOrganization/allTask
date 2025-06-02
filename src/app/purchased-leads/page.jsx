@@ -14,7 +14,7 @@ import {
     ChevronLeft,
     Calendar,
     ChevronRight,
-    PhoneCall 
+    PhoneCall
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -90,7 +90,7 @@ export default function PurchasedLeadsPage() {
         const excludedFields = [
             '_id', 'customer', 'serviceProvider', 'photos',
             'status', 'createdAt', 'updatedAt', '__v', 'kind',
-            'purchasedBy', 'isPurchased', 'purchasedPrice', "purchasedDate","serviceTypeSubSubCategory","serviceTypeSubCategory" // Now handled separately
+            'purchasedBy', 'isPurchased', 'purchasedPrice', "purchasedDate", "serviceTypeSubSubCategory", "serviceTypeSubCategory" // Now handled separately
         ]
         const handleStartConversation = async () => {
             try {
@@ -211,8 +211,8 @@ export default function PurchasedLeadsPage() {
     return (
         <>
             <ProfessionalHeader />
-            <div className="container w-screen  px-4 py-8">
-                <div className="flex max-w-6xl mx-auto flex-col md:flex-row gap-6">
+            <div className="w-screen  px-4 py-8">
+                <div className="flex max-w-6xl  m-auto flex-col md:flex-row gap-6">
                     {/* Payments List */}
                     <div className={`flex-1 ${selectedPayment ? 'hidden md:block' : ''}`}>
                         <h1 className="text-2xl font-bold mb-6">Purchased Leads</h1>
@@ -244,33 +244,35 @@ export default function PurchasedLeadsPage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {payments.map((payment) => (
-                                            <TableRow
-                                                key={payment._id}
-                                                onClick={() => setSelectedPayment(payment)}
-                                                className="cursor-pointer hover:bg-gray-50"
-                                            >
-                                                <TableCell className="text-center align-middle">
-                                                    <div className="font-medium mx-auto">
-                                                        {payment.serviceRequest?.serviceType || 'Service'}
-                                                    </div>
-                                                    <div className="text-sm text-gray-500 ">
-                                                        {new Date(payment.serviceRequest?.createdAt).toLocaleDateString()}
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className="text-center align-middle">
-                                                    ${(payment.amount / 100).toFixed(2)}
-                                                </TableCell>
-                                                <TableCell className="text-center align-middle">
-                                                    {new Date(payment.purchasedAt).toLocaleDateString()}
-                                                </TableCell>
-                                                <TableCell className="text-center align-middle">
-                                                    <div className="flex justify-center">
-                                                        <StatusBadge status={payment.paymentStatus} />
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {payments
+                                            .filter(payment => payment.paymentStatus === 'completed')
+                                            .map((payment) => (
+                                                <TableRow
+                                                    key={payment._id}
+                                                    onClick={() => setSelectedPayment(payment)}
+                                                    className="cursor-pointer hover:bg-gray-50"
+                                                >
+                                                    <TableCell className="text-center align-middle">
+                                                        <div className="font-medium mx-auto">
+                                                            {payment.serviceRequest?.serviceType || 'Service'}
+                                                        </div>
+                                                        <div className="text-sm text-gray-500 ">
+                                                            {new Date(payment.serviceRequest?.createdAt).toLocaleDateString()}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="text-center align-middle">
+                                                        ${(payment.amount / 100).toFixed(2)}
+                                                    </TableCell>
+                                                    <TableCell className="text-center align-middle">
+                                                        {new Date(payment.purchasedAt).toLocaleDateString()}
+                                                    </TableCell>
+                                                    <TableCell className="text-center align-middle">
+                                                        <div className="flex justify-center">
+                                                            <StatusBadge status={payment.paymentStatus} />
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
                                     </TableBody>
                                 </Table>
                             </Card>

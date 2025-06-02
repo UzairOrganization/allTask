@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast, Toaster } from "sonner";
 import Header from "@/components/Header";
-import API from "@/redux/api"; // Direct API call for verifyCodeAndRegister
+
 import { useRouter } from "next/navigation";
 
 const RegisterWrapper = () => {

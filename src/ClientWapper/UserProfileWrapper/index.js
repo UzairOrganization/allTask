@@ -6,11 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import API from "@/redux/api";
+
 import { toast, Toaster } from "sonner";
 import { VscError } from "react-icons/vsc";
 import Header from "@/components/Header/index";
-
+import axios from "axios";
+import { API } from "@/lib/data-service";
 
 const UserProfileWrapper = () => {
     const { user } = useSelector((state) => state.auth);
@@ -23,8 +24,8 @@ const UserProfileWrapper = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await API.put(
-                "/api/users/change-password",
+            const response = await axios.put(
+                `${API}/api/users/change-password`,
                 { oldPassword, newPassword },
                 { withCredentials: true }
             );

@@ -15,8 +15,7 @@ import { AiFillGoogleCircle } from "react-icons/ai";
 import { redirect } from 'next/navigation'
 import Header from "@/components/Header/index";
 import { toast, Toaster } from "sonner";
-import Link from "next/link";
-// import API from "@/redux/api";
+import Link from "next/link";;
 import { API } from "@/lib/data-service";
 
 const LoginWrapper = () => {

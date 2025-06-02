@@ -9,8 +9,9 @@ import { toast, Toaster } from "sonner"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 
-import API from "@/redux/api"
+import { API } from "@/lib/data-service"
 import { useRouter } from "next/navigation"
+import axios from "axios"
 
 const MultiStepsForm = ({ questions, serviceProviders }) => {
     const navigation = useRouter()
@@ -25,7 +26,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
         const storedProviders = JSON.parse(localStorage.getItem('availableProviders') || '[]');
         const storedCategoryHierarchy = JSON.parse(localStorage.getItem('categoryHierarchy') || '{}');
         console.log(storedProviders);
-        
+
         setAvailableProviders(storedProviders);
         setCategoryHierarchy(storedCategoryHierarchy);
     }, []);
@@ -37,7 +38,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
 
         const fetchFormConfig = async () => {
             try {
-                const response = await API.get(`/api/leads/getFormConfig/${categoryHierarchy?.category}`)
+                const response = await axios.get(`${API}/api/leads/getFormConfig/${categoryHierarchy?.category}`)
                 if (response.data.success) {
                     setFormConfig(response.data.data)
                     setLoading(false)
@@ -164,7 +165,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
 
 
             // Make the POST request with FormData
-            const response = await API.post('/api/leads/createLead', finalFormData, {
+            const response = await axios.post(`${API}/api/leads/createLead`, finalFormData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

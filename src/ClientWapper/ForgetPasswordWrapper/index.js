@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast, Toaster } from "sonner";
 import Header from "@/components/Header";
-import API from "@/redux/api"; // You can use axios or fetch inside this
+
+import { API } from "@/lib/data-service";
 import { useRouter } from "next/navigation";
 import {
     Dialog,
@@ -15,6 +16,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import axios from "axios";
 
 const ForgetPasswordWrapper = () => {
     const [step, setStep] = useState(1);
@@ -29,7 +31,7 @@ const ForgetPasswordWrapper = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await API.post("/api/users/forget-password", { email });
+            await API.post(`${API}/api/users/forget-password`, { email });
             toast.success("Verification code sent!", {
                 description: "Check your email",
                 duration: 3000,
@@ -51,7 +53,7 @@ const ForgetPasswordWrapper = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await API.post("/api/users/reset-password", {
+            await axios.post(`${API}/api/users/reset-password`, {
                 email,
                 resetCode,
                 newPassword,
