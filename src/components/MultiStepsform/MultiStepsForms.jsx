@@ -21,6 +21,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
     const [formConfig, setFormConfig] = useState(null)
     const [categoryHierarchy, setCategoryHierarchy] = useState()
     const [availableProviders, setAvailableProviders] = useState()
+    const [categoryPricing, setCategoryPricing] = useState()
     const finalFormData = new FormData()
     useEffect(() => {
         const storedProviders = JSON.parse(localStorage.getItem('availableProviders') || '[]');
@@ -34,7 +35,17 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
     useEffect(() => {
 
         // Check if the code is running on the client-side  
-
+        const fetchCategoryPricing = async () => {
+            try {
+                setLoading(true)
+                const response = axios.get(`${API}/api/category/get-category-pricing`, categoryHierarchy?.category)
+                setCategoryPricing((await response).data.pricing)
+                setLoading(false)
+            } catch (error) {
+                console.error("Error fetching category pricing:", error)
+                setLoading(false)
+            }
+        }
 
         const fetchFormConfig = async () => {
             try {
@@ -54,6 +65,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
 
         if (categoryHierarchy) {
             fetchFormConfig()
+            // fetchCategoryPricing()
         }
 
     }, [categoryHierarchy])

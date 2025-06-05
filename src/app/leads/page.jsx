@@ -32,10 +32,15 @@ const Page = () => {
             const response = await axios.get(`${API}/api/leads/get-all-matching-leads-of-provider/${id}`);
             const leads = response.data.leads;
 
-            const yourLeads = leads.filter(lead =>
+            // Transform all leads at once
+            const transformedLeads = await Promise.all(
+                leads.map(lead => transformLead(lead, id))
+            );
+
+            const yourLeads = transformedLeads.filter(lead =>
                 lead.serviceProvider && lead.serviceProvider.includes(id)
             );
-            const allLeads = leads.filter(lead =>
+            const allLeads = transformedLeads.filter(lead =>
                 !lead.serviceProvider || !lead.serviceProvider.includes(id)
             );
 
@@ -52,22 +57,51 @@ const Page = () => {
 
     const leadsToShow = activeTab === 'all' ? allLeads : yourLeads;
 
-    const transformLead = (lead) => {
-        return {
-            id: lead._id,
-            name: lead.customerDetails?.name || 'Unknown Customer',
-            location: lead.customerDetails?.address || 'Location not specified',
-            status: "High hiring intent",
-            verified: true,
-            service: lead.serviceType,
-            description: getDynamicDescription(lead),
-            credits: '$' + 15,
-            requested: lead.serviceProvider?.includes(providerId),
-            photos: lead.photos,
-            kind: lead.kind,
-            details: getDynamicDetails(lead),
-            ...lead
-        };
+    const transformLead = async (lead, providerId) => { // Added providerId parameter
+        try {
+            const response = await axios.post(`${API}/api/category/get-category-pricing`, {
+                category: lead.serviceType
+            });
+            console.log("API Response:", response.data);
+            // Default values when pricing isn't available
+            const credits = response.data?.pricing
+                ? '$' + (response.data.pricing / 100).toFixed(2)
+                : '$0.00';
+
+            return {
+                id: lead._id,
+                name: lead.customerDetails?.name || 'Unknown Customer',
+                location: lead.customerDetails?.address || 'Location not specified',
+                status: "High hiring intent",
+                verified: true,
+                service: lead.serviceType,
+                description: getDynamicDescription(lead),
+                credits,
+                requested: lead.serviceProvider?.includes(providerId),
+                photos: lead.photos,
+                kind: lead.kind,
+                details: getDynamicDetails(lead),
+                ...lead
+            };
+        } catch (error) {
+            console.error('Error transforming lead:', error);
+            // Return a lead with default values when there's an error
+            return {
+                id: lead._id,
+                name: lead.customerDetails?.name || 'Unknown Customer',
+                location: lead.customerDetails?.address || 'Location not specified',
+                status: "High hiring intent",
+                verified: true,
+                service: lead.serviceType,
+                description: getDynamicDescription(lead),
+                credits: '$0.00',
+                requested: lead.serviceProvider?.includes(providerId),
+                photos: lead.photos,
+                kind: lead.kind,
+                details: getDynamicDetails(lead),
+                ...lead
+            };
+        }
     };
 
     const getDynamicDescription = (lead) => {
@@ -129,16 +163,16 @@ const Page = () => {
                     {/* Tabs */}
                     <div className="flex border-b border-gray-200">
                         <button
-                            onClick={() => setActiveTab('all')}
-                            className={`flex-1 py-3 text-sm font-medium ${activeTab === 'all' ? 'text-green-700 border-b-2 border-green-700' : 'text-gray-500'}`}
-                        >
-                            All Leads
-                        </button>
-                        <button
                             onClick={() => setActiveTab('yours')}
                             className={`flex-1 py-3 text-sm font-medium ${activeTab === 'yours' ? 'text-green-700 border-b-2 border-green-700' : 'text-gray-500'}`}
                         >
                             Your Leads
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('all')}
+                            className={`flex-1 py-3 text-sm font-medium ${activeTab === 'all' ? 'text-green-700 border-b-2 border-green-700' : 'text-gray-500'}`}
+                        >
+                            All Leads
                         </button>
                     </div>
 
@@ -163,8 +197,8 @@ const Page = () => {
                             {leadsToShow.map((lead) => (
                                 <LeadCard
                                     key={lead._id}
-                                    lead={transformLead(lead)}
-                                    onClick={() => setSelectedLead(transformLead(lead))}
+                                    lead={lead}
+                                    onClick={() => setSelectedLead(lead)}
                                 />
                             ))}
                         </div>
@@ -308,7 +342,7 @@ const LeadDetailView = ({ lead, onBack }) => {
                 {/* Status and Service Section */}
                 <div className="p-6 border-b border-gray-200">
                     <div className="flex items-center mb-4">
-                        <div className={`h-3 w-3 rounded-full mr-2 ${lead.status.includes('High') ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                        <div className={`h-3 w-3 rounded-full mr-2 bg-yellow-500`} />
                         <span className="font-medium text-gray-700">{lead.status}</span>
                     </div>
 

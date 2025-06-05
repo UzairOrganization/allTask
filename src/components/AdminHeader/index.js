@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, UserCog } from 'lucide-react' // Import icons
+import { Home, Users, UserCog, PenTool } from 'lucide-react' // Import icons
 
 export default function AdminHeader() {
     const pathname = usePathname()
@@ -21,6 +21,11 @@ export default function AdminHeader() {
             name: 'All Users',
             href: '/admin/all-users',
             icon: <Users className="h-5 w-5" />,
+        },
+        {
+            name: 'All Services',
+            href: '/admin/modifications',
+            icon: <PenTool className="h-5 w-5" />,
         }
     ]
 
