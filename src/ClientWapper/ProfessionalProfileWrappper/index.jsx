@@ -210,7 +210,7 @@ export default function ProfessionalProfile({ name }) {
                                 <Card key={index} className="p-4 border-green-100 hover:border-green-200 transition-colors">
                                     <h3 className="font-medium mb-2 text-green-800">{category?.category || 'Uncategorized'}</h3>
                                     <p className="text-sm text-gray-600 mb-2">
-                                        Service radius: {category?.serviceRadius || 0} meters around {category?.postalCode || 'unknown location'}
+                                        Service radius: {category?.serviceRadius || 0} miles around {category?.postalCode || 'unknown location'}
                                     </p>
                                     <div className="space-y-2">
                                         {category?.subcategories?.map((subcat, subIndex) => (

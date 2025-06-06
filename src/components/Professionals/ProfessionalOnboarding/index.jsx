@@ -127,11 +127,12 @@ export function ProfessionalOnboarding() {
         city: provider?.city || "",
         postalCode: provider?.postalCode || "",
         verificationDocument: provider?.verificationDocument || null,
+        status: provider?.status
     });
 
     const [documentUploading, setDocumentUploading] = useState(false);
     const [rejectionReason, setRejectionReason] = useState(provider?.reasonOfRejection || "");
-    const [holdReason, setHoldReason] = useState(provider?.reasonOfHold || "");
+    const [holdReason, setHoldReason] = useState(provider?.resaonOfHold || "");
 
     useEffect(() => {
         const updateTime = () => {
@@ -169,10 +170,8 @@ export function ProfessionalOnboarding() {
                 verificationDocument: provider.verificationDocument || null,
             });
             setRejectionReason(provider.reasonOfRejection || "");
-            setHoldReason(provider.reasonOfHold || "");
+            setHoldReason(provider.resaonOfHold || "");
         }
-        console.log(provider);
-        
     }, [provider]);
 
     const handleInputChange = (e) => {
@@ -539,12 +538,7 @@ export function ProfessionalOnboarding() {
                                                                         </Button>
                                                                     </div>
                                                                 </div>
-                                                                {formData.status === 'pending' && (
-                                                                    <div className="flex items-center gap-2 text-sm text-yellow-600">
-                                                                        <ClockIcon className="h-4 w-4" />
-                                                                        <span>Verification under review</span>
-                                                                    </div>
-                                                                )}
+
                                                             </div>
                                                         ) : (
                                                             <>
@@ -559,17 +553,24 @@ export function ProfessionalOnboarding() {
                                                             </>
                                                         )}
                                                     </div>
-
-                                                    {provider?.status === 'rejected' && rejectionReason && (
-                                                        <div className="space-y-2 md:col-span-2">
-                                                            <Label>Reason for Rejection</Label>
-                                                            <div className="p-4 bg-red-50 rounded-md border border-red-200">
-                                                                <p className="text-red-700">{rejectionReason}</p>
+                                                    <div className="flex justify-between w-full">
+                                                        {provider?.status === 'pending' && (
+                                                            <div className="flex items-center gap-2 text-sm text-yellow-600">
+                                                                <ClockIcon className="h-4 w-4" />
+                                                                <span>Verification under review</span>
                                                             </div>
-                                                        </div>
-                                                    )}
+                                                        )}
+                                                        {provider?.status === 'rejected' && (
+                                                            <div className="space-y-2 md:col-span-2">
+                                                                <Label>Reason for Rejection</Label>
+                                                                <div className="p-4 bg-red-50 rounded-md border border-red-200">
+                                                                    <p className="text-red-700">{rejectionReason}</p>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
 
-                                                    {provider?.status === 'onHold' && holdReason && (
+                                                    {provider?.accountStatus === 'on_hold' && (
                                                         <div className="space-y-2 md:col-span-2">
                                                             <Label>Account On Hold - Reason</Label>
                                                             <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200">

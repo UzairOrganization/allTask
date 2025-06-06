@@ -6,7 +6,7 @@ import { CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 
 
-const StageFive = ({ Toaster, formData, setFormData, back, onSubmit }) => {
+const StageFive = ({ Toaster, formData, setFormData, back, onSubmit, componentLoading }) => {
     const {
         customerDetails = {},
         photos = [],
@@ -115,8 +115,9 @@ const StageFive = ({ Toaster, formData, setFormData, back, onSubmit }) => {
                             type="button"
                             onClick={onSubmit}
                             className="px-8 py-3 text-base bg-[#00725A] hover:bg-[#00634A]"
+                            disabled={componentLoading}
                         >
-                            Confirm & Submit Request
+                            {componentLoading ? "Loading..." : "Confirm & Submit Request"}
                         </Button>
                     </div>
                 </div>

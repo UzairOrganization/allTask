@@ -42,7 +42,9 @@ export default function ProfessionalsPage() {
     const [totalPages, setTotalPages] = useState(1)
     const [totalCount, setTotalCount] = useState(0)
     const [selectedAccountStatus, setSelectedAccountStatus] = useState('');
-    const [holdReason, setHoldReason] = useState('');
+    const [holdReason, setHoldReason] = useState(professionals?.resaonOfHold);
+    const [isRejectSelected, setIsRejectedSelected] = useState(false)
+    const [rejectedReason, setRejectedReason] = useState(professionals?.reasonOfRejection)
     const limit = 10
 
     const fetchProfessionals = async () => {
@@ -98,6 +100,10 @@ export default function ProfessionalsPage() {
 
     const updateAccountStatus = async (id, status, reason) => {
         try {
+            console.log("Sending:", {
+                accountStatus: status,
+                reasonOfHold: reason
+            });
             await axios.put(`${API}/api/admin/updateAccountStatus/${id}`, {
                 accountStatus: status,
                 reasonOfHold: reason
@@ -232,8 +238,11 @@ export default function ProfessionalsPage() {
                                                             <div className="space-y-4">
                                                                 <Select
                                                                     onValueChange={(value) => {
-                                                                        if (value !== 'rejected') {
+                                                                        if (value === 'rejected') {
+                                                                            setIsRejectedSelected(true);
+                                                                        } else {
                                                                             updateVerificationStatus(professional._id, value);
+                                                                            setIsRejectedSelected(false); // Reset when selecting other options
                                                                         }
                                                                     }}
                                                                     defaultValue={professional.status}
@@ -263,18 +272,20 @@ export default function ProfessionalsPage() {
                                                                     </SelectContent>
                                                                 </Select>
 
-                                                                {professional.status === 'rejected' && (
-                                                                    <Input
-                                                                        placeholder="Reason for rejection"
-                                                                        defaultValue={professional.reasonOfRejection}
-                                                                        onChange={(e) => {
-                                                                            updateVerificationStatus(
-                                                                                professional._id,
-                                                                                'rejected',
-                                                                                e.target.value
-                                                                            );
-                                                                        }}
-                                                                    />
+                                                                {isRejectSelected && (
+                                                                    <>
+                                                                        <Input
+                                                                            placeholder="Reason for rejection"
+                                                                            defaultValue={professional.reasonOfRejection}
+                                                                            onChange={(e) => {
+                                                                                setRejectedReason(e.target.value)
+                                                                            }}
+                                                                            value={rejectedReason}
+                                                                        />
+                                                                        <div className=' flex justify-end'>
+                                                                            <Button onClick={() => updateVerificationStatus(professional?._id, 'rejected', rejectedReason)} variant={"ghost"} className={"border bg-black text-white cursor-pointer"}>Submit</Button>
+                                                                        </div>
+                                                                    </>
                                                                 )}
                                                             </div>
                                                         </div>
@@ -352,7 +363,7 @@ export default function ProfessionalsPage() {
                                                                             updateAccountStatus(
                                                                                 professional._id,
                                                                                 selectedAccountStatus,
-                                                                                '' // No reason needed for active status
+                                                                                null // No reason needed for active status
                                                                             );
                                                                         }}
                                                                     >

@@ -22,6 +22,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
     const [categoryHierarchy, setCategoryHierarchy] = useState()
     const [availableProviders, setAvailableProviders] = useState()
     const [categoryPricing, setCategoryPricing] = useState()
+    const [componentLoading, setComponentLoading] = useState(false)
     const finalFormData = new FormData()
     useEffect(() => {
         const storedProviders = JSON.parse(localStorage.getItem('availableProviders') || '[]');
@@ -131,6 +132,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
                         formData={formData}
                         back={back}
                         onSubmit={handleFinalSubmit}
+                        componentLoading={componentLoading}
                     />
                 )
             default:
@@ -140,6 +142,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
 
     const handleFinalSubmit = async () => {
         try {
+            setComponentLoading(true)
             const finalFormData = new FormData();
 
             // Append category-related fields to finalFormData
@@ -192,12 +195,14 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
                         color: "green"
                     }
                 });
+
                 setTimeout(() => {
+                    setComponentLoading(false)
                     navigation.push("/")
-                }, [4000])
+                }, [2000])
             } else {
                 console.error("Form submission failed:", response.data.message);
-                // Handle failure here
+                setComponentLoading(false)
             }
         } catch (error) {
             console.error("Error submitting form:", error);

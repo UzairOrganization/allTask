@@ -199,6 +199,7 @@ const Page = () => {
                                     key={lead._id}
                                     lead={lead}
                                     onClick={() => setSelectedLead(lead)}
+                                    provider={provider}
                                 />
                             ))}
                         </div>
@@ -224,12 +225,12 @@ const Page = () => {
     );
 };
 
-const LeadCard = ({ lead, onClick }) => {
+const LeadCard = ({ lead, onClick, provider }) => {
     console.log(lead);
     return (
         <div
             className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
-            onClick={onClick}
+
         >
             <div className="p-4 border-b border-gray-200">
                 <div className="flex justify-between items-start">
@@ -261,11 +262,21 @@ const LeadCard = ({ lead, onClick }) => {
             </div>
 
             <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-                <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-700 hover:bg-green-800">
-                    View Details
+                <button
+                    className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white  ${provider?.accountStatus === 'on_hold' || provider?.status === 'rejected'
+                        ? 'bg-gray-600 hover:bg-gray-600 cursor-not-allowed'
+                        : 'bg-green-700 hover:bg-green-800'
+                        }`}
+                    onClick={onClick}
+                    disabled={provider?.accountStatus === 'on_hold' || provider?.status === 'rejected'}
+                >
+                    {provider?.accountStatus === 'on_hold' || provider?.status === 'rejected'
+                        ? 'Your Account Status is on hold'
+                        : 'View Details'
+                    }
                 </button>
             </div>
-        </div>
+        </div >
     );
 };
 
