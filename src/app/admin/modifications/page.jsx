@@ -132,7 +132,6 @@ export default function page() {
                     placeholder: ''
                 }]
             })
-            fetchData()
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to create form configuration')
         }
@@ -376,16 +375,23 @@ export default function page() {
                             <CardContent>
                                 <div className="space-y-4">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div >
-                                            <Label className={"mb-2"}>Service Type</Label>
-                                            <Input
+                                        <div>
+                                            <Label className="mb-2">Service Type</Label>
+                                            <select
                                                 value={newFormConfig.serviceType}
                                                 onChange={(e) => setNewFormConfig({
                                                     ...newFormConfig,
                                                     serviceType: e.target.value
                                                 })}
-                                                placeholder="e.g., Plumbing, Electrical"
-                                            />
+                                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                            >
+                                                <option value="">Select a service type</option>
+                                                {categories.map((category) => (
+                                                    <option key={category._id} value={category.name}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
                                     </div>
 
@@ -517,7 +523,7 @@ export default function page() {
                         </Card>
 
                         {/* Existing Form Configurations */}
-                        <Card>
+                        {/* <Card>
                             <CardHeader>
                                 <CardTitle>Existing Form Configurations</CardTitle>
                             </CardHeader>
@@ -579,7 +585,7 @@ export default function page() {
                                     </div>
                                 )}
                             </CardContent>
-                        </Card>
+                        </Card> */}
                     </TabsContent>
                 </Tabs>
             </div>
