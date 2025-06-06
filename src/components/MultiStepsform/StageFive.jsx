@@ -40,19 +40,36 @@ const StageFive = ({ Toaster, formData, setFormData, back, onSubmit, componentLo
                                 Service Details
                             </h2>
                         </div>
-                        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {Object.entries(serviceDetails)
-                                .filter(([key]) => key !== "files" && key !== "customer")
-                                .map(([key, value]) => (
-                                    <div key={key} className="p-4 rounded-lg bg-gray-50">
-                                        <h3 className="text-sm font-medium text-gray-500">
-                                            {formatKey(key)}
-                                        </h3>
-                                        <p className="text-gray-900 font-medium">
-                                            {value?.toString() || 'Not specified'}
-                                        </p>
+                        <div className="p-6  gap-4 ">
+                            {/* Submitted Questions & Answers */}
+                            {Array.isArray(formData.questions) && formData.questions.length > 0 && (
+                                <div className="bg-white rounded-xl shadow-sm border border-gray-100  ">
+                                    <div className="bg-gray-50 px-6 py-4 border-b">
+                                        <h2 className="font-semibold text-gray-800">
+                                            Your Answers
+                                        </h2>
                                     </div>
-                                ))}
+                                    <div className="p-6 space-y-4">
+                                        {formData.questions.map((qa, index) => (
+                                            <div key={index} className="p-4 rounded-lg bg-gray-50">
+                                                <h3 className="text-sm font-medium text-gray-500 mb-1">
+                                                    {qa.questionText}
+                                                </h3>
+                                                {Array.isArray(qa.answer) ? (
+                                                    <ul className="list-disc list-inside text-gray-900 font-medium">
+                                                        {qa.answer.map((ans, idx) => (
+                                                            <li key={idx}>{ans}</li>
+                                                        ))}
+                                                    </ul>
+                                                ) : (
+                                                    <p className="text-gray-900 font-medium">{qa.answer || 'Not answered'}</p>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                         </div>
 
                     </div>

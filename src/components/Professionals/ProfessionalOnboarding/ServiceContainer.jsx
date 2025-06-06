@@ -227,7 +227,7 @@ export function ServicesContainer() {
                                         <div>
                                             <h3 className="font-medium">{category.category}</h3>
                                             <p className="text-sm text-gray-500 mt-1">
-                                                {category.serviceRadius} meter radius • {category.postalCode}
+                                                {category.serviceRadius} miles radius • {category.postalCode}
                                             </p>
                                         </div>
                                         <Dialog open={openRemoveDialog} onOpenChange={setOpenRemoveDialog}>

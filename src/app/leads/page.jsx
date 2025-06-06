@@ -57,16 +57,20 @@ const Page = () => {
 
     const leadsToShow = activeTab === 'all' ? allLeads : yourLeads;
 
-    const transformLead = async (lead, providerId) => { // Added providerId parameter
+    // In the main Page component, update the transformLead function:
+    const transformLead = async (lead, providerId) => {
         try {
             const response = await axios.post(`${API}/api/category/get-category-pricing`, {
                 category: lead.serviceType
             });
-            console.log("API Response:", response.data);
-            // Default values when pricing isn't available
-            const credits = response.data?.pricing
-                ? '$' + (response.data.pricing / 100).toFixed(2)
-                : '$0.00';
+
+            // Convert questions array to a details object
+            const details = {};
+            if (lead.questions && Array.isArray(lead.questions)) {
+                lead.questions.forEach(q => {
+                    details[q.questionText] = Array.isArray(q.answer) ? q.answer.join(', ') : q.answer;
+                });
+            }
 
             return {
                 id: lead._id,
@@ -76,16 +80,20 @@ const Page = () => {
                 verified: true,
                 service: lead.serviceType,
                 description: getDynamicDescription(lead),
-                credits,
+                credits: response.data?.pricing ? '$' + (response.data.pricing / 100).toFixed(2) : '$0.00',
                 requested: lead.serviceProvider?.includes(providerId),
                 photos: lead.photos,
-                kind: lead.kind,
-                details: getDynamicDetails(lead),
+                details: {
+                    ...details,
+                    ...(lead.customerDetails || {}),
+                    serviceType: lead.serviceType,
+                    status: lead.status
+                },
                 ...lead
             };
         } catch (error) {
             console.error('Error transforming lead:', error);
-            // Return a lead with default values when there's an error
+            // Return default values on error
             return {
                 id: lead._id,
                 name: lead.customerDetails?.name || 'Unknown Customer',
@@ -97,20 +105,36 @@ const Page = () => {
                 credits: '$0.00',
                 requested: lead.serviceProvider?.includes(providerId),
                 photos: lead.photos,
-                kind: lead.kind,
-                details: getDynamicDetails(lead),
+                details: {
+                    serviceType: lead.serviceType,
+                    status: lead.status,
+                    ...(lead.customerDetails || {})
+                },
                 ...lead
             };
         }
     };
 
+    // Update getDynamicDescription to use questions if available
     const getDynamicDescription = (lead) => {
+        if (lead.questions && lead.questions.length > 0) {
+            // Find the first question that might contain a description
+            const descQuestion = lead.questions.find(q =>
+                q.questionText.toLowerCase().includes('description') ||
+                q.questionText.toLowerCase().includes('details')
+            );
+            if (descQuestion) return descQuestion.answer;
+        }
+
+        // Fallback to old fields if they exist
         return lead.additionalNotes ||
             lead.areaDescription ||
             lead.itemsDescription ||
             lead.shortDescription ||
-            lead.serviceTypeSubSubCategory;
+            lead.serviceType;
     };
+
+    // Remove getDynamicDetails function as we're now building details in transformLead
 
     const getDynamicDetails = (lead) => {
         const details = {};
@@ -253,7 +277,7 @@ const LeadCard = ({ lead, onClick, provider }) => {
 
                 <div className="mb-4">
                     <h4 className="font-semibold text-gray-900">{lead.service}</h4>
-                    <p className="text-sm text-gray-600 mt-1">{lead.description}</p>
+                    {/* <p className="text-sm text-gray-600 mt-1">{lead.description}</p> */}
                 </div>
 
                 <div className="flex justify-between items-center">
@@ -358,7 +382,7 @@ const LeadDetailView = ({ lead, onBack }) => {
                     </div>
 
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">{lead.service}</h3>
-                    <p className="text-gray-600 mb-6">{lead.description}</p>
+                    {/* <p className="text-gray-600 mb-6">{lead.description}</p> */}
 
                     {lead.requested && (
                         <div className="p-4 bg-green-50 rounded-lg border border-green-200 mb-6">
@@ -371,17 +395,25 @@ const LeadDetailView = ({ lead, onBack }) => {
                 {/* Details Section */}
                 <div className="p-6 border-b border-gray-200">
                     <h4 className="font-medium text-lg mb-4">Service Details</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        {Object.entries(lead.details || {})
-                            .filter(([key]) => !['customer', 'kind', 'isPurchased', 'purchasedPrice'].includes(key))
-                            .map(([key, value]) => (
-                                <div key={key} className="bg-gray-50 p-3 rounded-lg">
-                                    <p className="text-sm font-medium text-gray-500 capitalize">
-                                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                                    </p>
-                                    <p className="text-gray-800">{value}</p>
+                    <div className="mb-6">
+                        {lead.questions && lead.questions.length > 0 && (
+                            <>
+                                <h4 className="font-medium text-lg mb-4">Service Questions</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    {lead.questions.map((q, index) => (
+                                        <div key={index} className="bg-gray-50 p-3 rounded-lg">
+                                            <p className="text-sm font-medium text-gray-500">
+                                                {q.questionText}
+                                            </p>
+                                            <p className="text-gray-800">
+                                                {Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}
+                                            </p>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            </>
+                        )}
+
                     </div>
 
                     {lead.photos?.length > 0 && (

@@ -117,19 +117,13 @@ export default function PurchasedLeadsPage() {
                 throw error;
             }
         }
-        const serviceQuestions = Object.entries(serviceRequest)
-            .filter(([key, value]) =>
-                !excludedFields.includes(key) &&
-                value !== undefined &&
-                value !== null &&
-                value !== '' &&
-                !Array.isArray(value) &&
-                typeof value !== 'object'
-            )
-            .map(([key, value]) => ({
-                question: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
-                answer: value
+        const serviceQuestions = Array.isArray(serviceRequest.questions)
+            ? serviceRequest.questions.map(q => ({
+                question: q.questionText,
+                answer: q.answer
             }))
+            : [];
+
 
         // Handle array fields
         const excludedArrayFields = ['serviceProvider', 'photos']
@@ -164,15 +158,21 @@ export default function PurchasedLeadsPage() {
                     <div className="space-y-4">
                         <h3 className="text-lg font-medium">Service Details</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {[...serviceQuestions, ...arrayFields].map((item, i) => (
-                                <div key={i} className="space-y-1">
-                                    <p className="text-sm font-medium text-gray-500">{item.question}</p>
-                                    <p className="capitalize">{item.answer}</p>
-                                </div>
-                            ))}
+                            {[...serviceQuestions].map((item, i) => {
+                                const question = typeof item.question === 'string' ? item.question : 'Question';
+                                const answer = typeof item.answer === 'string' ? item.answer : JSON.stringify(item.answer);
+                                return (
+                                    <div key={i} className="space-y-1">
+                                        <p className="text-sm font-medium text-gray-500">{question}</p>
+                                        <p className="capitalize">{answer}</p>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 )}
+
+
 
                 {/* Photos if available */}
                 {serviceRequest.photos?.length > 0 && (

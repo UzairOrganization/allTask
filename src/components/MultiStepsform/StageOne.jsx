@@ -63,10 +63,21 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        Object.entries(answers).forEach(([key, value]) => {
-            finalFormData.append(key, typeof value === "string" ? value : JSON.stringify(value));
+
+        const transformedQuestions = formConfig.questions.map(q => ({
+            questionText: q.questionText, // or q.label if that's what you're using
+            answer: answers[q.fieldName] ?? (q.fieldType === 'checkbox' ? [] : ""),
+        }));
+
+        // Append to FormData (for actual submission)
+        finalFormData.append("questions", JSON.stringify(transformedQuestions));
+
+        // ✅ Update local formData state so StageFive can access it
+        setFormData({
+            questions: transformedQuestions
         });
-        setFormData(answers);
+
+        setFormSubmitted(true); // ensure "Continue to Next Step" shows
     };
 
     if (!formConfig) {

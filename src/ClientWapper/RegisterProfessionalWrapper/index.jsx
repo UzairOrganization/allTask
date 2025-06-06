@@ -423,11 +423,14 @@ const RegisterProfessionalWrapper = () => {
                                                 <SelectValue placeholder="Select a country" />
                                             </SelectTrigger>
                                             <SelectContent className="max-h-[300px]">
-                                                {Country.getAllCountries().map((country) => (
-                                                    <SelectItem key={country.isoCode} value={country.isoCode}>
-                                                        {country.name}
-                                                    </SelectItem>
-                                                ))}
+                                                {Country.getAllCountries()
+                                                    .filter(country => country.isoCode === 'US' || country.isoCode === 'CA')
+                                                    .map((country) => (
+                                                        <SelectItem key={country.isoCode} value={country.isoCode}>
+                                                            {country.name}
+                                                        </SelectItem>
+                                                    ))}
+
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -558,13 +561,13 @@ const RegisterProfessionalWrapper = () => {
                                                             <SelectValue placeholder="Select service radius" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="200">200 m</SelectItem>
-                                                            <SelectItem value="400">400 m</SelectItem>
-                                                            <SelectItem value="600">600 m</SelectItem>
-                                                            <SelectItem value="1000">1000 m</SelectItem>
-                                                            <SelectItem value="1500">1500 m</SelectItem>
-                                                            <SelectItem value="2500">2500 m</SelectItem>
-                                                            <SelectItem value="5000">5000 m</SelectItem>
+                                                            <SelectItem value="200">200 mi</SelectItem>
+                                                            <SelectItem value="400">400 mi</SelectItem>
+                                                            <SelectItem value="600">600 mi</SelectItem>
+                                                            <SelectItem value="1000">1000 mi</SelectItem>
+                                                            <SelectItem value="1500">1500 mi</SelectItem>
+                                                            <SelectItem value="2500">2500 mi</SelectItem>
+                                                            <SelectItem value="5000">5000 mi</SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                 </div>

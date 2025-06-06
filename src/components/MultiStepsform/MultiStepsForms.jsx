@@ -145,41 +145,42 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
             setComponentLoading(true)
             const finalFormData = new FormData();
 
-            // Append category-related fields to finalFormData
+            // Append category-related fields
             finalFormData.append("serviceType", categoryHierarchy.category);
             finalFormData.append("serviceTypeSubCategory", categoryHierarchy.subcategory);
             finalFormData.append("serviceTypeSubSubCategory", categoryHierarchy.subSubcategory);
 
-            // Ensure customerDetails are only added once
+            // Append customer details
             Object.keys(formData.customerDetails).forEach((key) => {
                 finalFormData.append(`customerDetails.${key}`, formData.customerDetails[key]);
             });
 
-            // Loop through the main formData and append to finalFormData
+            // Append questions array properly
+            if (Array.isArray(formData.questions)) {
+                formData.questions.forEach((question, index) => {
+                    finalFormData.append(`questions[${index}][questionText]`, question.questionText);
+                    finalFormData.append(`questions[${index}][answer]`, question.answer);
+                });
+            }
+
+            // Handle the rest of formData
             Object.entries(formData).forEach(([key, value]) => {
+                if (key === "customerDetails" || key === "questions") return;
+
                 if (Array.isArray(value)) {
-                    // If the value is an array, handle each item separately
-                    value.forEach((item, index) => {
-                        if (item.file) {
-                            // If the item is a file, append it with a specific name (like photos)
+                    value.forEach((item) => {
+                        if (item?.file) {
                             finalFormData.append("photos", item.file, item.name);
                         } else {
-                            // Append other values as they are (e.g., serviceProvider)
                             finalFormData.append(key, item);
                         }
                     });
-                }
-
-                else {
-                    // For simple values, just append them
+                } else {
                     finalFormData.append(key, value);
                 }
             });
 
-            // To check that the data has been copied correctly
-
-
-            // Make the POST request with FormData
+            // Submit to backend
             const response = await axios.post(`${API}/api/leads/createLead`, finalFormData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -191,23 +192,23 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
                     description: "Our professionals will contact you shortly!",
                     duration: 6000,
                     position: "bottom-left",
-                    style: {
-                        color: "green"
-                    }
+                    style: { color: "green" }
                 });
 
                 setTimeout(() => {
                     setComponentLoading(false)
                     navigation.push("/")
-                }, [2000])
+                }, 2000)
             } else {
                 console.error("Form submission failed:", response.data.message);
                 setComponentLoading(false)
             }
         } catch (error) {
             console.error("Error submitting form:", error);
+            setComponentLoading(false)
         }
     };
+
 
 
 
