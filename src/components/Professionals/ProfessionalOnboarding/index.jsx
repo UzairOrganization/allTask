@@ -37,6 +37,8 @@ import { Toaster, toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { checkProviderAuthStatus } from "@/redux/slices/authSlice";
 import PDFUpload from "@/components/PDFUpload/PDFUpload";
+import { loadStripe } from '@stripe/stripe-js';
+const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibFbf1ijemDQ1TkHwjsb5oJ2AG3ePLAi8Np9FLNZsmz4N2CA4sKEhn00vHNOmlYC");
 // FileUpload component
 const FileUpload = ({ onFileUpload, accept, uploading }) => {
     const [file, setFile] = useState(null);
@@ -114,6 +116,9 @@ export function ProfessionalOnboarding() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { provider } = useSelector(state => state.auth);
     const [profileUpdating, setProfileUpdateing] = useState(false)
+    const [paymentProcessing, setPaymentProcessing] = useState(false);
+    const [paymentError, setPaymentError] = useState(null);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [profilePictureUploading, setProfilePictureUploading] = useState(false);
     const dispatch = useDispatch()
     // Form state
@@ -129,6 +134,31 @@ export function ProfessionalOnboarding() {
         verificationDocument: provider?.verificationDocument || null,
         status: provider?.status
     });
+    const handlePaymentSubmit = async (event) => {
+        event.preventDefault();
+        setPaymentProcessing(true);
+        setPaymentError(null);
+
+        try {
+            // 1. Initiate checkout session
+            const response = await axios.post(`${API}/api/payments/initiate-professional-plus`, {},
+                { withCredentials: true }
+            );
+
+            // 2. Redirect to Stripe Checkout using Stripe.js
+            const { error } = (await stripePromise).redirectToCheckout({
+                sessionId: response.data.sessionId
+            });
+
+            if (error) {
+                throw error;
+            }
+
+        } catch (err) {
+            setPaymentError(err.response?.data?.error || err.message);
+            setPaymentProcessing(false);
+        }
+    };
 
     const [documentUploading, setDocumentUploading] = useState(false);
     const [rejectionReason, setRejectionReason] = useState(provider?.reasonOfRejection || "");
@@ -631,9 +661,9 @@ export function ProfessionalOnboarding() {
                                     </ul>
                                 </div>
                                 <div className="pt-4">
-                                    <Button className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg">
+                                    <Button onClick={handlePaymentSubmit} disabled={paymentProcessing} className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg">
                                         <Crown className="mr-2 h-5 w-5" />
-                                        Upgrade Now
+                                        {paymentProcessing ? "Loading" : "Upgrade Now"}
                                     </Button>
                                     <p className="text-center text-sm text-gray-500 mt-2">
                                         30-day money back guarantee
