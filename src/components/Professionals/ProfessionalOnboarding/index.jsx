@@ -6,6 +6,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import { ToggleLeft, ToggleRight } from "lucide-react";
 import { CheckCircle, ChevronRight, Edit, Info, Crown, User, Upload, X, ClockIcon } from "lucide-react"
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -118,6 +119,8 @@ export function ProfessionalOnboarding() {
     const [profileUpdating, setProfileUpdateing] = useState(false)
     const [paymentProcessing, setPaymentProcessing] = useState(false);
     const [paymentError, setPaymentError] = useState(null);
+    const [activityStatus, setActivityStatus] = useState(provider?.activityStatus ?? true);
+    const [updatingStatus, setUpdatingStatus] = useState(false);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [profilePictureUploading, setProfilePictureUploading] = useState(false);
     const dispatch = useDispatch()
@@ -282,17 +285,86 @@ export function ProfessionalOnboarding() {
             setProfileUpdateing(false);
         }
     };
+    const handleStatusToggle = async () => {
+        const newStatus = !activityStatus;
+        setUpdatingStatus(true);
+        try {
+            const response = await axios.put(
+                `${API}/api/service-provider/update-activity-status`,
+                { activityStatus: newStatus },
+                { withCredentials: true }
+            );
 
+            if (response.data.success) {
+                setActivityStatus(newStatus);
+                toast.success(`You're now ${newStatus ? 'online' : 'offline'}`, {
+                    description: `Your profile is now ${newStatus ? 'visible' : 'hidden'} to clients`,
+                    duration: 3000,
+                    position: "bottom-left",
+                });
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+            toast.error("Failed to update status", {
+                description: error.response?.data?.message || "Please try again later",
+                duration: 3000,
+                position: "bottom-left",
+            });
+        } finally {
+            setUpdatingStatus(false);
+        }
+    };
     return (
         <>
 
             <Toaster />
             <div className="w-full my-4 max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm">
-                <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-900">Hello, {provider?.name}!</h1>
-                    <p className="text-gray-500">{dateTime}</p>
-                </div>
+                <div className="flex w-full items-center justify-between">
 
+                    <div className="mb-8">
+                        <h1 className="text-2xl font-bold text-gray-900">Hello, {provider?.name}!</h1>
+                        <p className="text-gray-500">{dateTime}</p>
+                    </div>
+                    <div className="flex items-center w-[200px] justify-around ">
+                        <div className="flex items-center gap-2">
+                            {activityStatus ? (
+                                <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse"></div>
+                            ) : (
+                                <div className="h-3 w-3 rounded-full bg-gray-400"></div>
+                            )}
+                            <span className="text-sm font-medium">
+                                {activityStatus ? 'Online' : 'Offline'}
+                            </span>
+                        </div>
+                        <Button
+                            variant="outline"
+                            className="flex items-center gap-2"
+                            onClick={handleStatusToggle}
+                            disabled={updatingStatus}
+                        >
+                            {activityStatus ? (
+                                <>
+                                    <ToggleLeft className="h-4 w-4" />
+                                    <span>Go Offline</span>
+                                </>
+                            ) : (
+                                <>
+                                    <ToggleRight className="h-4 w-4 text-green-600" />
+                                    <span>Go Online</span>
+                                </>
+                            )}
+                            {updatingStatus && (
+                                <span className="ml-2">
+                                    <svg className="animate-spin h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </span>
+                            )}
+                        </Button>
+                    </div>
+
+                </div>
                 <div className="mb-8 p-6 bg-green-50 rounded-lg border border-green-100">
                     <h3 className="text-lg font-medium text-green-800 mb-2">Welcome to Our Platform, {provider?.name}</h3>
                     <p className="text-green-700">
@@ -363,9 +435,9 @@ export function ProfessionalOnboarding() {
 
                 <div className="container mx-auto px-4 py-6">
                     <h1 className="text-3xl font-bold text-gray-900 mb-8">Profile Overview</h1>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+                    <div className={`grid grid-cols-1  ${provider?.isSubscriptionHolder ? "lg:grid-cols-1" : "lg:grid-cols-2"} gap-6 items-stretch`}>
                         {/* Profile Completion Card */}
-                        <Card className="border border-gray-200 rounded-lg shadow-sm h-full flex flex-col">
+                        <Card className="border  border-gray-200 rounded-lg shadow-sm h-full flex flex-col">
                             <CardHeader className="border-b border-gray-200">
                                 <div className="flex items-center space-x-4">
                                     {provider?.profilePicture ? (
@@ -629,48 +701,55 @@ export function ProfessionalOnboarding() {
                             </CardContent>
                         </Card>
 
-                        {/* Professional Plus Card */}
-                        <Card className="border rounded-lg shadow-sm bg-gradient-to-br from-green-50 to-green-100 border-green-200 h-full flex flex-col">
-                            <CardHeader className="border-b border-green-200 bg-green-100/50">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-xl font-semibold text-gray-800">PROFESSIONAL PLUS</h2>
-                                    <Badge variant="outline" className="border-green-600 text-green-600">
-                                        RECOMMENDED
-                                    </Badge>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="p-6 flex-grow flex flex-col">
-                                <div className="space-y-4 flex-grow">
-                                    <div className="flex items-end gap-2">
-                                        <span className="text-3xl font-bold">$199</span>
-                                        <span className="text-gray-600">/year</span>
-                                    </div>
-                                    <ul className="space-y-3 text-gray-700">
-                                        <li className="flex items-start gap-3">
-                                            <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                            <span><strong>Platform Choice Badges</strong> - Stand out as a verified top professional</span>
-                                        </li>
-                                        <li className="flex items-start gap-3">
-                                            <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                            <span><strong>Priority Placement</strong> - Appear in top spots for relevant searches</span>
-                                        </li>
-                                        <li className="flex items-start gap-3">
-                                            <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                            <span><strong>3× More Visibility</strong> - Get seen by more potential clients</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="pt-4">
-                                    <Button onClick={handlePaymentSubmit} disabled={paymentProcessing} className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg">
-                                        <Crown className="mr-2 h-5 w-5" />
-                                        {paymentProcessing ? "Loading" : "Upgrade Now"}
-                                    </Button>
-                                    <p className="text-center text-sm text-gray-500 mt-2">
-                                        30-day money back guarantee
-                                    </p>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        {
+                            !provider?.isSubscriptionHolder && (
+                                <Card className="border rounded-lg shadow-sm bg-gradient-to-br from-green-50 to-green-100 border-green-200 h-full flex flex-col">
+                                    <CardHeader className="border-b border-green-200 bg-green-100/50">
+                                        <div className="flex justify-between items-center">
+                                            <h2 className="text-xl font-semibold text-gray-800">PROFESSIONAL PLUS</h2>
+                                            <Badge variant="outline" className="border-green-600 text-green-600">
+                                                RECOMMENDED
+                                            </Badge>
+                                        </div>
+                                    </CardHeader>
+                                    <CardContent className="p-6 flex-grow flex flex-col">
+                                        <div className="space-y-4 flex-grow">
+                                            <div className="flex items-end gap-2">
+                                                <span className="text-3xl font-bold">$199</span>
+                                                <span className="text-gray-600">/year</span>
+                                            </div>
+                                            <ul className="space-y-3 text-gray-700">
+                                                <li className="flex items-start gap-3">
+                                                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                                    <span><strong>Platform Choice Badges</strong> - Stand out as a verified top professional</span>
+                                                </li>
+                                                <li className="flex items-start gap-3">
+                                                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                                    <span><strong>Priority Placement</strong> - Appear in top spots for relevant searches</span>
+                                                </li>
+                                                <li className="flex items-start gap-3">
+                                                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                                    <span><strong>3× More Visibility</strong> - Get seen by more potential clients</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div className="pt-4">
+                                            <Button
+                                                onClick={handlePaymentSubmit}
+                                                disabled={paymentProcessing}
+                                                className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg"
+                                            >
+                                                <Crown className="mr-2 h-5 w-5" />
+                                                {paymentProcessing ? "Processing..." : "Upgrade Now"}
+                                            </Button>
+                                            <p className="text-center text-sm text-gray-500 mt-2">
+                                                30-day money back guarantee
+                                            </p>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            )
+                        }
 
                         {/* Services Section */}
                         <ServicesContainer />

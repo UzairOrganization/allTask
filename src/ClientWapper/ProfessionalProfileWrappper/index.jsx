@@ -146,7 +146,14 @@ export default function ProfessionalProfile({ name }) {
                 <div className="flex-1">
                     <div className="flex items-center justify-between flex-wrap gap-4">
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900">{professional?.name || 'Professional'}</h1>
+                            <div className="flex items-center gap-6 flex-wrap">
+                                <h1 className="text-3xl font-bold text-gray-900">{professional?.name || 'Professional'}</h1>
+                                {professional?.isSubscriptionHolder && (
+                                    <Badge className="bg-purple-100 text-green-800 hover:bg-purple-200 text-lg">
+                                        Platform Choice 
+                                    </Badge>
+                                )}
+                            </div>
                             <div className="flex items-center gap-2 mt-2">
                                 <div className="flex items-center">
                                     <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />

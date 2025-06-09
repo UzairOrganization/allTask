@@ -63,17 +63,6 @@ export default function page() {
             setLoading(prev => ({ ...prev, categories: false }))
         }
 
-        try {
-            setLoading(prev => ({ ...prev, forms: true }))
-            const formsRes = await axios.get(`${API}/api/leads/form-configs`)
-            if (formsRes.data.success) {
-                setFormConfigs(formsRes.data.data)
-            }
-        } catch (error) {
-            toast.error('Failed to fetch form configurations')
-        } finally {
-            setLoading(prev => ({ ...prev, forms: false }))
-        }
     }
 
     useEffect(() => {

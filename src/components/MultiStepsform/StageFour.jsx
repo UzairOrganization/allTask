@@ -7,6 +7,7 @@ import { Check, Star, MapPin, Phone, Mail, User, ZapIcon, Frown, Search, Externa
 import Image from 'next/image';
 import { API } from '@/lib/data-service';
 import Link from 'next/link';
+import { Badge } from '../ui/badge';
 
 const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
     const [availableProviders, setAvailableProviders] = useState([]);
@@ -143,7 +144,7 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
     }
 
     return (
-        <div className="max-w-6xl mx-auto p-4 md:p-6">
+        <div className="max-w-[100%] mt-6  mx-auto p-4 md:p-6">
             <Card className="shadow-lg overflow-hidden border border-gray-100">
                 <CardHeader className="bg-[#00725A] p-4">
                     <h2 className="text-lg md:text-xl font-semibold text-white">
@@ -201,13 +202,19 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
                                                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                                     <div>
                                                         <h3 className="text-xl font-semibold text-gray-900 flex gap-4 items-center">{provider.name}
+
                                                             <span>
                                                                 <Link href={`/professional/${provider?.name}`} target='_blank'>
                                                                     <ExternalLink className="h-4.5 w-4.5" />
                                                                 </Link>
                                                             </span>
                                                         </h3>
-                                                        <div className="flex items-center mt-1">
+                                                        <div className="flex gap-4 items-center mt-3">
+                                                            {provider?.isSubscriptionHolder && (
+                                                                <Badge className="bg-purple-100 text-green-800 hover:bg-purple-200 text-lg">
+                                                                    Platform Choice
+                                                                </Badge>
+                                                            )}
                                                             <div className="flex items-center bg-[#00725A]/10 px-2 py-1 rounded">
                                                                 <Star className="h-4 w-4 fill-[#00725A] text-[#00725A]" />
                                                                 <span className="ml-1 font-medium text-[#00725A]">
@@ -219,20 +226,23 @@ const StageFour = ({ finalFormData, formData, setFormData, next, back }) => {
                                                                     </span>
                                                                 )}
                                                             </div>
+
                                                         </div>
+
                                                     </div>
 
                                                     <div className="flex flex-wrap gap-3">
                                                         <div className="flex items-center text-sm text-gray-600">
                                                             <MapPin className="h-4 w-4 mr-2 text-[#00725A]" />
-                                                            <span>{provider.city}, {provider.country}</span>
+                                                            <span>{provider.city}, {provider.country}</span> &nbsp;
+                                                            {provider.postalCode && (
+                                                                <div className="flex items-center text-sm text-gray-600">
+                                                                    {/* <ZapIcon className="h-4 w-4 mr-2 text-[#00725A]" /> */}
+                                                                    <span>{provider.postalCode}</span>
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                        {provider.postalCode && (
-                                                            <div className="flex items-center text-sm text-gray-600">
-                                                                {/* <ZapIcon className="h-4 w-4 mr-2 text-[#00725A]" /> */}
-                                                                <span>{provider.postalCode}</span>
-                                                            </div>
-                                                        )}
+
                                                     </div>
                                                 </div>
 
