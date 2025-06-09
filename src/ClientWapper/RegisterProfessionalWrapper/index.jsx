@@ -597,7 +597,7 @@ const RegisterProfessionalWrapper = () => {
                                                                 <h4 className="font-medium">{service.category}</h4>
                                                                 <div className="mt-1 text-sm text-gray-600">
                                                                     <p>Postal Code: {service.postalCode}</p>
-                                                                    <p>Service Radius: {service.serviceRadius} km</p>
+                                                                    <p>Service Radius: {service.serviceRadius} mi</p>
                                                                 </div>
                                                                 <ul className="mt-2 text-sm text-gray-600 list-disc list-inside">
                                                                     {service.subcategories.map((subcat, i) => (
