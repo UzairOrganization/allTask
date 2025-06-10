@@ -157,9 +157,11 @@ export function ProfessionalOnboarding() {
             if (error) {
                 throw error;
             }
-
+            setPaymentProcessing(false);
         } catch (err) {
             setPaymentError(err.response?.data?.error || err.message);
+            setPaymentProcessing(false);
+        } finally {
             setPaymentProcessing(false);
         }
     };
@@ -612,7 +614,7 @@ export function ProfessionalOnboarding() {
                                                     </div>
 
                                                     <div className="space-y-2">
-                                                        <Label htmlFor="postalCode">Postal Code</Label>
+                                                        <Label htmlFor="postalCode">Zip Code</Label>
 
                                                         <h3 className="text-gray-800 text-sm p-1">{formData.postalCode}</h3>
                                                     </div>
