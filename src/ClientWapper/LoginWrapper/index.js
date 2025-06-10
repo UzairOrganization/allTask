@@ -43,7 +43,7 @@ const LoginWrapper = () => {
         e.preventDefault();
         const result = await dispatch(loginUser(credentials));
         if (result.meta.requestStatus === "fulfilled") {
-          
+
             router.push("/")
         } else {
             toast.error("Login Failed", {
@@ -79,6 +79,12 @@ const LoginWrapper = () => {
                                     value={credentials.email}
                                     onChange={handleChange}
                                     required
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault(); // Prevent default Enter behavior
+                                            handleLogin(e);
+                                        }
+                                    }}
                                 />
                             </div>
 
@@ -92,6 +98,12 @@ const LoginWrapper = () => {
                                     value={credentials.password}
                                     onChange={handleChange}
                                     required
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault(); // Prevent default Enter behavior
+                                            handleLogin(e);
+                                        }
+                                    }}
                                 />
                             </div>
 

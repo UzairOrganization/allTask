@@ -363,13 +363,13 @@ const RegisterProfessionalWrapper = () => {
                                         </div>
                                         <div>
                                             <Label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">
-                                                Postal Code
+                                                Zip Code
                                             </Label>
                                             <Input
                                                 id="postalCode"
                                                 name="postalCode"
                                                 type="text"
-                                                placeholder="Postal/Zip Code"
+                                                placeholder="Zip Code"
                                                 value={formData.postalCode}
                                                 onChange={handleInputChange}
                                                 required
@@ -534,16 +534,16 @@ const RegisterProfessionalWrapper = () => {
 
                                         {selectedCategory && (
                                             <div className="space-y-4">
-                                                {/* Postal Code Input */}
+                                                {/* Zip Code Input */}
                                                 <div>
                                                     <Label className="block text-sm font-medium text-gray-700">
-                                                        Postal Code (Where you'll provide this service)
+                                                        Zip Code (Where you'll provide this service)
                                                     </Label>
                                                     <Input
                                                         type="text"
                                                         value={servicePostalCode}
                                                         onChange={(e) => setServicePostalCode(e.target.value)}
-                                                        placeholder="Enter postal code"
+                                                        placeholder="Enter zip code"
                                                         className="mt-1 w-full"
                                                     />
                                                 </div>
@@ -561,13 +561,22 @@ const RegisterProfessionalWrapper = () => {
                                                             <SelectValue placeholder="Select service radius" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="200">200 mi</SelectItem>
-                                                            <SelectItem value="400">400 mi</SelectItem>
-                                                            <SelectItem value="600">600 mi</SelectItem>
-                                                            <SelectItem value="1000">1000 mi</SelectItem>
-                                                            <SelectItem value="1500">1500 mi</SelectItem>
-                                                            <SelectItem value="2500">2500 mi</SelectItem>
-                                                            <SelectItem value="5000">5000 mi</SelectItem>
+                                                            <SelectItem value="5">5 mi</SelectItem>
+                                                            <SelectItem value="10">10 mi</SelectItem>
+                                                            <SelectItem value="20">20 mi</SelectItem>
+                                                            <SelectItem value="30">30 mi</SelectItem>
+                                                            <SelectItem value="40">40 mi</SelectItem>
+                                                            <SelectItem value="50">50 mi</SelectItem>
+                                                            <SelectItem value="60">60 mi</SelectItem>
+                                                            <SelectItem value="70">70 mi</SelectItem>
+                                                            <SelectItem value="80">80 mi</SelectItem>
+                                                            <SelectItem value="90">90 mi</SelectItem>
+                                                            <SelectItem value="100">100 mi</SelectItem>
+                                                            <SelectItem value="110">110 mi</SelectItem>
+                                                            <SelectItem value="120">120 mi</SelectItem>
+                                                            <SelectItem value="130">130 mi</SelectItem>
+                                                            <SelectItem value="140">140 mi</SelectItem>
+                                                            <SelectItem value="150">150 mi</SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                 </div>
@@ -596,7 +605,7 @@ const RegisterProfessionalWrapper = () => {
                                                             <div>
                                                                 <h4 className="font-medium">{service.category}</h4>
                                                                 <div className="mt-1 text-sm text-gray-600">
-                                                                    <p>Postal Code: {service.postalCode}</p>
+                                                                    <p>Zip Code: {service.postalCode}</p>
                                                                     <p>Service Radius: {service.serviceRadius} mi</p>
                                                                 </div>
                                                                 <ul className="mt-2 text-sm text-gray-600 list-disc list-inside">

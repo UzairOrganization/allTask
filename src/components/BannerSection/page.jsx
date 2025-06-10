@@ -10,6 +10,7 @@ import { findCategoryHierarchy, getAvailableProviders } from "@/redux/slices/ser
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { API } from "@/lib/data-service";
+import { toast, Toaster } from 'sonner';
 
 export default function BannerSection() {
   const router = useRouter()
@@ -62,6 +63,7 @@ export default function BannerSection() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (postalCode && query) {
       try {
         // Fetch the data by calling the getAvailableProviders and findCategoryHierarchy thunks
@@ -87,7 +89,14 @@ export default function BannerSection() {
         console.error('Error fetching data:', err);
       }
     } else {
-      console.error('Postal code or query missing');
+      toast.error('Service or Zip code is required', {
+        position: 'top-center',
+        duration: 3000,
+        style: {
+          color: "red"
+        }
+      });
+      return;
     }
   };
   const storeCustomServiceInLocalStorage = () => {
@@ -108,7 +117,7 @@ export default function BannerSection() {
   }
   return (
     <>
-
+      <Toaster />
       <section className="banner-section p_relative centred">
         <div className="banner-carousel">
           <div className="slide-item p_relative">
@@ -191,7 +200,7 @@ export default function BannerSection() {
                       <span style={{ marginLeft: "2px" }}>
                         <IoLocationSharp size={25} />
                       </span>
-                      <input type="text" placeholder="Postcode" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="text-black" />
+                      <input required type="text" placeholder="Zip Code" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="text-black" />
                     </div>
                     <div className="searchBtn" onClick={handleSubmit}>{loadingRedux ? "Searching..." : "Search"}</div>
                   </div>

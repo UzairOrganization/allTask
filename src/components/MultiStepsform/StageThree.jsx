@@ -206,7 +206,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
                                     </SelectTrigger>
                                     <SelectContent className="w-full">
                                         <SelectItem value="Call">Phone Call</SelectItem>
-                                        <SelectItem value="SMS">Text Message (SMS)</SelectItem>
+                                        <SelectItem value="SMS">Text Message</SelectItem>
                                         <SelectItem value="WhatsApp">WhatsApp</SelectItem>
                                         <SelectItem value="Email">Email</SelectItem>
                                     </SelectContent>

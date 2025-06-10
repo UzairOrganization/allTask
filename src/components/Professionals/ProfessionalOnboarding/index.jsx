@@ -119,7 +119,8 @@ export function ProfessionalOnboarding() {
     const [profileUpdating, setProfileUpdateing] = useState(false)
     const [paymentProcessing, setPaymentProcessing] = useState(false);
     const [paymentError, setPaymentError] = useState(null);
-    const [activityStatus, setActivityStatus] = useState(provider?.activityStatus ?? true);
+    const [activityStatus, setActivityStatus] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [updatingStatus, setUpdatingStatus] = useState(false);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [profilePictureUploading, setProfilePictureUploading] = useState(false);
@@ -204,6 +205,8 @@ export function ProfessionalOnboarding() {
             });
             setRejectionReason(provider.reasonOfRejection || "");
             setHoldReason(provider.resaonOfHold || "");
+            setActivityStatus(provider.activityStatus);
+            setIsLoading(false);
         }
     }, [provider]);
 
@@ -325,29 +328,39 @@ export function ProfessionalOnboarding() {
                         <h1 className="text-2xl font-bold text-gray-900">Hello, {provider?.name}!</h1>
                         <p className="text-gray-500">{dateTime}</p>
                     </div>
-                    <div className="flex items-center w-[200px] justify-around ">
+                    <div className="flex items-center w-[200px] justify-around">
                         <div className="flex items-center gap-2">
-                            {activityStatus ? (
+                            {isLoading ? (
+                                // Loading state
+                                <div className="h-3 w-3 rounded-full bg-gray-400"></div>
+                            ) : activityStatus ? (
+                                // Online state
                                 <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse"></div>
                             ) : (
+                                // Offline state
                                 <div className="h-3 w-3 rounded-full bg-gray-400"></div>
                             )}
                             <span className="text-sm font-medium">
-                                {activityStatus ? 'Online' : 'Offline'}
+                                {isLoading ? 'Loading...' : activityStatus ? 'Online' : 'Offline'}
                             </span>
                         </div>
                         <Button
                             variant="outline"
                             className="flex items-center gap-2"
                             onClick={handleStatusToggle}
-                            disabled={updatingStatus}
+                            disabled={updatingStatus || isLoading}
                         >
-                            {activityStatus ? (
+                            {isLoading ? (
+                                // Loading state for button
+                                <span>Loading...</span>
+                            ) : activityStatus ? (
+                                // Online button state
                                 <>
                                     <ToggleLeft className="h-4 w-4" />
                                     <span>Go Offline</span>
                                 </>
                             ) : (
+                                // Offline button state
                                 <>
                                     <ToggleRight className="h-4 w-4 text-green-600" />
                                     <span>Go Online</span>
@@ -363,6 +376,7 @@ export function ProfessionalOnboarding() {
                             )}
                         </Button>
                     </div>
+
 
                 </div>
                 <div className="mb-8 p-6 bg-green-50 rounded-lg border border-green-100">

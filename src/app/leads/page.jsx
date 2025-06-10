@@ -10,7 +10,7 @@ import { loadStripe } from '@stripe/stripe-js';
 const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibFbf1ijemDQ1TkHwjsb5oJ2AG3ePLAi8Np9FLNZsmz4N2CA4sKEhn00vHNOmlYC");
 import { Elements } from '@stripe/react-stripe-js';
 const Page = () => {
-    const [activeTab, setActiveTab] = useState('all');
+    const [activeTab, setActiveTab] = useState('yours');
     const [selectedLead, setSelectedLead] = useState(null);
     const [allLeads, setAllLeads] = useState([]);
     const [yourLeads, setYourLeads] = useState([]);

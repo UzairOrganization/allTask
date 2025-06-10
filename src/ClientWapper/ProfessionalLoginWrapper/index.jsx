@@ -110,6 +110,12 @@ const ProfessionalLoginWrapper = () => {
                                     value={credentials.email}
                                     onChange={handleChange}
                                     required
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault(); // Prevent default Enter behavior
+                                            handleLogin(e);
+                                        }
+                                    }}
                                 />
                             </div>
 
@@ -123,6 +129,12 @@ const ProfessionalLoginWrapper = () => {
                                     value={credentials.password}
                                     onChange={handleChange}
                                     required
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault(); // Prevent default Enter behavior
+                                            handleLogin(e);
+                                        }
+                                    }}
                                 />
                             </div>
 

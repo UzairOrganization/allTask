@@ -51,7 +51,7 @@ const ProfessionalHeader = () => {
       <div className="border w-full p-4 flex justify-between items-center">
         {/* Logo */}
         <div className="logo w-[180px] lg:max-w-[210px] 2xl:max-w-[240px] lg:ml-0 2xl:ml-2">
-          <Link href="/">
+          <Link href="/professional-dashboard">
             <img src="/assets/images/logoMain.png" alt="Logo" className="w-full" />
           </Link>
         </div>
@@ -67,7 +67,7 @@ const ProfessionalHeader = () => {
               >
                 {item.label}
                 {pathname === item.href && (
-                  <span className="absolute bottom-[-31px] left-1/2 transform -translate-x-1/2 h-[3px] w-[120%] bg-green-700" />
+                  <span className="absolute bottom-[-35px] left-1/2 transform -translate-x-1/2 h-[3px] w-[120%] bg-green-700" />
                 )}
               </Link>
             </div>
