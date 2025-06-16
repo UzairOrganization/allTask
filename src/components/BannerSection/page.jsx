@@ -101,9 +101,9 @@ export default function BannerSection() {
   };
   const storeCustomServiceInLocalStorage = () => {
     const category = {
-      category: "CustomRequest",
-      subcategory: "CustomRequest",
-      subSubcategory: "CustomRequest"
+      category: "Custom Request",
+      subcategory: null,
+      subSubcategory: null
     }
     const availableProviders = []
     try {

@@ -27,8 +27,7 @@ export default function RootLayout({ children }) {
         <Provider store={store}>
           <AuthProvider>
             <ThemeProvider attribute="class"
-              defaultTheme="system"
-              enableSystem
+              defaultTheme="light"
               disableTransitionOnChange
             >
               {children}
