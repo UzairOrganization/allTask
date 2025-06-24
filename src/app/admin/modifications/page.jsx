@@ -29,8 +29,22 @@ export default function page() {
     const [categories, setCategories] = useState([])
     const [formConfigs, setFormConfigs] = useState([])
     const [loading, setLoading] = useState({ categories: true, forms: true })
-    const [newCategory, setNewCategory] = useState({ name: '', pricing: 1500 })
-    const [editPricing, setEditPricing] = useState({ id: '', pricing: 0, name: '' })
+    const [newCategory, setNewCategory] = useState({
+        name: '',
+        pricing: 1500,
+        description: '',
+        estimatedPrice: '',
+        servicePicture: null // For file upload
+    });
+    const [editPricing, setEditPricing] = useState({
+        id: '',
+        pricing: 0,
+        name: '',
+        description: '',
+        estimatedPrice: '',
+        servicePicture: '',
+        imageFile: null
+    });
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [categoryToDelete, setCategoryToDelete] = useState(null)
 
@@ -72,27 +86,73 @@ export default function page() {
     // Category handlers (unchanged from your existing code)
     const handleCreateCategory = async () => {
         try {
-            const response = await axios.post(`${API}/api/category/create-category`, newCategory)
-            toast.success('Category created successfully')
-            setNewCategory({ name: '', pricing: 1500 })
-            fetchData()
-        } catch (error) {
-            toast.error(error.response?.data?.error || 'Failed to create category')
-        }
-    }
+            const formData = new FormData();
 
-    const handleUpdatePricing = async () => {
-        try {
-            const response = await axios.put(
-                `${API}/api/category/update-category-pricing/${editPricing.id}`,
-                { pricing: editPricing.pricing }
-            )
-            toast.success('Pricing updated successfully')
-            fetchData()
+            // Append all fields to formData
+            formData.append('name', newCategory.name);
+            formData.append('pricing', newCategory.pricing);
+            formData.append('description', newCategory.description);
+            formData.append('estimatedPrice', newCategory.estimatedPrice);
+            if (newCategory.servicePicture) {
+                formData.append('image', newCategory.servicePicture);
+            }
+
+            const response = await axios.post(`${API}/api/category/create-category`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            toast.success('Category created successfully');
+            setNewCategory({
+                name: '',
+                pricing: 1500,
+                description: '',
+                estimatedPrice: '',
+                servicePicture: null
+            });
+            window.location.reload();
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to update pricing')
+            toast.error(error.response?.data?.error || 'Failed to create category');
         }
-    }
+    };
+    const handleUpdateCategory = async () => {
+        try {
+            const formData = new FormData();
+
+            // Append all fields to FormData if they exist
+            if (editPricing.name) formData.append('name', editPricing.name);
+            if (editPricing.pricing) formData.append('pricing', editPricing.pricing);
+            if (editPricing.description) formData.append('description', editPricing.description);
+            if (editPricing.estimatedPrice) formData.append('estimatedPrice', editPricing.estimatedPrice);
+            if (editPricing.imageFile) formData.append('image', editPricing.imageFile);
+
+            const response = await axios.put(
+                `${API}/api/category/update-category/${editPricing.id}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
+
+            toast.success('Category updated successfully');
+            fetchData();
+            setEditPricing({
+                id: '',
+                pricing: 0,
+                name: '',
+                description: '',
+                estimatedPrice: 0,
+                servicePicture: '',
+                imageFile: null
+            });
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to update category');
+            console.error('Error updating category:', error);
+        }
+    };
 
     const handleDeleteCategory = async () => {
         try {
@@ -225,22 +285,60 @@ export default function page() {
                         {/* Categories Section (your existing code) */}
                         <div className="mb-8 p-4 bg-gray-50 rounded-lg">
                             <h2 className="text-lg font-semibold mb-4">Add New Category</h2>
-                            <div className="flex gap-4">
-                                <Input
-                                    placeholder="Category name"
-                                    value={newCategory.name}
-                                    onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                                />
-                                <Input
-                                    type="number"
-                                    placeholder="Pricing"
-                                    value={newCategory.pricing}
-                                    onChange={(e) => setNewCategory({ ...newCategory, pricing: Number(e.target.value) })}
-                                    className="w-32"
-                                />
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className='flex flex-col gap-2'>
+                                        <Label>Category Name</Label>
+                                        <Input
+                                            placeholder="Category name"
+                                            value={newCategory.name}
+                                            onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className='flex flex-col gap-2'>
+                                        <Label>Pricing (in cents)</Label>
+                                        <Input
+                                            type="number"
+                                            placeholder="Pricing"
+                                            value={newCategory.pricing}
+                                            onChange={(e) => setNewCategory({ ...newCategory, pricing: Number(e.target.value) })}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className='flex flex-col gap-2'>
+                                        <Label>Estimated Price (display text)</Label>
+                                        <Input
+                                            placeholder="e.g., $100-$200"
+                                            value={newCategory.estimatedPrice}
+                                            onChange={(e) => setNewCategory({ ...newCategory, estimatedPrice: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className='flex flex-col gap-2'>
+                                        <Label>Category Image</Label>
+                                        <Input
+                                            type="file"
+                                            accept="image/*"
+                                            required
+                                            onChange={(e) => setNewCategory({ ...newCategory, servicePicture: e.target.files[0] })}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className='flex flex-col gap-2'>
+                                    <Label>Description</Label>
+                                    <Textarea
+                                        required
+                                        placeholder="Category description"
+                                        value={newCategory.description}
+                                        onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
+                                    />
+                                </div>
+
                                 <Button
                                     onClick={handleCreateCategory}
-                                    disabled={!newCategory.name}
+                                    disabled={!newCategory.name || !newCategory.description || !newCategory.servicePicture || loading.categories}
                                     className="gap-2"
                                 >
                                     <Plus className="h-4 w-4" /> Add Category
@@ -254,6 +352,7 @@ export default function page() {
                                     <TableRow>
                                         <TableHead>Category Name</TableHead>
                                         <TableHead>Pricing</TableHead>
+                                        <TableHead>Estimated Pricing</TableHead>
                                         <TableHead className="text-right">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -273,8 +372,27 @@ export default function page() {
                                     ) : (
                                         categories.map((category) => (
                                             <TableRow key={category._id}>
-                                                <TableCell className="font-medium">{category.name}</TableCell>
+                                                <TableCell className="font-medium">
+                                                    <div className="flex items-center gap-3">
+                                                        {category.servicePicture && (
+                                                            <img
+                                                                src={category.servicePicture}
+                                                                alt={category.name}
+                                                                className="h-10 w-10 rounded-md object-cover"
+                                                            />
+                                                        )}
+                                                        <div>
+                                                            <p>{category.name}</p>
+                                                            {/* {category.description && (
+                                                                <p className="text-xs text-gray-500">{category.description}</p>
+                                                            )} */}
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
                                                 <TableCell>${(category.pricing / 100).toFixed(2)}</TableCell>
+                                                <TableCell>
+                                                    {category.estimatedPrice ? `${category.estimatedPrice}` : "NaN  "}
+                                                </TableCell>
                                                 <TableCell className="text-right space-x-2">
                                                     <Dialog>
                                                         <DialogTrigger asChild>
@@ -284,31 +402,102 @@ export default function page() {
                                                                 onClick={() => setEditPricing({
                                                                     id: category._id,
                                                                     pricing: category.pricing,
-                                                                    name: category.name
+                                                                    name: category.name,
+                                                                    description: category.description,
+                                                                    estimatedPrice: category.estimatedPrice,
+                                                                    servicePicture: category.servicePicture
                                                                 })}
                                                             >
                                                                 <Pencil className="h-4 w-4" />
                                                             </Button>
                                                         </DialogTrigger>
-                                                        <DialogContent>
+                                                        <DialogContent className="max-w-md">
                                                             <DialogHeader>
-                                                                <DialogTitle>Update Pricing for {category.name}</DialogTitle>
+                                                                <DialogTitle>Update {category.name}</DialogTitle>
                                                                 <DialogDescription>
-                                                                    Enter the new pricing amount in cents (e.g., 1500 = $15.00)
+                                                                    Update the category details below
                                                                 </DialogDescription>
                                                             </DialogHeader>
-                                                            <div className="py-4">
-                                                                <Input
-                                                                    type="number"
-                                                                    value={editPricing.pricing}
-                                                                    onChange={(e) => setEditPricing({
-                                                                        ...editPricing,
-                                                                        pricing: Number(e.target.value)
-                                                                    })}
-                                                                />
+                                                            <div className="grid gap-4 py-4">
+                                                                <div className="grid gap-2">
+                                                                    <Label htmlFor="name">Category Name</Label>
+                                                                    <Input
+                                                                        id="name"
+                                                                        value={editPricing.name}
+                                                                        onChange={(e) => setEditPricing({
+                                                                            ...editPricing,
+                                                                            name: e.target.value
+                                                                        })}
+                                                                    />
+                                                                </div>
+
+                                                                <div className="grid gap-2">
+                                                                    <Label htmlFor="description">Description</Label>
+                                                                    <Textarea
+                                                                        id="description"
+                                                                        value={editPricing.description || ''}
+                                                                        onChange={(e) => setEditPricing({
+                                                                            ...editPricing,
+                                                                            description: e.target.value
+                                                                        })}
+                                                                    />
+                                                                </div>
+
+                                                                <div className="grid grid-cols-2 gap-4">
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="pricing">Pricing (in cents)</Label>
+                                                                        <Input
+                                                                            id="pricing"
+                                                                            type="number"
+                                                                            value={editPricing.pricing}
+                                                                            onChange={(e) => setEditPricing({
+                                                                                ...editPricing,
+                                                                                pricing: Number(e.target.value)
+                                                                            })}
+                                                                        />
+                                                                    </div>
+
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="estimatedPrice">Estimated Price </Label>
+                                                                        <Input
+                                                                            id="estimatedPrice"
+                                                                            type="text"
+                                                                            value={editPricing.estimatedPrice || ''}
+                                                                            onChange={(e) => setEditPricing({
+                                                                                ...editPricing,
+                                                                                estimatedPrice: Number(e.target.value)
+                                                                            })}
+                                                                            placeholder="eg: $100-$200"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="grid gap-2">
+                                                                    <Label htmlFor="image">Category Image</Label>
+                                                                    <Input
+                                                                        id="image"
+                                                                        type="file"
+                                                                        accept="image/*"
+                                                                        onChange={(e) => {
+                                                                            if (e.target.files && e.target.files[0]) {
+                                                                                setEditPricing({
+                                                                                    ...editPricing,
+                                                                                    imageFile: e.target.files[0]
+                                                                                });
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    {editPricing.servicePicture && !editPricing.imageFile && (
+                                                                        <img
+                                                                            src={editPricing.servicePicture}
+                                                                            alt="Current"
+                                                                            className="h-20 w-20 rounded-md object-cover mt-2"
+                                                                        />
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                             <DialogFooter>
-                                                                <Button onClick={handleUpdatePricing}>
+                                                                <Button onClick={handleUpdateCategory}>
                                                                     Save Changes
                                                                 </Button>
                                                             </DialogFooter>
