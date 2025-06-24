@@ -15,6 +15,7 @@ import axios from "axios"
 
 const MultiStepsForm = ({ questions, serviceProviders }) => {
     const navigation = useRouter()
+    const user = useSelector((state) => state.auth)
     const [formData, setFormData] = useState({})
     const [step, setStep] = useState(1)
     const [loading, setLoading] = useState(true)
@@ -27,7 +28,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
     useEffect(() => {
         const storedProviders = JSON.parse(localStorage.getItem('availableProviders') || '[]');
         const storedCategoryHierarchy = JSON.parse(localStorage.getItem('categoryHierarchy') || '{}');
-        console.log(storedProviders);
+
 
         setAvailableProviders(storedProviders);
         setCategoryHierarchy(storedCategoryHierarchy);
@@ -150,7 +151,9 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
             finalFormData.append("serviceTypeSubCategory", categoryHierarchy.subcategory);
             finalFormData.append("serviceTypeSubSubCategory", categoryHierarchy.subSubcategory);
 
-            // Append customer details
+
+
+
             Object.keys(formData.customerDetails).forEach((key) => {
                 finalFormData.append(`customerDetails.${key}`, formData.customerDetails[key]);
             });

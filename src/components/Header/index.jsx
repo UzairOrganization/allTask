@@ -47,7 +47,22 @@ export default function Header() {
         await dispatch(logoutUser())
         location.reload()
     }
-
+    const storeCustomServiceInLocalStorage = () => {
+        const category = {
+            category: "Custom Request",
+            subcategory: null,
+            subSubcategory: null
+        }
+        const availableProviders = []
+        try {
+            localStorage.setItem('categoryHierarchy', JSON.stringify(category));
+            localStorage.setItem('availableProviders', JSON.stringify(availableProviders));
+        }
+        catch (e) {
+            console.error("Error saving data to localStorage", err);
+        }
+        window.location.href = "/service-request"
+    }
     return (
         <header className="bg-white w-full border-b shadow-lg">
             <div className="w-[95%] mx-auto p-3 flex justify-between items-center">
@@ -60,20 +75,12 @@ export default function Header() {
 
                 {/* Desktop Navigation - Hidden on mobile */}
                 <div className="hidden md:flex items-center gap-3">
-                    {/* <div
-                        className="relative cursor-pointer flex items-center font-semibold text-lg text-black hover:text-green-700"
-                        onClick={() => setIsOpen(!isOpen)}
-                    >
-                        EXPLORE &nbsp; <FaChevronDown size={16} className="ml-1" />
-                    </div> */}
-
-                    {/* Authenticated: Show profile, notification */}
+                   
                     {isAuthenticated ? (
                         <>
-                            <div className="btn-box">
-                                <a href="index.html" className="theme-btn btn-two">
-                                    Request a Service
-                                </a>
+                            <div className="btn-box theme-btn btn-two cursor-pointer" onClick={storeCustomServiceInLocalStorage}>
+                                Request a Service
+
                             </div>
 
                             <div className="border p-1 rounded-full">
@@ -141,10 +148,9 @@ export default function Header() {
                                 </Link>
                             </div>
 
-                            <div className="btn-box">
-                                <a href="index.html" className="theme-btn btn-two">
-                                    Request a Service
-                                </a>
+                            <div className="btn-box theme-btn btn-two cursor-pointer" onClick={storeCustomServiceInLocalStorage}>
+                                Request a Service
+
                             </div>
                         </>
                     )}

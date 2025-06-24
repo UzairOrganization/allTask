@@ -61,7 +61,7 @@ export default function PurchasedLeadsPage() {
         )
     }
 
-    const renderServiceDetails = (serviceRequest) => {
+    const renderServiceDetails = (serviceRequest, payment) => {
         if (!serviceRequest) return null;
         // Format purchased date consistently
         const formatPurchaseDate = (dateString) => {
@@ -93,6 +93,7 @@ export default function PurchasedLeadsPage() {
             'purchasedBy', 'isPurchased', 'purchasedPrice', "purchasedDate", "serviceTypeSubSubCategory", "serviceTypeSubCategory" // Now handled separately
         ]
         const handleStartConversation = async () => {
+            console.log(serviceRequest.customer, "dsud");
             try {
                 const result = await axios.post(
                     `${API}/api/conversations`,
@@ -193,8 +194,7 @@ export default function PurchasedLeadsPage() {
                         </div>
                     </div>
                 )}
-                {serviceRequest.isPurchased && (
-
+                {serviceRequest.customer && serviceRequest.isPurchased && !payment?.isConversationStarted ? (
                     <div className=''>
                         <Button
                             onClick={handleStartConversation}
@@ -203,6 +203,25 @@ export default function PurchasedLeadsPage() {
                             Start Conversation
                             <ChevronRight className="h-4 w-4 ml-2" />
                         </Button>
+                    </div>
+                ) : (
+                    <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-md">
+                        <div className="flex">
+                            <div className="flex-shrink-0">
+                                <AlertCircle className="h-5 w-5 text-green-500" />
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-black">
+                                    {!serviceRequest.customer ? (
+                                        <>This customer is not registered on our platform. Please contact them directly using the provided email or phone number.</>
+                                    ) : payment?.isConversationStarted ? (
+                                        <>You've already started a conversation with this customer. Check your messages to continue the discussion.</>
+                                    ) : (
+                                        <>This lead hasn't been purchased yet. Purchase the lead to enable messaging.</>
+                                    )}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
@@ -301,7 +320,7 @@ export default function PurchasedLeadsPage() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                {renderServiceDetails(selectedPayment.serviceRequest)}
+                                {renderServiceDetails(selectedPayment.serviceRequest, selectedPayment)}
                             </CardContent>
                         </Card>
                     </div>

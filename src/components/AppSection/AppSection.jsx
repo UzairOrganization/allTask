@@ -21,7 +21,7 @@ const AppSection = () => {
                     </div>
                 </div>
                 <div className="image-section">
-                    <img src="assets/images/resource/jpeg-03.png" alt="Alltasko Promo Image" />
+                    <img src="assets/images/resource/jpeg-04.png" alt="Alltasko Promo Image" />
                 </div>
             </div>
         </div>

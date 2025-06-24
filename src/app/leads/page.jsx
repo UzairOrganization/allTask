@@ -58,62 +58,68 @@ const Page = () => {
     const leadsToShow = activeTab === 'all' ? allLeads : yourLeads;
 
     // In the main Page component, update the transformLead function:
-    const transformLead = async (lead, providerId) => {
-        try {
+  const transformLead = async (lead, providerId) => {
+    try {
+        let creditsValue = '$20.00'; // Default for Custom Request
+        
+        // Only make API call for non-Custom Request services
+        if (lead.serviceType !== "Custom Request") {
             const response = await axios.post(`${API}/api/category/get-category-pricing`, {
                 category: lead.serviceType
             });
-
-            // Convert questions array to a details object
-            const details = {};
-            if (lead.questions && Array.isArray(lead.questions)) {
-                lead.questions.forEach(q => {
-                    details[q.questionText] = Array.isArray(q.answer) ? q.answer.join(', ') : q.answer;
-                });
-            }
-
-            return {
-                id: lead._id,
-                name: lead.customerDetails?.name || 'Unknown Customer',
-                location: lead.customerDetails?.address || 'Location not specified',
-                status: "High hiring intent",
-                verified: true,
-                service: lead.serviceType,
-                description: getDynamicDescription(lead),
-                credits: response.data?.pricing ? '$' + (response.data.pricing / 100).toFixed(2) : '$0.00',
-                requested: lead.serviceProvider?.includes(providerId),
-                photos: lead.photos,
-                details: {
-                    ...details,
-                    ...(lead.customerDetails || {}),
-                    serviceType: lead.serviceType,
-                    status: lead.status
-                },
-                ...lead
-            };
-        } catch (error) {
-            console.error('Error transforming lead:', error);
-            // Return default values on error
-            return {
-                id: lead._id,
-                name: lead.customerDetails?.name || 'Unknown Customer',
-                location: lead.customerDetails?.address || 'Location not specified',
-                status: "High hiring intent",
-                verified: true,
-                service: lead.serviceType,
-                description: getDynamicDescription(lead),
-                credits: '$0.00',
-                requested: lead.serviceProvider?.includes(providerId),
-                photos: lead.photos,
-                details: {
-                    serviceType: lead.serviceType,
-                    status: lead.status,
-                    ...(lead.customerDetails || {})
-                },
-                ...lead
-            };
+            creditsValue = response.data?.pricing ? '$' + (response.data.pricing / 100).toFixed(2) : '$0.00';
         }
-    };
+
+        // Convert questions array to a details object
+        const details = {};
+        if (lead.questions && Array.isArray(lead.questions)) {
+            lead.questions.forEach(q => {
+                details[q.questionText] = Array.isArray(q.answer) ? q.answer.join(', ') : q.answer;
+            });
+        }
+
+        return {
+            id: lead._id,
+            name: lead.customerDetails?.name || 'Unknown Customer',
+            location: lead.customerDetails?.address || 'Location not specified',
+            status: "High hiring intent",
+            verified: true,
+            service: lead.serviceType,
+            description: getDynamicDescription(lead),
+            credits: creditsValue,
+            requested: lead.serviceProvider?.includes(providerId),
+            photos: lead.photos,
+            details: {
+                ...details,
+                ...(lead.customerDetails || {}),
+                serviceType: lead.serviceType,
+                status: lead.status
+            },
+            ...lead
+        };
+    } catch (error) {
+        console.error('Error transforming lead:', error);
+        // Return default values on error
+        return {
+            id: lead._id,
+            name: lead.customerDetails?.name || 'Unknown Customer',
+            location: lead.customerDetails?.address || 'Location not specified',
+            status: "High hiring intent",
+            verified: true,
+            service: lead.serviceType,
+            description: getDynamicDescription(lead),
+            credits: lead.serviceType === "Custom Request" ? '$20.00' : '$0.00',
+            requested: lead.serviceProvider?.includes(providerId),
+            photos: lead.photos,
+            details: {
+                serviceType: lead.serviceType,
+                status: lead.status,
+                ...(lead.customerDetails || {})
+            },
+            ...lead
+        };
+    }
+};
 
     // Update getDynamicDescription to use questions if available
     const getDynamicDescription = (lead) => {
