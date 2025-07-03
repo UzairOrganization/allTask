@@ -2,7 +2,7 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Edit, Plus, Trash2, ChevronDown, ChevronUp, Check } from "lucide-react"
+import { Edit, Plus, Trash2, ChevronDown, ChevronUp, Check, Pen } from "lucide-react"
 import {
     Dialog,
     DialogContent,
@@ -18,6 +18,7 @@ import { toast, Toaster } from "sonner"
 import axios from "axios"
 import { API } from "@/lib/data-service"
 import { checkProviderAuthStatus } from "@/redux/slices/authSlice"
+import Link from "next/link"
 
 export function ServicesContainer() {
     const dispatch = useDispatch()
@@ -230,53 +231,63 @@ export function ServicesContainer() {
                                                 {category.serviceRadius} miles radius • {category.postalCode}
                                             </p>
                                         </div>
-                                        <Dialog open={openRemoveDialog} onOpenChange={setOpenRemoveDialog}>
-                                            <DialogTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => setSelectedService(category)}
-                                                >
-                                                    <Trash2 className="h-4 w-4 text-red-600" />
-                                                </Button>
-                                            </DialogTrigger>
-                                            <DialogContent>
-                                                <DialogHeader>
-                                                    <DialogTitle>Remove Service</DialogTitle>
-                                                </DialogHeader>
-                                                <div className="py-4">
-                                                    <p>Are you sure you want to remove this service?</p>
-                                                    <div className="mt-4 flex justify-end gap-2">
-                                                        <Button
-                                                            variant="outline"
-                                                            onClick={() => setOpenRemoveDialog(false)}
-                                                        >
-                                                            Cancel
-                                                        </Button>
-                                                        <Button
-                                                            variant="destructive"
-                                                            onClick={async () => {
-                                                                try {
-                                                                    await axios.delete(`${API}/api/service-provider/delete-single-category/${provider._id}`, {
-                                                                        data: {
-                                                                            category: selectedService.category
-                                                                        },
-                                                                        withCredentials: true
-                                                                    });
-                                                                    dispatch(checkProviderAuthStatus())
-                                                                    toast.success("Service removed successfully")
-                                                                    setOpenRemoveDialog(false)
-                                                                } catch (error) {
-                                                                    toast.error(error.response?.data?.message || "Failed to remove service")
-                                                                }
-                                                            }}
-                                                        >
-                                                            Remove
-                                                        </Button>
+                                        <div className="flex gap-2 items-center">
+                                            <Dialog open={openRemoveDialog} onOpenChange={setOpenRemoveDialog}>
+                                                <DialogTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => setSelectedService(category)}
+                                                    >
+                                                        <Trash2 className="h-4 w-4 text-red-600" />
+                                                    </Button>
+                                                </DialogTrigger>
+                                                <DialogContent>
+                                                    <DialogHeader>
+                                                        <DialogTitle>Remove Service</DialogTitle>
+                                                    </DialogHeader>
+                                                    <div className="py-4">
+                                                        <p>Are you sure you want to remove this service?</p>
+                                                        <div className="mt-4 flex justify-end gap-2">
+                                                            <Button
+                                                                variant="outline"
+                                                                onClick={() => setOpenRemoveDialog(false)}
+                                                            >
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                variant="destructive"
+                                                                onClick={async () => {
+                                                                    try {
+                                                                        await axios.delete(`${API}/api/service-provider/delete-single-category/${provider._id}`, {
+                                                                            data: {
+                                                                                category: selectedService.category
+                                                                            },
+                                                                            withCredentials: true
+                                                                        });
+                                                                        dispatch(checkProviderAuthStatus())
+                                                                        toast.success("Service removed successfully")
+                                                                        setOpenRemoveDialog(false)
+                                                                    } catch (error) {
+                                                                        toast.error(error.response?.data?.message || "Failed to remove service")
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Remove
+                                                            </Button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </DialogContent>
-                                        </Dialog>
+                                                </DialogContent>
+                                            </Dialog>
+                                            <div>
+                                                {/* <Pen color="black" size={18}/> */}
+                                                <Button>
+                                                    <Link href={`/estimated-price/${category.category}`}>
+                                                        Estimated Cost
+                                                    </Link>
+                                                </Button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             ))}

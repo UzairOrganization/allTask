@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Pencil, Trash2, Plus, ChevronDown, ChevronUp } from 'lucide-react'
+import { Pencil, Trash2, Plus, ChevronDown, ChevronUp, ExternalLink, PlusCircle } from 'lucide-react'
 import {
     Dialog,
     DialogContent,
@@ -26,6 +26,7 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import CategoryForm from '@/components/Modifications/CategoryForm'
 import UpdateCategoryDialog from '@/components/Modifications/UpdateCategoryDialog'
+import Link from 'next/link'
 
 
 export default function page() {
@@ -267,6 +268,7 @@ export default function page() {
                                                     {category.estimatedPrice ? `${category.estimatedPrice}` : "NaN  "}
                                                 </TableCell>
                                                 <TableCell className="text-right space-x-2">
+
                                                     <UpdateCategoryDialog category={category} fetchData={fetchData} />
                                                     <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                                                         <DialogTrigger asChild>
@@ -299,6 +301,21 @@ export default function page() {
                                                             </DialogFooter>
                                                         </DialogContent>
                                                     </Dialog>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className='flex items-center gap-4'>
+                                                        <div>
+                                                            <Link href={`/service/${category.name}`} target='_blank'>
+                                                                <ExternalLink size={15} color='black' />
+                                                            </Link>
+                                                        </div>
+                                                        <div>
+
+                                                            <Link href={`modifications/${category.name}`}>
+                                                                <PlusCircle size={15} color='black' />
+                                                            </Link>
+                                                        </div>
+                                                    </div>
                                                 </TableCell>
                                             </TableRow>
                                         ))

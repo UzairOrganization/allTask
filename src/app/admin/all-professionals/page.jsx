@@ -34,6 +34,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { API } from '@/lib/data-service'
 import { format } from 'date-fns';
 import AdminHeader from '@/components/AdminHeader'
+import Link from 'next/link'
 export default function ProfessionalsPage() {
     const [professionals, setProfessionals] = useState([])
     const [loading, setLoading] = useState(true)
@@ -182,7 +183,12 @@ export default function ProfessionalsPage() {
                                 <TableBody>
                                     {professionals.map((professional) => (
                                         <TableRow key={professional._id}>
-                                            <TableCell>{professional.name}</TableCell>
+                                            <TableCell>
+                                                <Link href={`/professionals${professional.name}`} target='_blank'>
+                                                    {professional.name}
+                                                </Link>
+
+                                            </TableCell>
                                             <TableCell>{professional.email}</TableCell>
                                             <TableCell>
                                                 <StatusBadge status={professional.status} />

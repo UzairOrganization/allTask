@@ -80,7 +80,7 @@ const ProfessionalHeader = () => {
               <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2 ml-2">
                 <Avatar className="h-12 w-12 border-2 border-green-700">
                   {provider?.profilePicture ? (
-                    <AvatarImage src={API + provider.profilePicture} alt="Profile" />
+                    <AvatarImage src={provider.profilePicture} alt="Profile" />
                   ) : (
                     <AvatarFallback className="bg-green-100 text-green-700 font-medium">
                       {provider?.name ? (

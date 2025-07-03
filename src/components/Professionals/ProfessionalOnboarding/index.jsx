@@ -188,7 +188,7 @@ export function ProfessionalOnboarding() {
 
         updateTime();
         const interval = setInterval(updateTime, 60000);
-        
+
         return () => clearInterval(interval);
     }, []);
 
@@ -458,7 +458,7 @@ export function ProfessionalOnboarding() {
                                 <div className="flex items-center space-x-4">
                                     {provider?.profilePicture ? (
                                         <img
-                                            src={API + provider.profilePicture}
+                                            src={provider.profilePicture}
                                             alt="Profile"
                                             className="h-12 w-12 rounded-full object-cover"
                                         />
@@ -505,7 +505,7 @@ export function ProfessionalOnboarding() {
                                                             <div className="relative">
                                                                 {provider?.profilePicture ? (
                                                                     <img
-                                                                        src={provider.profilePicture == null ? "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3DlfHx8fGVufDB8fHx8fA%3D%3D" : API + provider.profilePicture}
+                                                                        src={provider.profilePicture == null ? "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3DlfHx8fGVufDB8fHx8fA%3D%3D" : provider.profilePicture}
                                                                         alt="Profile"
                                                                         className="h-24 w-24 rounded-full object-cover"
                                                                     />
@@ -624,30 +624,27 @@ export function ProfessionalOnboarding() {
                                                         {formData.verificationDocument ? (
                                                             <div className="flex flex-col gap-4">
                                                                 <div className="flex items-center gap-4">
-                                                                    {formData.verificationDocument.startsWith('data:') ||
-                                                                        formData.verificationDocument.startsWith('http') ? (
-                                                                        <img
-                                                                            src={formData.verificationDocument}
-                                                                            alt="Verification document"
-                                                                            className="h-20 w-20 object-cover rounded-md"
-                                                                        />
-                                                                    ) : (
-                                                                        <div className="h-20 w-20 bg-gray-100 rounded-md flex items-center justify-center">
-                                                                            <span className="text-xs text-gray-500">Document</span>
-                                                                        </div>
-                                                                    )}
+
                                                                     <div className="flex gap-2">
                                                                         <Button
                                                                             variant="outline"
-                                                                            onClick={() => {
-                                                                                // Open document in new tab if it's a URL
+                                                                            onClick={(e) => {
+                                                                                e.preventDefault();
                                                                                 if (formData.verificationDocument) {
-                                                                                    window.open(API + formData.verificationDocument, '_blank');
+                                                                                    const fileUrl = `${formData.verificationDocument}`; // Forces Cloudinary to download
+                                                                                    const link = document.createElement('a');
+                                                                                    link.href = fileUrl;
+                                                                                    link.download = formData.verificationDocument.split('/').pop() || 'document.pdf';
+                                                                                    document.body.appendChild(link);
+                                                                                    link.click();
+                                                                                    document.body.removeChild(link);
                                                                                 }
                                                                             }}
                                                                         >
-                                                                            View Document
+                                                                            Download Document
                                                                         </Button>
+
+
                                                                         <Button
                                                                             variant="outline"
                                                                             onClick={() => setFormData({ ...formData, verificationDocument: null })}
