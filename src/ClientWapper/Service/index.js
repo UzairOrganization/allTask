@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
+import Link from 'next/link';
 
 async function getCategoryData(name) {
     const res = await fetch(`${API}/api/category/getCategoryByName/${name}`);
@@ -29,14 +30,14 @@ const CustomNotFound = () => (
             <h1 className="text-6xl font-bold text-green-600 mb-4">404</h1>
             <h2 className="text-3xl font-semibold mb-6">Service Not Found</h2>
             <p className="text-xl text-gray-300 mb-8">
-                The service you're looking for doesn't exist or may have been moved.
+                The service you are looking for doesn&apos;t exist or may have been moved.
             </p>
-            <a
+            <Link
                 href="/"
                 className="bg-green-700 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 inline-block"
             >
                 Return Home
-            </a>
+            </Link>
         </div>
     </div>
 );
