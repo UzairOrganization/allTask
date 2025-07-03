@@ -75,7 +75,7 @@ export default function Header() {
 
                 {/* Desktop Navigation - Hidden on mobile */}
                 <div className="hidden md:flex items-center gap-3">
-                   
+
                     {isAuthenticated ? (
                         <>
                             <div className="btn-box theme-btn btn-two cursor-pointer" onClick={storeCustomServiceInLocalStorage}>
@@ -135,6 +135,12 @@ export default function Header() {
                         </>
                     ) : (
                         <>
+                            <Link
+                                href="/service"
+                                className="flex text-lg font-semibold items-center text-black hover:text-green-700"
+                            >
+                                EXPLORE &nbsp;
+                            </Link>
                             <Link
                                 href="/login"
                                 className="flex text-lg font-semibold items-center text-black hover:text-green-700"

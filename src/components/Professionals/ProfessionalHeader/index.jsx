@@ -31,7 +31,8 @@ const ProfessionalHeader = () => {
     { href: "/professional-dashboard", label: "Dashboard" },
     { href: "/leads", label: "Leads" },
     { href: "/my-responses", label: "My Responses" },
-    { href: "/help", label: "Help" }
+    { href: "/forums", label: "Community Discussions" },
+    { href: "/help", label: "Help" },
   ];
 
 

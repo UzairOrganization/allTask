@@ -68,7 +68,7 @@ export default function NewForumPage() {
                     <div className="mb-6">
                         <Button
                             variant="ghost"
-                            onClick={() => router.push("/forum")}
+                            onClick={() => router.push("/forums")}
                             className="flex items-center gap-2 text-sm px-0"
                         >
                             <ArrowLeft size={16} />

@@ -77,7 +77,7 @@ export default function Page() {
         <>
             <ProfessionalHeader />
 
-            <div className="container mx-auto py-8">
+            <div className="container mx-auto max-w-6xl py-8">
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Community Forum</h1>
                     <div className="flex gap-4">

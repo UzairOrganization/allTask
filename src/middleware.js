@@ -26,7 +26,9 @@ export async function middleware(req) {
             '/professional-dashboard',
             '/leads',
             '/my-responses',
-            '/purchased-leads'
+            '/purchased-leads',
+            '/forums',
+            '/new-forum'
         ];
 
         const isUserRoute = userRoutes.some(route => req.nextUrl.pathname.startsWith(route));

@@ -199,7 +199,7 @@ export default function Page({ params }) {
     if (error) return (
         <>
             <ProfessionalHeader />
-            <div className="container mx-auto py-8">
+            <div className="container mx-auto max-w-6xl py-8">
                 <div className="text-center py-12">
                     <div className="mx-auto w-24 h-24 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
@@ -221,7 +221,7 @@ export default function Page({ params }) {
     if (!forum) return (
         <>
             <ProfessionalHeader />
-            <div className="container mx-auto py-8">
+            <div className="container max-w-6xl mx-auto py-8">
                 <div className="text-center py-12">
                     <div className="mx-auto w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500">
@@ -243,7 +243,7 @@ export default function Page({ params }) {
     return (
         <>
             <ProfessionalHeader />
-            <div className="container mx-auto py-8">
+            <div className="container max-w-6xl mx-auto py-8">
                 <div className="mb-6">
                     <Link href="/forums" className="inline-flex items-center text-sm text-green-600 hover:text-green-800 dark:text-blue-400 dark:hover:text-blue-300 hover:underline">
                         <CornerDownLeft size={16} className="mr-1" />
