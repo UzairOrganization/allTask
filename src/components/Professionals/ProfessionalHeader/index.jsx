@@ -30,8 +30,8 @@ const ProfessionalHeader = () => {
   const navItems = [
     { href: "/professional-dashboard", label: "Dashboard" },
     { href: "/leads", label: "Leads" },
-    { href: "/my-responses", label: "My Responses" },
-    { href: "/forums", label: "Community Discussions" },
+    { href: "/my-responses", label: "Chat" },
+    { href: "/forums", label: "Professional Forum" },
     { href: "/help", label: "Help" },
   ];
 

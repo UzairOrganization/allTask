@@ -92,8 +92,8 @@ export default function PaymentSuccess({ searchParams }) {
                                     </Link>
                                 </Button>
                                 <Button variant="outline" asChild className="px-6 py-3">
-                                    <Link href="/leads" className="flex items-center gap-2">
-                                        Browse More Leads
+                                    <Link href="/purchased-leads" className="flex items-center gap-2">
+                                        Browse Purchased Leads
                                     </Link>
                                 </Button>
                             </div>

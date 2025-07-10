@@ -52,6 +52,7 @@ export function ServicesContainer() {
                 setCategoriesLoading(true)
                 const response = await axios.get(`${API}/api/category/categories`)
                 setCategories(response.data || [])
+                
             } catch (error) {
                 toast.error("Failed to fetch categories")
                 setCategories([])
@@ -164,8 +165,8 @@ export function ServicesContainer() {
                                         >
                                             <option value="">Select a category</option>
                                             {categories?.map((category) => (
-                                                <option key={category._id} value={category.name || category.category}>
-                                                    {category.name || category.category}
+                                                <option key={category._id} value={category.name}>
+                                                    {category.name}
                                                 </option>
                                             ))}
                                         </select>

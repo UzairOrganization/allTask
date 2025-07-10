@@ -276,7 +276,7 @@ export default function PurchasedLeadsPage() {
                                                             {payment.serviceRequest?.serviceType || 'Service'}
                                                         </div>
                                                         <div className="text-sm text-gray-500 ">
-                                                            {new Date(payment.serviceRequest?.createdAt).toLocaleDateString()}
+                                                            {new Date(payment.serviceRequest?.createdAt).toLocaleDateString('en-US')}
                                                         </div>
                                                     </TableCell>
                                                     <TableCell className="text-center align-middle">

@@ -29,7 +29,7 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Search, Trash2, CheckCircle2, XCircle, AlertCircle } from 'lucide-react'
+import { Loader2, Search, Trash2, CheckCircle2, XCircle, AlertCircle, SquareArrowOutUpRight } from 'lucide-react'
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
 import { API } from '@/lib/data-service'
 import { format } from 'date-fns';
@@ -184,7 +184,7 @@ export default function ProfessionalsPage() {
                                     {professionals.map((professional) => (
                                         <TableRow key={professional._id}>
                                             <TableCell>
-                                                <Link href={`/professionals${professional.name}`} target='_blank'>
+                                                <Link href={`/professional/${professional.name}`} target='_blank'>
                                                     {professional.name}
                                                 </Link>
 
@@ -405,6 +405,11 @@ export default function ProfessionalsPage() {
                                                         </DialogFooter>
                                                     </DialogContent>
                                                 </Dialog>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Link href={`/professional/${professional.name}`} target='_blank'>
+                                                    <SquareArrowOutUpRight size={20} color='black' />
+                                                </Link>
                                             </TableCell>
                                         </TableRow>
                                     ))}

@@ -55,13 +55,13 @@ export function ProfessionalEstimations() {
 
     if (error) {
         return (
-            <Card className="border-red-500">
+            <Card className="border-green-500">
                 <CardHeader>
-                    <CardTitle className="text-red-500">Error</CardTitle>
+                    <CardTitle className="text-black text-center">There's is no Additional Information for this Professional.</CardTitle>
                 </CardHeader>
-                <CardContent>
-                    <p>{error}</p>
-                </CardContent>
+                {/* <CardContent>
+                    <p className='text-center'>There's is no Additional Information.</p>
+                </CardContent> */}
             </Card>
         );
     }
@@ -85,7 +85,7 @@ export function ProfessionalEstimations() {
                 <Card key={estimation._id} className="border-green-700">
                     <CardHeader>
                         <CardTitle className="text-green-700 flex items-center justify-between">
-                            {estimation.service}
+                            {decodeURIComponent(estimation.service)}
                             {/* <Badge variant="outline" className="text-green-700 border-green-700">
                                 {new Date(estimation.createdAt).toLocaleDateString()}
                             </Badge> */}

@@ -251,7 +251,7 @@ const Discover = () => {
       </div>
       <div className="pt-16 flex justify-center items-center">
         <div className="btn-box ">
-          <Link href="/all-categories" className="theme-btn btn-two">
+          <Link href="/service" className="theme-btn btn-two">
             View All Services
           </Link>
         </div>

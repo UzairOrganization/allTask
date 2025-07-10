@@ -65,7 +65,7 @@ const ServicesPage = () => {
         <>
             <Header />
             <div className="container max-w-[90vw] mx-auto py-8">
-                <h1 className="text-3xl font-bold mb-8 text-black">All Services</h1>
+                <h1 className="text-3xl font-bold mb-8 text-black mt-8">All Services</h1>
 
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

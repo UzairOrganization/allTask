@@ -183,7 +183,8 @@ export function ProfessionalOnboarding() {
 
             hours = hours % 12 || 12;
 
-            setDateTime(`${dayName}, ${day} ${month} ${hours}:${minutes}${ampm}`);
+            // Updated to US format: Month–Day
+            setDateTime(`${dayName}, ${month} ${day} ${hours}:${minutes}${ampm}`);
         };
 
         updateTime();
@@ -191,6 +192,7 @@ export function ProfessionalOnboarding() {
 
         return () => clearInterval(interval);
     }, []);
+
 
     useEffect(() => {
         if (provider) {

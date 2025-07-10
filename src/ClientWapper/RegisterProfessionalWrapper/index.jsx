@@ -324,7 +324,7 @@ const RegisterProfessionalWrapper = () => {
                                                 id="name"
                                                 name="name"
                                                 type="text"
-                                                placeholder="Your full name"
+                                                placeholder="Your Full Name/ Company Name"
                                                 value={formData.name}
                                                 onChange={handleInputChange}
                                                 required
@@ -525,7 +525,7 @@ const RegisterProfessionalWrapper = () => {
                                                 <SelectContent>
                                                     {categories.map((cat) => (
                                                         <SelectItem key={cat._id} value={cat.category}>
-                                                            {cat.category}
+                                                            {cat.name}
                                                         </SelectItem>
                                                     ))}
                                                 </SelectContent>
