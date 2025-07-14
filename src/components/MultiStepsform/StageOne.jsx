@@ -71,11 +71,11 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
 
         // Append to FormData (for actual submission)
         finalFormData.append("questions", JSON.stringify(transformedQuestions));
-
         // ✅ Update local formData state so StageFive can access it
         setFormData({
             questions: transformedQuestions
         });
+
 
         setFormSubmitted(true); // ensure "Continue to Next Step" shows
     };
@@ -204,16 +204,19 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
                                     type="submit"
                                     disabled={!allQuestionsAnswered}
                                     className="px-4 py-2 text-sm bg-[#00725A] hover:bg-[#00634A] text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
-                                    onClick={() => setFormSubmitted(true)}
+                                    onClick={() => {
+                                        setFormSubmitted(true)
+                                        next()
+                                    }}
                                 >
-                                    Submit Answers
+                                    Continue to Next Step
                                 </Button>
                             )}
                         </div>
                     </form>
 
                     {/* Main Next button appears after form submission */}
-                    {formSubmitted && (
+                    {/* {formSubmitted && (
                         <div className="mt-6 flex justify-end">
                             <Button
                                 onClick={next}
@@ -222,7 +225,7 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
                                 Continue to Next Step
                             </Button>
                         </div>
-                    )}
+                    )} */}
                 </CardContent>
             </Card>
 

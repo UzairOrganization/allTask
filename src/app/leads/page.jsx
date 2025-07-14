@@ -31,7 +31,8 @@ const Page = () => {
             setLoading(true);
             const response = await axios.get(`${API}/api/leads/get-all-matching-leads-of-provider/${id}`);
             const leads = response.data.leads;
-
+            console.log(leads);
+            
             // Transform all leads at once
             const transformedLeads = await Promise.all(
                 leads.map(lead => transformLead(lead, id))
@@ -40,6 +41,8 @@ const Page = () => {
             const yourLeads = transformedLeads.filter(lead =>
                 lead.serviceProvider && lead.serviceProvider.includes(id)
             );
+            console.log(yourLeads);
+
             const allLeads = transformedLeads.filter(lead =>
                 !lead.serviceProvider || !lead.serviceProvider.includes(id)
             );
@@ -58,68 +61,68 @@ const Page = () => {
     const leadsToShow = activeTab === 'all' ? allLeads : yourLeads;
 
     // In the main Page component, update the transformLead function:
-  const transformLead = async (lead, providerId) => {
-    try {
-        let creditsValue = '$20.00'; // Default for Custom Request
-        
-        // Only make API call for non-Custom Request services
-        if (lead.serviceType !== "Custom Request") {
-            const response = await axios.post(`${API}/api/category/get-category-pricing`, {
-                category: lead.serviceType
-            });
-            creditsValue = response.data?.pricing ? '$' + (response.data.pricing / 100).toFixed(2) : '$0.00';
-        }
+    const transformLead = async (lead, providerId) => {
+        try {
+            let creditsValue = '$20.00'; // Default for Custom Request
 
-        // Convert questions array to a details object
-        const details = {};
-        if (lead.questions && Array.isArray(lead.questions)) {
-            lead.questions.forEach(q => {
-                details[q.questionText] = Array.isArray(q.answer) ? q.answer.join(', ') : q.answer;
-            });
-        }
+            // Only make API call for non-Custom Request services
+            if (lead.serviceType !== "Custom Request") {
+                const response = await axios.post(`${API}/api/category/get-category-pricing`, {
+                    category: lead.serviceType
+                });
+                creditsValue = response.data?.pricing ? '$' + (response.data.pricing / 100).toFixed(2) : '$0.00';
+            }
 
-        return {
-            id: lead._id,
-            name: lead.customerDetails?.name || 'Unknown Customer',
-            location: lead.customerDetails?.address || 'Location not specified',
-            status: "High hiring intent",
-            verified: true,
-            service: lead.serviceType,
-            description: getDynamicDescription(lead),
-            credits: creditsValue,
-            requested: lead.serviceProvider?.includes(providerId),
-            photos: lead.photos,
-            details: {
-                ...details,
-                ...(lead.customerDetails || {}),
-                serviceType: lead.serviceType,
-                status: lead.status
-            },
-            ...lead
-        };
-    } catch (error) {
-        console.error('Error transforming lead:', error);
-        // Return default values on error
-        return {
-            id: lead._id,
-            name: lead.customerDetails?.name || 'Unknown Customer',
-            location: lead.customerDetails?.address || 'Location not specified',
-            status: "High hiring intent",
-            verified: true,
-            service: lead.serviceType,
-            description: getDynamicDescription(lead),
-            credits: lead.serviceType === "Custom Request" ? '$20.00' : '$0.00',
-            requested: lead.serviceProvider?.includes(providerId),
-            photos: lead.photos,
-            details: {
-                serviceType: lead.serviceType,
-                status: lead.status,
-                ...(lead.customerDetails || {})
-            },
-            ...lead
-        };
-    }
-};
+            // Convert questions array to a details object
+            const details = {};
+            if (lead.questions && Array.isArray(lead.questions)) {
+                lead.questions.forEach(q => {
+                    details[q.questionText] = Array.isArray(q.answer) ? q.answer.join(', ') : q.answer;
+                });
+            }
+
+            return {
+                id: lead._id,
+                name: lead.customerDetails?.name || 'Unknown Customer',
+                location: lead.customerDetails?.address || 'Location not specified',
+                status: "High hiring intent",
+                verified: true,
+                service: lead.serviceType,
+                description: getDynamicDescription(lead),
+                credits: creditsValue,
+                requested: lead.serviceProvider?.includes(providerId),
+                photos: lead.photos,
+                details: {
+                    ...details,
+                    ...(lead.customerDetails || {}),
+                    serviceType: lead.serviceType,
+                    status: lead.status
+                },
+                ...lead
+            };
+        } catch (error) {
+            console.error('Error transforming lead:', error);
+            // Return default values on error
+            return {
+                id: lead._id,
+                name: lead.customerDetails?.name || 'Unknown Customer',
+                location: lead.customerDetails?.address || 'Location not specified',
+                status: "High hiring intent",
+                verified: true,
+                service: lead.serviceType,
+                description: getDynamicDescription(lead),
+                credits: lead.serviceType === "Custom Request" ? '$20.00' : '$0.00',
+                requested: lead.serviceProvider?.includes(providerId),
+                photos: lead.photos,
+                details: {
+                    serviceType: lead.serviceType,
+                    status: lead.status,
+                    ...(lead.customerDetails || {})
+                },
+                ...lead
+            };
+        }
+    };
 
     // Update getDynamicDescription to use questions if available
     const getDynamicDescription = (lead) => {
@@ -173,84 +176,89 @@ const Page = () => {
     return (
         <>
             <ProfessionalHeader />
-            <div className="flex h-screen bg-gray-50">
-                {/* Sidebar */}
-                <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-                    {/* Header */}
-                    <div className="p-4 border-b border-gray-200">
-                        <h1 className="text-xl font-bold text-gray-800">Leads</h1>
-                        <div className="flex items-center mt-2">
-                            <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
-                            <span className="text-sm text-gray-600">
-                                {activeTab === 'all'
-                                    ? `${allLeads.length} available leads`
-                                    : `${yourLeads.length} requested leads`}
-                            </span>
+            <div className="bg-white rounded-lg shadow-sm mb-6">
+                {/* Combined Header and Tabs */}
+                <div className="border-b border-gray-200">
+                    <div className="px-6 pt-4 pb-2 flex justify-between items-center">
+                        <div>
+                            <h1 className="text-xl font-bold text-gray-800">Leads</h1>
+                            <div className="flex items-center mt-1 mb-4">
+                                <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
+                                <span className="text-sm text-gray-600">
+                                    {activeTab === 'all'
+                                        ? `${allLeads.length} available leads`
+                                        : `${yourLeads.length} requested leads`}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
-
-                    {/* Tabs */}
-                    <div className="flex border-b border-gray-200">
+                    {/* Tabs Navigation */}
+                    <div className="flex px-6">
                         <button
                             onClick={() => setActiveTab('yours')}
-                            className={`flex-1 py-3 text-sm font-medium ${activeTab === 'yours' ? 'text-green-700 border-b-2 border-green-700' : 'text-gray-500'}`}
+                            className={`pb-3 px-4 mr-4 text-sm font-medium transition-colors ${activeTab === 'yours'
+                                ? 'text-green-700 border-b-2 border-green-700'
+                                : 'text-gray-500 hover:text-gray-700'
+                                }`}
                         >
                             Your Leads
                         </button>
                         <button
                             onClick={() => setActiveTab('all')}
-                            className={`flex-1 py-3 text-sm font-medium ${activeTab === 'all' ? 'text-green-700 border-b-2 border-green-700' : 'text-gray-500'}`}
+                            className={`pb-3 px-4 text-sm font-medium transition-colors ${activeTab === 'all'
+                                ? 'text-green-700 border-b-2 border-green-700'
+                                : 'text-gray-500 hover:text-gray-700'
+                                }`}
                         >
                             All Leads
                         </button>
                     </div>
-
                 </div>
+            </div>
 
-                {/* Main Content */}
-                <div className="flex-1 overflow-auto">
-                    {selectedLead ? (
-                        <LeadDetailView
-                            lead={selectedLead}
-                            onBack={() => setSelectedLead(null)}
-                        />
-                    ) : loading ? (
-                        <div className="flex justify-center items-center h-full">
-                            <div className="text-center">
-                                <PulseLoader color="#16a34a" size={20} />
-                                <p className="mt-4 text-gray-600">Loading leads...</p>
+            {/* Your existing content area below */}
+            <div className="flex-1 overflow-y-auto">
+                {selectedLead ? (
+                    <LeadDetailView
+                        lead={selectedLead}
+                        onBack={() => setSelectedLead(null)}
+                    />
+                ) : loading ? (
+                    <div className="flex justify-center items-center h-full">
+                        <div className="text-center">
+                            <PulseLoader color="#16a34a" size={20} />
+                            <p className="mt-4 text-gray-600">Loading leads...</p>
+                        </div>
+                    </div>
+                ) : leadsToShow.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                        {leadsToShow.map((lead) => (
+                            <LeadCard
+                                key={lead._id}
+                                lead={lead}
+                                onClick={() => setSelectedLead(lead)}
+                                provider={provider}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex justify-center items-center h-full">
+                        <div className="text-center">
+                            <div className="text-gray-400 mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
                             </div>
+                            <p className="text-gray-500 text-lg">
+                                {activeTab === 'all'
+                                    ? "No available leads matching your services"
+                                    : "No leads have requested you specifically"}
+                            </p>
                         </div>
-                    ) : leadsToShow.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-                            {leadsToShow.map((lead) => (
-                                <LeadCard
-                                    key={lead._id}
-                                    lead={lead}
-                                    onClick={() => setSelectedLead(lead)}
-                                    provider={provider}
-                                />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="flex justify-center items-center h-full">
-                            <div className="text-center">
-                                <div className="text-gray-400 mb-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <p className="text-gray-500 text-lg">
-                                    {activeTab === 'all'
-                                        ? "No available leads matching your services"
-                                        : "No leads have requested you specifically"}
-                                </p>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div >
+                    </div>
+                )}
+            </div>
         </>
     );
 };

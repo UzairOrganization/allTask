@@ -401,9 +401,9 @@ export default function page() {
                                                             <option value="text">Text Input</option>
                                                             <option value="radio">Radio Buttons</option>
                                                             <option value="checkbox">Checkboxes</option>
-                                                            <option value="select">Dropdown Select</option>
+                                                            {/* <option value="select">Dropdown Select</option>
                                                             <option value="number">Number Input</option>
-                                                            <option value="date">Date Picker</option>
+                                                            <option value="date">Date Picker</option> */}
                                                         </select>
                                                     </div>
                                                     <div className="flex items-end">

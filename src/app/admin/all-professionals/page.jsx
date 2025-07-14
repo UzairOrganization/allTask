@@ -218,22 +218,29 @@ export default function ProfessionalsPage() {
                                                             {professional.verificationDocument && (
                                                                 <div className="border rounded-lg p-4">
                                                                     <h3 className="font-medium mb-2">Verification Documents</h3>
-                                                                    <div className="h-96">
-                                                                        <iframe
-                                                                            src={`${API}${professional.verificationDocument}`}
+                                                                    <div className="">
+                                                                        {/* <iframe
+                                                                            src={`${professional.verificationDocument}`}
                                                                             className="w-full h-full border rounded"
                                                                             title="Verification Document"
-                                                                        />
+                                                                        /> */}
                                                                         <div className="mt-2 flex justify-end">
-                                                                            <Button asChild variant="outline" size="sm">
-                                                                                <a
-                                                                                    href={`${API}${professional.verificationDocument}`}
-                                                                                    download
-                                                                                    target="_blank"
-                                                                                    rel="noopener noreferrer"
-                                                                                >
-                                                                                    Download Document
-                                                                                </a>
+                                                                            <Button
+                                                                                variant="outline"
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    if (professional.verificationDocument) {
+                                                                                        const fileUrl = `${professional.verificationDocument}`; // Forces Cloudinary to download
+                                                                                        const link = document.createElement('a');
+                                                                                        link.href = fileUrl;
+                                                                                        link.download = professional.verificationDocument.split('/').pop() || 'document.pdf';
+                                                                                        document.body.appendChild(link);
+                                                                                        link.click();
+                                                                                        document.body.removeChild(link);
+                                                                                    }
+                                                                                }}
+                                                                            >
+                                                                                Download Document
                                                                             </Button>
                                                                         </div>
                                                                     </div>

@@ -233,7 +233,7 @@ export function ProfessionalOnboarding() {
             if (response.status === 200) {
                 setFormData(prev => ({
                     ...prev,
-                    verificationDocument: response?.data.serviceProvider.verificationDocument,
+                    verificationDocument: response?.data.provider.verificationDocument,
                     status: 'pending'
                 }));
                 toast.success("Document Uploaded Successfully", {
@@ -329,7 +329,7 @@ export function ProfessionalOnboarding() {
                 <div className="flex w-full items-center justify-between">
 
                     <div className="mb-8">
-                        <h1 className="text-2xl font-bold text-gray-900">Hello, {provider?.name}!</h1>
+                        <h1 className="text-2xl font-bold text-gray-900">Hello, {provider?.name}</h1>
                         <p className="text-gray-500">{dateTime}</p>
                     </div>
                     <div className="flex items-center w-[200px] justify-around">
@@ -661,7 +661,7 @@ export function ProfessionalOnboarding() {
                                                             <>
                                                                 <PDFUpload
                                                                     onFileUpload={handleDocumentUpload}
-                                                                    maxSize={5 * 1024 * 1024} // 5MB
+                                                                    maxSize={30 * 1024 * 1024} // 5MB
                                                                     multiple={false} // Assuming single file upload
                                                                 />
                                                                 <p className="text-sm text-gray-500 mt-2">
