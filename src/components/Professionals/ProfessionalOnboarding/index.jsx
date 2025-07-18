@@ -196,6 +196,8 @@ export function ProfessionalOnboarding() {
 
     useEffect(() => {
         if (provider) {
+            console.log(provider);
+
             setFormData({
                 name: provider.name || "",
                 email: provider.email || "",
@@ -383,73 +385,77 @@ export function ProfessionalOnboarding() {
 
 
                 </div>
-                <div className="mb-8 p-6 bg-green-50 rounded-lg border border-green-100">
-                    <h3 className="text-lg font-medium text-green-800 mb-2">Welcome to Our Platform, {provider?.name}</h3>
-                    <p className="text-green-700">
-                        We're excited to help you grow your business. Here's how it works:
-                    </p>
-                </div>
+                {new Date(provider?.createdAt) > new Date(Date.now() - 24 * 60 * 60 * 1000) && (
+                    <>
+                        <div className="mb-8 p-6 bg-green-50 rounded-lg border border-green-100">
+                            <h3 className="text-lg font-medium text-green-800 mb-2">Welcome to Our Platform, {provider?.name}</h3>
+                            <p className="text-green-700">
+                                We're excited to help you grow your business. Here's how it works:
+                            </p>
+                        </div>
 
-                <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="item-1">
-                        <AccordionTrigger className="hover:no-underline">
-                            <div className="flex items-center space-x-3">
-                                <CheckCircle className="h-5 w-5 text-green-600" />
-                                <span className="text-left font-medium">1. Customers tell us what they need</span>
-                            </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-10 text-gray-600">
-                            Customers answer specific questions about their requirements, helping us match you with the most relevant opportunities.
-                        </AccordionContent>
-                    </AccordionItem>
+                        <Accordion type="single" collapsible className="w-full">
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger className="hover:no-underline">
+                                    <div className="flex items-center space-x-3">
+                                        <CheckCircle className="h-5 w-5 text-green-600" />
+                                        <span className="text-left font-medium">1. Customers tell us what they need</span>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="pl-10 text-gray-600">
+                                    Customers answer specific questions about their requirements, helping us match you with the most relevant opportunities.
+                                </AccordionContent>
+                            </AccordionItem>
 
-                    <AccordionItem value="item-2">
-                        <AccordionTrigger className="hover:no-underline">
-                            <div className="flex items-center space-x-3">
-                                <CheckCircle className="h-5 w-5 text-green-600" />
-                                <span className="text-left font-medium">2. We send you matching leads</span>
-                            </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-10 text-gray-600">
-                            You receive leads that match your preferences instantly by email and on the app, so you never miss an opportunity.
-                        </AccordionContent>
-                    </AccordionItem>
+                            <AccordionItem value="item-2">
+                                <AccordionTrigger className="hover:no-underline">
+                                    <div className="flex items-center space-x-3">
+                                        <CheckCircle className="h-5 w-5 text-green-600" />
+                                        <span className="text-left font-medium">2. We send you matching leads</span>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="pl-10 text-gray-600">
+                                    You receive leads that match your preferences instantly by email and on the app, so you never miss an opportunity.
+                                </AccordionContent>
+                            </AccordionItem>
 
-                    <AccordionItem value="item-3">
-                        <AccordionTrigger className="hover:no-underline">
-                            <div className="flex items-center space-x-3">
-                                <CheckCircle className="h-5 w-5 text-green-600" />
-                                <span className="text-left font-medium">3. You choose leads you like</span>
-                            </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-10 text-gray-600">
-                            Review leads and select those that fit your business. Get customer contact details right away for the leads you choose.
-                        </AccordionContent>
-                    </AccordionItem>
+                            <AccordionItem value="item-3">
+                                <AccordionTrigger className="hover:no-underline">
+                                    <div className="flex items-center space-x-3">
+                                        <CheckCircle className="h-5 w-5 text-green-600" />
+                                        <span className="text-left font-medium">3. You choose leads you like</span>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="pl-10 text-gray-600">
+                                    Review leads and select those that fit your business. Get customer contact details right away for the leads you choose.
+                                </AccordionContent>
+                            </AccordionItem>
 
-                    <AccordionItem value="item-4">
-                        <AccordionTrigger className="hover:no-underline">
-                            <div className="flex items-center space-x-3">
-                                <CheckCircle className="h-5 w-5 text-green-600" />
-                                <span className="text-left font-medium">4. You contact the customer</span>
-                            </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-10 text-gray-600">
-                            Reach out directly to the customer to discuss their needs and provide your services. Build your client base with qualified leads.
-                        </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="item-5">
-                        <AccordionTrigger className="hover:no-underline">
-                            <div className="flex items-center space-x-3">
-                                <CheckCircle className="h-5 w-5 text-green-600" />
-                                <span className="text-left font-medium">5. You get hired.</span>
-                            </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-10 text-gray-600">
-                            There's no commission and nothing more to pay.
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
+                            <AccordionItem value="item-4">
+                                <AccordionTrigger className="hover:no-underline">
+                                    <div className="flex items-center space-x-3">
+                                        <CheckCircle className="h-5 w-5 text-green-600" />
+                                        <span className="text-left font-medium">4. You contact the customer</span>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="pl-10 text-gray-600">
+                                    Reach out directly to the customer to discuss their needs and provide your services. Build your client base with qualified leads.
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="item-5">
+                                <AccordionTrigger className="hover:no-underline">
+                                    <div className="flex items-center space-x-3">
+                                        <CheckCircle className="h-5 w-5 text-green-600" />
+                                        <span className="text-left font-medium">5. You get hired.</span>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="pl-10 text-gray-600">
+                                    There's no commission and nothing more to pay.
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </>
+                )}
 
                 <div className="container mx-auto px-4 py-6">
                     <h1 className="text-3xl font-bold text-gray-900 mb-8">Profile Overview</h1>

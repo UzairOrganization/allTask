@@ -15,7 +15,7 @@ import axios from "axios"
 
 const MultiStepsForm = ({ questions, serviceProviders }) => {
     const navigation = useRouter()
-    const user = useSelector((state) => state.auth)
+    const { user } = useSelector((state) => state.auth)
     const [formData, setFormData] = useState({})
     const [step, setStep] = useState(1)
     const [loading, setLoading] = useState(true)
@@ -28,12 +28,12 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
     useEffect(() => {
         const storedProviders = JSON.parse(localStorage.getItem('availableProviders') || '[]');
         const storedCategoryHierarchy = JSON.parse(localStorage.getItem('categoryHierarchy') || '{}');
-
-
         setAvailableProviders(storedProviders);
         setCategoryHierarchy(storedCategoryHierarchy);
-    }, []);
 
+        console.log(user, "dsudsudhu");
+
+    }, []);
     useEffect(() => {
 
         // Check if the code is running on the client-side  
@@ -54,6 +54,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
                 const response = await axios.get(`${API}/api/leads/getFormConfig/${categoryHierarchy?.category}`)
                 if (response.data.success) {
                     setFormConfig(response.data.data)
+                    console.log(response.data.data);
                     setLoading(false)
                 } else {
                     console.error("Form configuration not found")
@@ -151,8 +152,9 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
             finalFormData.append("serviceTypeSubCategory", categoryHierarchy.subcategory);
             finalFormData.append("serviceTypeSubSubCategory", categoryHierarchy.subSubcategory);
 
-
-
+           
+            
+            // finalFormData.append("customer", user ? user._id : null)
 
             Object.keys(formData.customerDetails).forEach((key) => {
                 finalFormData.append(`customerDetails.${key}`, formData.customerDetails[key]);

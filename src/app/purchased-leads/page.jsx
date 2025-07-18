@@ -62,6 +62,8 @@ export default function PurchasedLeadsPage() {
     }
 
     const renderServiceDetails = (serviceRequest, payment) => {
+       
+        
         if (!serviceRequest) return null;
         // Format purchased date consistently
         const formatPurchaseDate = (dateString) => {
@@ -93,7 +95,7 @@ export default function PurchasedLeadsPage() {
             'purchasedBy', 'isPurchased', 'purchasedPrice', "purchasedDate", "serviceTypeSubSubCategory", "serviceTypeSubCategory" // Now handled separately
         ]
         const handleStartConversation = async () => {
-            console.log(serviceRequest.customer, "dsud");
+            
             try {
                 const result = await axios.post(
                     `${API}/api/conversations`,

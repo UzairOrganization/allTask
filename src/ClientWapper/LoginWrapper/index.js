@@ -148,7 +148,7 @@ const LoginWrapper = () => {
 
                         {/* Terms Notice */}
                         <p className="mt-6 text-xs text-gray-500 text-center">
-                            By clicking Continue with Facebook, or Google you agree to the
+                            By clicking Continue with Google you agree to the
                             <a href="#" className="underline"> Terms of Use</a> and
                             <a href="#" className="underline"> Privacy Policy</a>.
                             We&apos;ll keep you logged in.

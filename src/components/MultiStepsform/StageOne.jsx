@@ -19,11 +19,20 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
     useEffect(() => {
         if (formConfig) {
             const requiredQuestions = formConfig.questions.filter(q => q.required);
+
+
             const allAnswered = requiredQuestions.every(q => answers[q.fieldName]);
+
             setAllQuestionsAnswered(allAnswered);
+
+
         }
     }, [answers, formConfig]);
-
+    useEffect(() => {
+        if (formSubmitted) {
+            next()
+        }
+    }, [formSubmitted, next])
     const handleAnswerChange = (fieldName, value) => {
         setAnswers((prev) => ({
             ...prev,
@@ -65,20 +74,20 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
         e.preventDefault();
 
         const transformedQuestions = formConfig.questions.map(q => ({
-            questionText: q.questionText, // or q.label if that's what you're using
+            questionText: q.questionText,
             answer: answers[q.fieldName] ?? (q.fieldType === 'checkbox' ? [] : ""),
         }));
 
-        // Append to FormData (for actual submission)
+        // console.log(transformedQuestions);
+
         finalFormData.append("questions", JSON.stringify(transformedQuestions));
-        // ✅ Update local formData state so StageFive can access it
-        setFormData({
-            questions: transformedQuestions
-        });
 
+        setFormData({ questions: transformedQuestions });
 
-        setFormSubmitted(true); // ensure "Continue to Next Step" shows
+        setFormSubmitted(true);
+
     };
+
 
     if (!formConfig) {
         return <div className="text-center">Loading...</div>;
@@ -140,8 +149,9 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
                                 )}
 
                                 {currentQuestion.fieldType === "text" && (
-                                    <Input
+                                    <input
                                         type="text"
+                                        required
                                         id={currentQuestion.fieldName}
                                         name={currentQuestion.fieldName}
                                         placeholder={currentQuestion.placeholder}
@@ -204,28 +214,13 @@ const StageOne = ({ finalFormData, formConfig, next, back, setFormData }) => {
                                     type="submit"
                                     disabled={!allQuestionsAnswered}
                                     className="px-4 py-2 text-sm bg-[#00725A] hover:bg-[#00634A] text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
-                                    onClick={() => {
-                                        setFormSubmitted(true)
-                                        next()
-                                    }}
+
                                 >
                                     Continue to Next Step
                                 </Button>
                             )}
                         </div>
                     </form>
-
-                    {/* Main Next button appears after form submission */}
-                    {/* {formSubmitted && (
-                        <div className="mt-6 flex justify-end">
-                            <Button
-                                onClick={next}
-                                className="px-6 py-3 text-sm bg-[#00725A] hover:bg-[#00634A] text-white"
-                            >
-                                Continue to Next Step
-                            </Button>
-                        </div>
-                    )} */}
                 </CardContent>
             </Card>
 
