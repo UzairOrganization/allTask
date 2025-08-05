@@ -1,6 +1,6 @@
 const NODE_ENV = "production"
 
-export const API = "https://api.alltasko.com"
+export const API = "https://staging.alltasko.com"
 
 import axios from "axios"
 import { notFound } from "next/navigation"

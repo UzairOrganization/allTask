@@ -39,6 +39,8 @@ import { useDispatch } from "react-redux";
 import { checkProviderAuthStatus } from "@/redux/slices/authSlice";
 import PDFUpload from "@/components/PDFUpload/PDFUpload";
 import { loadStripe } from '@stripe/stripe-js';
+import PurchasedLeadsPage from "@/ClientWapper/PurchasedLeadsWrapper";
+import PurchasedLeads from "@/components/PurchasedLeads";
 const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibFbf1ijemDQ1TkHwjsb5oJ2AG3ePLAi8Np9FLNZsmz4N2CA4sKEhn00vHNOmlYC");
 // FileUpload component
 const FileUpload = ({ onFileUpload, accept, uploading }) => {
@@ -207,6 +209,7 @@ export function ProfessionalOnboarding() {
                 state: provider.state || "",
                 city: provider.city || "",
                 postalCode: provider.postalCode || "",
+                externalLink: provider.externalLink || "",
                 verificationDocument: provider.verificationDocument || null,
             });
             setRejectionReason(provider.reasonOfRejection || "");
@@ -264,7 +267,7 @@ export function ProfessionalOnboarding() {
         e.preventDefault();
         setProfileUpdateing(true)
         try {
-            const response = await axios.put(`${API}/api/service-provider/update-provider-profile`, { about: formData.about }, { withCredentials: true });
+            const response = await axios.put(`${API}/api/service-provider/update-provider-profile`, { name: formData.name, about: formData.about, contactInfo: formData.contactInfo, postalCode: formData.postalCode, externalLink: formData.externalLink }, { withCredentials: true });
 
             if (response.status === 200) {
                 setFormData(prev => ({
@@ -277,6 +280,8 @@ export function ProfessionalOnboarding() {
                     duration: 3000,
                     position: "bottom-left",
                 })
+
+                window.location.reload()
             } else {
                 throw new Error('update failed');
 
@@ -561,14 +566,14 @@ export function ProfessionalOnboarding() {
                                                         </div>
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <Label htmlFor="name">Full Name</Label>
+                                                        <Label htmlFor="name">Full Name or Company Name</Label>
                                                         <Input
                                                             id="name"
                                                             name="name"
                                                             value={formData.name}
                                                             onChange={handleInputChange}
                                                             required
-                                                            disabled
+                                                        // disabled
                                                         />
                                                     </div>
 
@@ -582,6 +587,20 @@ export function ProfessionalOnboarding() {
                                                             onChange={handleInputChange}
                                                             required
                                                             disabled
+                                                        />
+                                                    </div>
+
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="email">External Link</Label>
+                                                        <Input
+                                                            id="externalLink"
+                                                            name="externalLink"
+                                                            type="text"
+                                                            value={formData.externalLink}
+                                                            placeholder="External Link (Website or Social Media)"
+                                                            onChange={handleInputChange}
+                                                        // required
+                                                        // disabled
                                                         />
                                                     </div>
 
@@ -728,8 +747,11 @@ export function ProfessionalOnboarding() {
                                     <CardHeader className="border-b border-green-200 bg-green-100/50">
                                         <div className="flex justify-between items-center">
                                             <h2 className="text-xl font-semibold text-gray-800">PROFESSIONAL PLUS</h2>
-                                            <Badge variant="outline" className="border-green-600 text-green-600">
-                                                RECOMMENDED
+                                            <Badge className="bg-green-800 text-white hover:bg-green-900">
+                                                <div className="flex items-center gap-1">
+                                                    <Crown className="h-4 w-4 fill-yellow-300 text-yellow-300" />
+                                                    <span>PLATFORM CHOICE</span>
+                                                </div>
                                             </Badge>
                                         </div>
                                     </CardHeader>
@@ -776,22 +798,14 @@ export function ProfessionalOnboarding() {
                         <ServicesContainer />
 
                         {/* Response Rate */}
-                        {/* <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">
+                        <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">
                             <CardHeader className="border-b border-gray-200">
-                                <h2 className="text-xl font-semibold text-gray-800">Response Rate</h2>
+                                <h2 className="text-xl font-semibold text-gray-800">Purchased Leads</h2>
                             </CardHeader>
                             <CardContent className="p-6">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                    <div>
-                                        <p className="text-gray-600">Estimated 87 leads per day</p>
-                                        <p className="text-gray-700">You haven't responded to any leads yet.</p>
-                                    </div>
-                                    <Button variant="outline" className="border-green-700 text-green-700">
-                                        View responses
-                                    </Button>
-                                </div>
+                                <PurchasedLeads />
                             </CardContent>
-                        </Card> */}
+                        </Card>
                     </div>
                 </div>
             </div>

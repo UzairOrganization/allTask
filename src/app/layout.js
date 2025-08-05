@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/ThemeProvide/ThemeProvider";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 import AuthProvider from "@/redux/authProvider";
+import AppProviders from "@/lib/AppProvider";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

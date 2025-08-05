@@ -24,7 +24,8 @@ import {
     AlertCircle, CheckCircle2, XCircle, PauseCircle,
     Loader2,
     Eye,
-    Info
+    Info,
+    Link
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
@@ -174,7 +175,21 @@ export default function ProfessionalProfile({ name }) {
                                     <MapPin className="w-4 h-4 mr-1" />
                                     {[professional?.city, professional?.state, professional?.country].filter(Boolean).join(', ') || 'Location not specified'}
                                 </div>
+
                             </div>
+                            {professional?.externalLink && (
+                                <div className="flex items-center gap-2 mt-2">
+                                    <div className="flex items-center">
+                                        <Link className="w-5 h-5" />
+                                        {/* <span className="ml-1 font-medium">{avgRating.toFixed(1)}</span> */}
+                                        <a href={professional.externalLink} target="_blank" className="text-blue-600">
+                                            <span className="ml-1 text-blue-600">
+                                                {professional.externalLink}
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="flex gap-2">

@@ -1,14 +1,16 @@
+import ProfessionalChatPage from "@/ClientWapper/ProfessionalChatPageWrapper"
 import ProfessionalHeader from "@/components/Professionals/ProfessionalHeader"
-import ChatPage from "./ChatApp"
+
+
 
 export const metadata = {
-    title: "Chat Responses - Alltasko"
+    title: "Professional Chats - Alltasko"
 }
 const page = () => {
     return (
         <>
             <ProfessionalHeader />
-            <ChatPage />
+            <ProfessionalChatPage />
         </>
     )
 }

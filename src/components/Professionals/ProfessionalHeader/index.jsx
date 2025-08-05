@@ -21,6 +21,7 @@ import { logoutUser, professionalLogout } from "@/redux/slices/authSlice";
 import { useRouter } from 'next/navigation'
 import { API } from "@/lib/data-service";
 import axios from 'axios';
+import { NotificationDropdownForProvider } from "@/components/ProviderNotifications";
 const ProfessionalHeader = () => {
   const pathname = usePathname();
   const { provider } = useSelector(state => state.auth);
@@ -73,7 +74,7 @@ const ProfessionalHeader = () => {
               </Link>
             </div>
           ))}
-
+          <NotificationDropdownForProvider />
           {/* Profile Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -93,6 +94,7 @@ const ProfessionalHeader = () => {
                 </Avatar>
               </button>
             </DropdownMenuTrigger>
+
             <DropdownMenuContent className="w-56 mt-2 shadow-lg rounded-md border border-gray-200">
               <Link href={`/professional/${provider?.name}`}>
                 <DropdownMenuItem className="flex items-center gap-3 p-3 hover:bg-green-50 cursor-pointer">
@@ -128,22 +130,23 @@ const ProfessionalHeader = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
-          <div className="container mx-auto px-4 py-3 flex flex-col">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`py-3 px-2 text-lg font-medium border-b border-gray-100 ${pathname === item.href ? "text-green-700" : "text-gray-800"
-                  }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
+      {
+        isMobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-200">
+            <div className="container mx-auto px-4 py-3 flex flex-col">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`py-3 px-2 text-lg font-medium border-b border-gray-100 ${pathname === item.href ? "text-green-700" : "text-gray-800"
+                    }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
 
-            {/* <div className="py-3 px-2 flex items-center gap-3 border-b border-gray-100">
+              {/* <div className="py-3 px-2 flex items-center gap-3 border-b border-gray-100">
               <Avatar className="h-10 w-10 border-2 border-green-700">
                 {provider?.profilePicture ? (
                   <AvatarImage src={provider.profilePicture} alt="Profile" />
@@ -160,61 +163,62 @@ const ProfessionalHeader = () => {
               <span className="font-medium">My Account</span>
             </div> */}
 
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="my-account">
-                <AccordionTrigger className="py-3 px-2 flex items-center gap-3 border-b border-gray-100">
-                  <Avatar className="h-10 w-10 border-2 border-green-700">
-                    {provider?.profilePicture ? (
-                      <AvatarImage src={provider.profilePicture} alt="Profile" />
-                    ) : (
-                      <AvatarFallback className="bg-green-100 text-green-700 font-medium">
-                        {provider?.name ? (
-                          provider.name.charAt(0).toUpperCase()
-                        ) : (
-                          <User className="h-5 w-5" />
-                        )}
-                      </AvatarFallback>
-                    )}
-                  </Avatar>
-                  <span className="font-medium text-left w-full ">My Account</span>
-                </AccordionTrigger>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="my-account">
+                  <AccordionTrigger className="py-3 px-2 flex items-center gap-3 border-b border-gray-100">
+                    <Avatar className="h-10 w-10 border-2 border-green-700">
+                      {provider?.profilePicture ? (
+                        <AvatarImage src={provider.profilePicture} alt="Profile" />
+                      ) : (
+                        <AvatarFallback className="bg-green-100 text-green-700 font-medium">
+                          {provider?.name ? (
+                            provider.name.charAt(0).toUpperCase()
+                          ) : (
+                            <User className="h-5 w-5" />
+                          )}
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    <span className="font-medium text-left w-full ">My Account</span>
+                  </AccordionTrigger>
 
-                <AccordionContent className="py-3 px-2 flex flex-col gap-2">
-                  <Link
-                    href="#"
-                    className="flex items-center gap-3 py-2 text-gray-800 hover:text-green-700"
-                  >
-                    <User className="h-5 w-5" />
-                    <span>View public profile</span>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-3 py-2 text-gray-800 hover:text-green-700"
-                  >
-                    <Backpack className="h-5 w-5" />
-                    <span>Purchased Leads</span>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-3 py-2 text-gray-800 hover:text-green-700"
-                  >
-                    <Smartphone className="h-5 w-5" />
-                    <span>Alltasko App</span>
-                  </Link>
-                  <div
-                    onClick={logoutHandler}
-                    className="flex items-center gap-3 py-2 text-red-600 hover:text-red-700"
-                  >
-                    <LogOut className="h-5 w-5" />
-                    <span>Logout</span>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                  <AccordionContent className="py-3 px-2 flex flex-col gap-2">
+                    <Link
+                      href="#"
+                      className="flex items-center gap-3 py-2 text-gray-800 hover:text-green-700"
+                    >
+                      <User className="h-5 w-5" />
+                      <span>View public profile</span>
+                    </Link>
+                    <Link
+                      href="#"
+                      className="flex items-center gap-3 py-2 text-gray-800 hover:text-green-700"
+                    >
+                      <Backpack className="h-5 w-5" />
+                      <span>Purchased Leads</span>
+                    </Link>
+                    <Link
+                      href="#"
+                      className="flex items-center gap-3 py-2 text-gray-800 hover:text-green-700"
+                    >
+                      <Smartphone className="h-5 w-5" />
+                      <span>Alltasko App</span>
+                    </Link>
+                    <div
+                      onClick={logoutHandler}
+                      className="flex items-center gap-3 py-2 text-red-600 hover:text-red-700"
+                    >
+                      <LogOut className="h-5 w-5" />
+                      <span>Logout</span>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
           </div>
-        </div>
-      )}
-    </header>
+        )
+      }
+    </header >
   )
 }
 

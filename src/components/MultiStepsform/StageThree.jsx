@@ -17,7 +17,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
         address: '',
         zipCode: '',
         phoneNo: '',
-        contactPreference: ''
+        // contactPreference: ''
     });
     const [isLoading, setIsLoading] = useState(true);
     const [isFormValid, setIsFormValid] = useState(false);
@@ -31,7 +31,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
                 address: user.address || '',
                 zipCode: user.zipCode || '',
                 phoneNo: user.phoneNo || '',
-                contactPreference: user.contactPreference || ''
+                // contactPreference: user.contactPreference || ''
             });
         }
         setIsLoading(false);
@@ -45,8 +45,8 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
             customerDetails.email &&
             customerDetails.address &&
             customerDetails.zipCode &&
-            customerDetails.phoneNo &&
-            customerDetails.contactPreference
+            customerDetails.phoneNo
+            // customerDetails.contactPreference
         );
         setIsFormValid(isValid);
     }, [customerDetails]);
@@ -78,7 +78,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
         finalFormData.append("customerDetails[address]", customerDetails.address)
         finalFormData.append("customerDetails[zipCode]", customerDetails.zipCode)
         finalFormData.append('customerDetails[phoneNo]', customerDetails.phoneNo)
-        finalFormData.append("customerDetails[contactPreference]", customerDetails.contactPreference)
+        // finalFormData.append("customerDetails[contactPreference]", customerDetails.contactPreference)-
         isAuthenticated && finalFormData.append("customer", user._id)
         setFormData(updatedFormData)
         next();
@@ -186,7 +186,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
                             </div>
 
                             {/* Contact Preference */}
-                            <div className="space-y-2">
+                            {/* <div className="space-y-2">
                                 <Label htmlFor="contactPreference" className="flex items-center gap-2">
                                     <Phone className="h-4 w-4 text-[#00725A]" />
                                     Preferred Contact Method
@@ -211,7 +211,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
                                         <SelectItem value="Email">Email</SelectItem>
                                     </SelectContent>
                                 </Select>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* Navigation buttons */}

@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/dialog"
 import { logoutUser } from "@/redux/slices/authSlice";
 import { Button } from "../ui/button";
+import { NotificationDropdown } from "../Notification";
 
 export default function Header() {
     const [open, setOpen] = useState(false);
@@ -84,10 +85,11 @@ export default function Header() {
                             </div>
 
                             <div className="border p-1 rounded-full">
-                                <Avatar className="cursor-pointer p-1">
+                                {/* <Avatar className="cursor-pointer p-1">
                                     <AvatarImage src="/assets/images/notification.png" alt="notifications" />
                                     <AvatarFallback>CN</AvatarFallback>
-                                </Avatar>
+                                </Avatar> */}
+                                <NotificationDropdown />
                             </div>
 
                             <div className="flex">
