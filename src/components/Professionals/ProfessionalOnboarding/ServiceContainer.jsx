@@ -20,7 +20,7 @@ import { API } from "@/lib/data-service"
 import { checkProviderAuthStatus } from "@/redux/slices/authSlice"
 import Link from "next/link"
 
-export function ServicesContainer() {
+export function ServicesContainer({ isNewRegistration }) {
     const dispatch = useDispatch()
     const { provider } = useSelector(state => state.auth)
     const [openAddDialog, setOpenAddDialog] = useState(false)
@@ -34,6 +34,7 @@ export function ServicesContainer() {
         serviceRadius: '120',
         postalCode: ''
     })
+    const [hasProcessedRegistration, setHasProcessedRegistration] = useState(false)
 
     // Initialize form data after mount
     useEffect(() => {
@@ -52,7 +53,6 @@ export function ServicesContainer() {
                 setCategoriesLoading(true)
                 const response = await axios.get(`${API}/api/category/categories`)
                 setCategories(response.data || [])
-                
             } catch (error) {
                 toast.error("Failed to fetch categories")
                 setCategories([])
@@ -63,21 +63,50 @@ export function ServicesContainer() {
         fetchCategories()
     }, [])
 
+    // Handle new registration logic
+    useEffect(() => {
+        if (isNewRegistration && !hasProcessedRegistration && provider?.selectedCategories?.length > 0) {
+            const processAutoEstimations = async () => {
+                try {
+                    // Process each category sequentially to avoid rate limiting
+                    for (const item of provider.selectedCategories) {
+                        try {
+                            await axios.post(
+                                `${API}/api/cost-estimator/auto-estimation-by-service/${item.category}`,
+                                {},
+                                { withCredentials: true }
+                            )
+                        } catch (error) {
+                            console.error(`Failed to process auto-estimation for ${item.category}:`, error)
+                            // Continue with next category even if one fails
+                        }
+                    }
+                    toast.success("Auto-estimation completed for your services")
+                } catch (error) {
+                    console.error("Error during auto-estimation process:", error)
+                    toast.error("Some auto-estimations may have failed")
+                } finally {
+                    setHasProcessedRegistration(true)
+                }
+            }
+
+            processAutoEstimations()
+        }
+    }, [isNewRegistration, provider?.selectedCategories, hasProcessedRegistration])
+
     const handleAddService = async () => {
         if (!formData.category) {
             toast.error("Please select a category");
             return;
         }
 
-        // Validate required fields
         if (!formData.postalCode || !formData.serviceRadius) {
             toast.error("Please fill in all required fields (Postal Code and Service Radius)");
             return;
         }
 
-        // Convert serviceRadius to number
         const serviceRadius = Number(formData.serviceRadius) || 120;
-        const postalCode = formData.postalCode || provider.postalCode
+        const postalCode = formData.postalCode || provider.postalCode;
 
         try {
             setLoading(true);
@@ -98,15 +127,38 @@ export function ServicesContainer() {
 
             toast.promise(promise, {
                 loading: 'Adding service...',
-                success: () => {
+                success: async () => {
+                    // First reset the form and update auth status
                     setOpenAddDialog(false);
-                    // Reset form after successful submission
                     setFormData({
                         category: '',
                         serviceRadius: '120',
                         postalCode: provider?.postalCode || ''
                     });
-                    dispatch(checkProviderAuthStatus())
+
+                    // Dispatch to update the provider state
+                    await dispatch(checkProviderAuthStatus());
+
+                    // Then call the auto-estimation API for the newly added service
+                    try {
+                        const estimationPromise = axios.post(
+                            `${API}/api/cost-estimator/auto-estimation-by-service/${formData.category}`,
+                            {},
+                            { withCredentials: true }
+                        );
+
+                        toast.promise(estimationPromise, {
+                            loading: 'Calculating estimated costs...',
+                            success: 'Cost estimation completed for the new service',
+                            error: 'Cost estimation failed (you can set prices manually)'
+                        });
+
+                        await estimationPromise;
+                    } catch (estimationError) {
+                        console.error("Auto-estimation failed:", estimationError);
+                        // Don't reject the main promise - this is a secondary operation
+                    }
+
                     return "Service added successfully";
                 },
                 error: (error) => {
@@ -152,7 +204,6 @@ export function ServicesContainer() {
                             </DialogHeader>
 
                             <div className="space-y-6 py-4">
-                                {/* Category Selection */}
                                 <div className="space-y-2">
                                     <Label>Service Category</Label>
                                     {categoriesLoading ? (
@@ -173,7 +224,6 @@ export function ServicesContainer() {
                                     )}
                                 </div>
 
-                                {/* Service Radius */}
                                 <div className="space-y-2">
                                     <Label>Service Radius (miles)</Label>
                                     <Input
@@ -184,7 +234,6 @@ export function ServicesContainer() {
                                     />
                                 </div>
 
-                                {/* Postal Code */}
                                 <div className="space-y-2">
                                     <Label>Postal Code</Label>
                                     <Input
@@ -281,8 +330,7 @@ export function ServicesContainer() {
                                                 </DialogContent>
                                             </Dialog>
                                             <div>
-                                                {/* <Pen color="black" size={18}/> */}
-                                                <Button>
+                                                <Button asChild>
                                                     <Link href={`/estimated-price/${category.category}`}>
                                                         Estimated Cost
                                                     </Link>

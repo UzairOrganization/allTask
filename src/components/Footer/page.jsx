@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <>
@@ -17,22 +19,22 @@ export default function Footer() {
                   <div className="widget-content">
                     <ul className="links-list clearfix">
                       <li>
-                        <a href="service.html">About</a>
+                        <Link href="/about">About</Link>
                       </li>
                       <li>
-                        <a href="team.html">Partner with us</a>
+                        <Link href="/partner-with-us">Partner with us</Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <a href="index.html">For Developers</a>
+                      </li> */}
+                      <li>
+                        <Link href="/careers">Careers</Link>
                       </li>
                       <li>
-                        <a href="contact.html">Careers</a>
+                        <Link href="/press">Press</Link>
                       </li>
                       <li>
-                        <a href="contact.html">Press</a>
-                      </li>
-                      <li>
-                        <a href="contact.html">Blogs</a>
+                        <Link href="blogs">Blogs</Link>
                       </li>
                     </ul>
                   </div>
@@ -67,29 +69,24 @@ export default function Footer() {
                   </div>
                   <div className="widget-content">
                     <ul className="links-list clearfix">
-                     
+
                       <li>
-                        <a href="how-to-use.html">How to use Alltasko</a>
+                        <Link href="how-to-use-alltasko">How to use Alltasko</Link>
                       </li>
                       <li>
-                        <a href="signup.html">Sign up</a>
+                        <Link href="register-email">Sign up</Link>
+                      </li>
+
+                      <li>
+                        <Link href="cost-estimate">Cost estimates</Link>
                       </li>
                       <li>
-                        <a href="get-the-app.html">Get the app</a>
+                        <Link href="home-resource-center">Home resource center</Link>
                       </li>
                       <li>
-                        <a href="services-near-me.html">Services near me</a>
-                      </li>
-                      <li>
-                        <a href="cost-estimates.html">Cost estimates</a>
-                      </li>
-                      <li>
-                        <a href="home-resource.html">Home resource center</a>
-                      </li>
-                      <li>
-                        <a href="home-inspiration.html">
-                          Home inspiration pictures
-                        </a>
+                        <Link href="user-requests">
+                          Track My Leads
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -103,22 +100,17 @@ export default function Footer() {
 
                   <div className="widget-content">
                     <ul className="links-list clearfix">
-                     
+
                       <li>
-                        <a href="pros.html">Alltasko for pros</a>
+                        <Link href="/alltasko-for-pros">Alltasko for pros</Link>
                       </li>
                       <li>
-                        <a href="signup-pro.html">Sign up as a pro</a>
+                        <Link href="register-professional">Sign up as a pro</Link>
                       </li>
                       <li>
-                        <a href="community.html">Community</a>
+                        <Link href="/forums">Community</Link>
                       </li>
-                      <li>
-                        <a href="resources.html">Pro Resources</a>
-                      </li>
-                      <li>
-                        <a href="reviews.html">Pro reviews</a>
-                      </li>
+
                       <li>
                         <a href="iphone-app.html">iPhone app for pros</a>
                       </li>
@@ -137,27 +129,23 @@ export default function Footer() {
 
                   <div className="widget-content">
                     <ul className="links-list clearfix">
-                     
+
                       <li>
-                        <a href="help.html">Help</a>
+                        <Link href="help-center">Help</Link>
                       </li>
                       <li>
-                        <a href="safety.html">Safety</a>
+                        <Link href="safety">Safety</Link>
                       </li>
                       <li>
-                        <a href="terms.html">Terms of Use</a>
+                        <Link href="terms-of-use">Terms of Use</Link>
                       </li>
                       <li>
-                        <a href="privacy.html">Privacy Policy</a>
+                        <Link href="privacy-policy">Privacy Policy</Link>
                       </li>
                       <li>
-                        <a href="ca-notice.html">CA Notice at Collection</a>
+                        <Link href="how-we-use-your-data">How We Use Your Data</Link>
                       </li>
-                      <li>
-                        <a href="do-not-sell.html">
-                          Do not Sell or Share My Personal Information
-                        </a>
-                      </li>
+
                     </ul>
                   </div>
                 </div>
@@ -166,7 +154,7 @@ export default function Footer() {
           </div>
           <div className="footer-bottom centred">
             <div className="copyright">
-              <p style={{color:"gray"}}>
+              <p style={{ color: "gray" }}>
                 Copyright &copy; 2025 All rights reserved. Designed & Developed
                 by Technovativelab
               </p>

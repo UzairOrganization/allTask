@@ -209,7 +209,7 @@ const RegisterProfessionalWrapper = () => {
                 });
                 dispatch(checkProviderAuthStatus())
                 setStateLoading(false)
-                router.push("/professional-dashboard");
+                router.push("/professional-dashboard?isNewRegistration=true");
             }
         } catch (error) {
             setStateLoading(false)

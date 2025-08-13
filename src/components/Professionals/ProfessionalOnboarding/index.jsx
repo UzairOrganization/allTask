@@ -15,6 +15,7 @@ import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ServicesContainer } from "./ServiceContainer";
+import { useSearchParams } from 'next/navigation';
 import {
     Dialog,
     DialogContent,
@@ -46,6 +47,7 @@ const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibF
 const FileUpload = ({ onFileUpload, accept, uploading }) => {
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
+
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -115,6 +117,9 @@ const FileUpload = ({ onFileUpload, accept, uploading }) => {
 };
 
 export function ProfessionalOnboarding() {
+    const searchParams = useSearchParams()
+    const params = searchParams.get('isNewRegistration')
+    const isNewRegistration = params == 'true'
     const [dateTime, setDateTime] = useState("");
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { provider } = useSelector(state => state.auth);
@@ -795,7 +800,7 @@ export function ProfessionalOnboarding() {
                         }
 
                         {/* Services Section */}
-                        <ServicesContainer />
+                        <ServicesContainer isNewRegistration={isNewRegistration} />
 
                         {/* Response Rate */}
                         <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">

@@ -56,6 +56,7 @@ export default function ServiceSelectionForm() {
                     const existingSubServicesMap = new Map(
                         estimationResponse.data.subServices.map(item => [item.name, item])
                     );
+                    console.log(existingSubServicesMap, "dsds");
 
                     setSubServices(
                         serviceResponse.subServices.map(sub => ({
@@ -145,10 +146,10 @@ export default function ServiceSelectionForm() {
             <div className="flex items-center justify-center h-screen">
                 <Card className="w-full max-w-md border-green-700">
                     <CardHeader>
-                        <CardTitle className="text-green-700">Error</CardTitle>
+                        <CardTitle className="text-green-700">No Service available for estimation</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-red-500">{error}</p>
+                        <p className="text-black">This Service has no Sub-Categories for estimation.</p>
                     </CardContent>
                 </Card>
             </div>

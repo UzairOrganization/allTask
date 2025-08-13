@@ -19,7 +19,7 @@ export async function middleware(req) {
         const isAuthPage = authPages.includes(req.nextUrl.pathname);
 
         const userRoutes = [
-            '/about', '/user-profile', '/user-requests', '/user-chat',
+            '/user-profile', '/user-requests', '/user-chat',
         ];
 
         const providerRoutes = [
@@ -29,10 +29,13 @@ export async function middleware(req) {
             '/purchased-leads',
             '/forums',
             '/new-forum'
+
         ];
 
         const isUserRoute = userRoutes.some(route => req.nextUrl.pathname.startsWith(route));
-        const isProviderRoute = providerRoutes.some(route => req.nextUrl.pathname.startsWith(route));
+        const isProviderRoute = providerRoutes.some(route =>
+            req.nextUrl.pathname === route || req.nextUrl.pathname.startsWith(`${route}/`)
+        );
         const isRoot = req.nextUrl.pathname === '/';
 
         // Redirect if no token and trying to access protected route
@@ -55,7 +58,7 @@ export async function middleware(req) {
                         withCredentials: true,  // Ensure cookies are sent in the request
                     });
                     isUserValid = userRes.data?.valid || false;
-                } catch (error) { 
+                } catch (error) {
                     console.error("User validation error:", error.message);
                 }
 
@@ -68,7 +71,7 @@ export async function middleware(req) {
                         withCredentials: true,  // Ensure cookies are sent in the request
                     });
                     isProviderValid = providerRes.data?.valid || false;
-                } catch (error) { 
+                } catch (error) {
                     console.error("Provider validation error:", error.message);
                 }
 
