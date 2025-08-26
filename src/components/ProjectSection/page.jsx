@@ -176,16 +176,22 @@ export default function ProjectSection() {
                 >
                   {gallery.map((imageUrl, index) => (
                     <SwiperSlide key={index}>
-                      <div className="relative group rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                        <img
+                      <div className="relative border-2 w-[350px] h-[250px] group rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300" style={{
+                        backgroundImage: `url(${imageUrl})`,
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                      }} >
+                        {/* <img
                           src={imageUrl}
                           alt={`Project gallery ${index + 1}`}
-                          className="w-full h-84 md:h-96 object-cover transform group-hover:scale-105 transition-transform duration-500"
-                        />
+                          className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                        /> */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                          <span className="text-white font-medium text-lg">Image {index + 1}</span>
+                          {/* <span className="text-white font-medium text-lg">Image {index + 1}</span> */}
                         </div>
                       </div>
+
                     </SwiperSlide>
                   ))}
 

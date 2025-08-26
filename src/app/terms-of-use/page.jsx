@@ -6,7 +6,11 @@ import Footer from "@/components/Footer/page";
 import "@/assets/css/homepage.css"
 import "../globals.css"
 export const metadata = {
-    title: "Terms of Use - Alltasko"
+    title: "Terms of Use - Alltasko",
+    icons: {
+        icon: "/assets/images/resource/jpeg-03.ico",
+        shortcut: "/assets/images/resource/jpeg-03.ico",
+    },
 }
 
 export default function TermsOfUsePage() {

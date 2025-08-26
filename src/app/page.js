@@ -17,8 +17,8 @@ import "./globals.css"
 export const metadata = {
   title: "AllTasko",
   icons: {
-    icon: "/assets/imgs/logo/logo.ico",
-    shortcut: "/assets/imgs/favicon.ico",
+    icon: "/assets/images/resource/jpeg-03.ico",
+    shortcut: "/assets/images/resource/jpeg-03.ico",
   },
 };
 export default function Home() {

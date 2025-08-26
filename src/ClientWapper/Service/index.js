@@ -43,7 +43,7 @@ const CustomNotFound = () => (
 );
 
 
-const BookingDialog = ({ triggerText, categoryName }) => {
+export const BookingDialog = ({ triggerText, categoryName }) => {
     const [zipCode, setZipCode] = useState('');
     const router = useRouter();
     const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const BookingDialog = ({ triggerText, categoryName }) => {
                 }
                 router.push("/service-request");
             } catch (err) {
-                toast.error('Error fetching service providers', {
+                toast.error('Error fetching service professionals', {
                     position: 'top-center',
                     duration: 3000,
                     style: { color: "red" }

@@ -201,7 +201,7 @@ export default function page() {
     return (
         <>
             <AdminHeader />
-            <div className="container mx-auto py-8">
+            <div className="container mx-auto max-w-[80vw] py-8">
                 <Toaster position="bottom-left" richColors />
 
                 <Tabs defaultValue="categories" className="space-y-6">
