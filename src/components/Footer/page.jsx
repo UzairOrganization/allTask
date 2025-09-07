@@ -4,8 +4,8 @@ export default function Footer() {
   return (
     <>
       {/*<!-- main-footer --> */}
-      <footer className="main-footer">
-        <div className="auto-container">
+      <footer className="main-footer p-4">
+        <div className="auto-container ">
           <div className="widget-section">
             <div className="row clearfix">
               <div className="col-lg-3 col-md-6 col-sm-12 footer-column">

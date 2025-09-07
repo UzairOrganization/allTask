@@ -131,7 +131,7 @@ export default function BannerSection() {
                   <div className="search-container">
                     <div className="mainBar">
                       <span style={{ marginLeft: "8px" }}>
-                        <FaSearch size={25} />
+                        <FaSearch size={22} />
                       </span>
                       <input
                         type="text"
@@ -197,7 +197,7 @@ export default function BannerSection() {
 
                     </div>
                     <div className="postalBar">
-                      <span style={{ marginLeft: "2px" }}>
+                      <span style={{ marginLeft: "8px" }}>
                         <IoLocationSharp size={25} />
                       </span>
                       <input required type="text" placeholder="Zip Code" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="text-black" />

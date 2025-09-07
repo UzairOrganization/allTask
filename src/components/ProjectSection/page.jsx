@@ -75,7 +75,7 @@ export default function ProjectSection() {
     <>
       <section className="project-section">
         <div className="auto-container">
-          <div className="sec-title h2 centred" style={{ marginBottom: 20 }}>
+          <div className="sec-title h2 centred " style={{ marginBottom: 20 }}>
             <h2>
               Our Recent Projects
               <br />
@@ -99,7 +99,7 @@ export default function ProjectSection() {
                     </span>
                   </div>
                 ) : (
-                  <div className="flex flex-wrap items-center justify-center gap-8 w-[80%] m-auto">
+                  <div className="flex lg:flex-wrap items-center overflow-x-auto whitespace-nowrap scrollbar-hide lg:justify-center gap-8 w-[80%] m-auto">
                     {visibleTitles.map((project) => (
                       <div
                         key={project._id}
