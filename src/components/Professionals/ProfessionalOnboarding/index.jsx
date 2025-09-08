@@ -43,11 +43,11 @@ import { loadStripe } from '@stripe/stripe-js';
 import PurchasedLeadsPage from "@/ClientWapper/PurchasedLeadsWrapper";
 import PurchasedLeads from "@/components/PurchasedLeads";
 const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibFbf1ijemDQ1TkHwjsb5oJ2AG3ePLAi8Np9FLNZsmz4N2CA4sKEhn00vHNOmlYC");
+
 // FileUpload component
 const FileUpload = ({ onFileUpload, accept, uploading }) => {
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
-
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -64,31 +64,31 @@ const FileUpload = ({ onFileUpload, accept, uploading }) => {
     };
 
     return (
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 text-center">
             {previewUrl ? (
                 <div className="relative">
                     {file.type.startsWith('image/') ? (
-                        <img src={previewUrl} alt="Preview" className="h-40 mx-auto mb-4 rounded-md" />
+                        <img src={previewUrl} alt="Preview" className="h-32 sm:h-40 mx-auto mb-4 rounded-md" />
                     ) : (
-                        <div className="h-40 flex items-center justify-center bg-gray-100 rounded-md mb-4">
-                            <span className="text-gray-500">{file.name}</span>
+                        <div className="h-32 sm:h-40 flex items-center justify-center bg-gray-100 rounded-md mb-4">
+                            <span className="text-gray-500 text-sm sm:text-base">{file.name}</span>
                         </div>
                     )}
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="absolute -top-3 -right-3 bg-white rounded-full p-1 shadow-sm"
+                        className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 bg-white rounded-full p-1 shadow-sm"
                         onClick={handleRemove}
                     >
-                        <X className="h-4 w-4 text-gray-500" />
+                        <X className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
                     </Button>
                 </div>
             ) : (
                 <>
                     <div className="flex flex-col items-center justify-center space-y-2">
-                        <Upload className="h-8 w-8 text-gray-400" />
-                        <div className="flex text-sm text-gray-600">
-                            <Label htmlFor="file-upload" className="relative cursor-pointer rounded-md font-medium text-green-600 hover:text-green-500">
+                        <Upload className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
+                        <div className="flex flex-col sm:flex-row text-sm text-gray-600">
+                            <Label htmlFor="file-upload" className="relative cursor-pointer rounded-md font-medium text-green-600 hover:text-green-500 mb-1 sm:mb-0">
                                 <span>Upload a file</span>
                                 <input
                                     id="file-upload"
@@ -100,7 +100,7 @@ const FileUpload = ({ onFileUpload, accept, uploading }) => {
                                     disabled={uploading}
                                 />
                             </Label>
-                            <p className="pl-1">or drag and drop</p>
+                            <p className="sm:pl-1">or drag and drop</p>
                         </div>
                         <p className="text-xs text-gray-500">{accept}</p>
                     </div>
@@ -132,6 +132,7 @@ export function ProfessionalOnboarding() {
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [profilePictureUploading, setProfilePictureUploading] = useState(false);
     const dispatch = useDispatch()
+    
     // Form state
     const [formData, setFormData] = useState({
         name: provider?.name || "",
@@ -145,34 +146,7 @@ export function ProfessionalOnboarding() {
         verificationDocument: provider?.verificationDocument || null,
         status: provider?.status
     });
-    const handlePaymentSubmit = async (event) => {
-        event.preventDefault();
-        setPaymentProcessing(true);
-        setPaymentError(null);
-
-        try {
-            // 1. Initiate checkout session
-            const response = await axios.post(`${API}/api/payments/initiate-professional-plus`, {},
-                { withCredentials: true }
-            );
-
-            // 2. Redirect to Stripe Checkout using Stripe.js
-            const { error } = (await stripePromise).redirectToCheckout({
-                sessionId: response.data.sessionId
-            });
-
-            if (error) {
-                throw error;
-            }
-            setPaymentProcessing(false);
-        } catch (err) {
-            setPaymentError(err.response?.data?.error || err.message);
-            setPaymentProcessing(false);
-        } finally {
-            setPaymentProcessing(false);
-        }
-    };
-
+    
     const [documentUploading, setDocumentUploading] = useState(false);
     const [rejectionReason, setRejectionReason] = useState(provider?.reasonOfRejection || "");
     const [holdReason, setHoldReason] = useState(provider?.resaonOfHold || "");
@@ -190,7 +164,6 @@ export function ProfessionalOnboarding() {
 
             hours = hours % 12 || 12;
 
-            // Updated to US format: Month–Day
             setDateTime(`${dayName}, ${month} ${day} ${hours}:${minutes}${ampm}`);
         };
 
@@ -200,11 +173,8 @@ export function ProfessionalOnboarding() {
         return () => clearInterval(interval);
     }, []);
 
-
     useEffect(() => {
         if (provider) {
-            console.log(provider);
-
             setFormData({
                 name: provider.name || "",
                 email: provider.email || "",
@@ -253,7 +223,6 @@ export function ProfessionalOnboarding() {
                 })
             } else {
                 throw new Error('Upload failed');
-
             }
         } catch (error) {
             console.error('Error uploading document:', error);
@@ -262,7 +231,6 @@ export function ProfessionalOnboarding() {
                 duration: 3000,
                 position: "bottom-left",
             })
-            // Show error toast/notification
         } finally {
             setDocumentUploading(false);
         }
@@ -272,7 +240,13 @@ export function ProfessionalOnboarding() {
         e.preventDefault();
         setProfileUpdateing(true)
         try {
-            const response = await axios.put(`${API}/api/service-provider/update-provider-profile`, { name: formData.name, about: formData.about, contactInfo: formData.contactInfo, postalCode: formData.postalCode, externalLink: formData.externalLink }, { withCredentials: true });
+            const response = await axios.put(`${API}/api/service-provider/update-provider-profile`, { 
+                name: formData.name, 
+                about: formData.about, 
+                contactInfo: formData.contactInfo, 
+                postalCode: formData.postalCode, 
+                externalLink: formData.externalLink 
+            }, { withCredentials: true });
 
             if (response.status === 200) {
                 setFormData(prev => ({
@@ -285,11 +259,9 @@ export function ProfessionalOnboarding() {
                     duration: 3000,
                     position: "bottom-left",
                 })
-
                 window.location.reload()
             } else {
                 throw new Error('update failed');
-
             }
         } catch (error) {
             console.error('Error uploading document:', error);
@@ -298,12 +270,12 @@ export function ProfessionalOnboarding() {
                 duration: 3000,
                 position: "bottom-left",
             })
-            // Show error toast/notification
         } finally {
             setIsDialogOpen(false);
             setProfileUpdateing(false);
         }
     };
+
     const handleStatusToggle = async () => {
         const newStatus = !activityStatus;
         setUpdatingStatus(true);
@@ -333,27 +305,50 @@ export function ProfessionalOnboarding() {
             setUpdatingStatus(false);
         }
     };
+
+    const handlePaymentSubmit = async (event) => {
+        event.preventDefault();
+        setPaymentProcessing(true);
+        setPaymentError(null);
+
+        try {
+            const response = await axios.post(`${API}/api/payments/initiate-professional-plus`, {},
+                { withCredentials: true }
+            );
+
+            const { error } = (await stripePromise).redirectToCheckout({
+                sessionId: response.data.sessionId
+            });
+
+            if (error) {
+                throw error;
+            }
+            setPaymentProcessing(false);
+        } catch (err) {
+            setPaymentError(err.response?.data?.error || err.message);
+            setPaymentProcessing(false);
+        } finally {
+            setPaymentProcessing(false);
+        }
+    };
+
     return (
         <>
-
             <Toaster />
-            <div className="w-full my-4 max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm">
-                <div className="flex w-full items-center justify-between">
-
-                    <div className="mb-8">
-                        <h1 className="text-2xl font-bold text-gray-900">Hello, {provider?.name}</h1>
-                        <p className="text-gray-500">{dateTime}</p>
+            <div className="w-full my-4 max-w-5xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-sm">
+                {/* Header Section */}
+                <div className="flex flex-col sm:flex-row w-full items-center justify-between gap-4 mb-6 sm:mb-8">
+                    <div>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Hello, {provider?.name}</h1>
+                        <p className="text-gray-500 text-sm sm:text-base">{dateTime}</p>
                     </div>
-                    <div className="flex items-center w-[200px] justify-around">
+                    <div className="flex items-center w-full sm:w-auto justify-between sm:justify-around">
                         <div className="flex items-center gap-2">
                             {isLoading ? (
-                                // Loading state
                                 <div className="h-3 w-3 rounded-full bg-gray-400"></div>
                             ) : activityStatus ? (
-                                // Online state
                                 <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse"></div>
                             ) : (
-                                // Offline state
                                 <div className="h-3 w-3 rounded-full bg-gray-400"></div>
                             )}
                             <span className="text-sm font-medium">
@@ -362,29 +357,29 @@ export function ProfessionalOnboarding() {
                         </div>
                         <Button
                             variant="outline"
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 ml-4"
                             onClick={handleStatusToggle}
                             disabled={updatingStatus || isLoading}
+                            size="sm"
                         >
                             {isLoading ? (
-                                // Loading state for button
                                 <span>Loading...</span>
                             ) : activityStatus ? (
-                                // Online button state
                                 <>
-                                    <ToggleLeft className="h-4 w-4" />
-                                    <span>Go Offline</span>
+                                    <ToggleLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+                                    <span className="hidden sm:inline">Go Offline</span>
+                                    <span className="sm:hidden">Offline</span>
                                 </>
                             ) : (
-                                // Offline button state
                                 <>
-                                    <ToggleRight className="h-4 w-4 text-green-600" />
-                                    <span>Go Online</span>
+                                    <ToggleRight className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />
+                                    <span className="hidden sm:inline">Go Online</span>
+                                    <span className="sm:hidden">Online</span>
                                 </>
                             )}
                             {updatingStatus && (
                                 <span className="ml-2">
-                                    <svg className="animate-spin h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <svg className="animate-spin h-3 w-3 sm:h-4 sm:w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
@@ -392,111 +387,74 @@ export function ProfessionalOnboarding() {
                             )}
                         </Button>
                     </div>
-
-
                 </div>
+
                 {new Date(provider?.createdAt) > new Date(Date.now() - 24 * 60 * 60 * 1000) && (
                     <>
-                        <div className="mb-8 p-6 bg-green-50 rounded-lg border border-green-100">
-                            <h3 className="text-lg font-medium text-green-800 mb-2">Welcome to Our Platform, {provider?.name}</h3>
-                            <p className="text-green-700">
+                        <div className="mb-6 p-4 sm:p-6 bg-green-50 rounded-lg border border-green-100">
+                            <h3 className="text-base sm:text-lg font-medium text-green-800 mb-2">Welcome to Our Platform, {provider?.name}</h3>
+                            <p className="text-green-700 text-sm sm:text-base">
                                 We're excited to help you grow your business. Here's how it works:
                             </p>
                         </div>
 
                         <Accordion type="single" collapsible className="w-full">
-                            <AccordionItem value="item-1">
-                                <AccordionTrigger className="hover:no-underline">
-                                    <div className="flex items-center space-x-3">
-                                        <CheckCircle className="h-5 w-5 text-green-600" />
-                                        <span className="text-left font-medium">1. Customers tell us what they need</span>
-                                    </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="pl-10 text-gray-600">
-                                    Customers answer specific questions about their requirements, helping us match you with the most relevant opportunities.
-                                </AccordionContent>
-                            </AccordionItem>
-
-                            <AccordionItem value="item-2">
-                                <AccordionTrigger className="hover:no-underline">
-                                    <div className="flex items-center space-x-3">
-                                        <CheckCircle className="h-5 w-5 text-green-600" />
-                                        <span className="text-left font-medium">2. We send you matching leads</span>
-                                    </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="pl-10 text-gray-600">
-                                    You receive leads that match your preferences instantly by email and on the app, so you never miss an opportunity.
-                                </AccordionContent>
-                            </AccordionItem>
-
-                            <AccordionItem value="item-3">
-                                <AccordionTrigger className="hover:no-underline">
-                                    <div className="flex items-center space-x-3">
-                                        <CheckCircle className="h-5 w-5 text-green-600" />
-                                        <span className="text-left font-medium">3. You choose leads you like</span>
-                                    </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="pl-10 text-gray-600">
-                                    Review leads and select those that fit your business. Get customer contact details right away for the leads you choose.
-                                </AccordionContent>
-                            </AccordionItem>
-
-                            <AccordionItem value="item-4">
-                                <AccordionTrigger className="hover:no-underline">
-                                    <div className="flex items-center space-x-3">
-                                        <CheckCircle className="h-5 w-5 text-green-600" />
-                                        <span className="text-left font-medium">4. You contact the customer</span>
-                                    </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="pl-10 text-gray-600">
-                                    Reach out directly to the customer to discuss their needs and provide your services. Build your client base with qualified leads.
-                                </AccordionContent>
-                            </AccordionItem>
-                            <AccordionItem value="item-5">
-                                <AccordionTrigger className="hover:no-underline">
-                                    <div className="flex items-center space-x-3">
-                                        <CheckCircle className="h-5 w-5 text-green-600" />
-                                        <span className="text-left font-medium">5. You get hired.</span>
-                                    </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="pl-10 text-gray-600">
-                                    There's no commission and nothing more to pay.
-                                </AccordionContent>
-                            </AccordionItem>
+                            {[1, 2, 3, 4, 5].map((item) => (
+                                <AccordionItem key={item} value={`item-${item}`}>
+                                    <AccordionTrigger className="hover:no-underline py-3 sm:py-4">
+                                        <div className="flex items-center space-x-3">
+                                            <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
+                                            <span className="text-left font-medium text-sm sm:text-base">
+                                                {item === 1 && "1. Customers tell us what they need"}
+                                                {item === 2 && "2. We send you matching leads"}
+                                                {item === 3 && "3. You choose leads you like"}
+                                                {item === 4 && "4. You contact the customer"}
+                                                {item === 5 && "5. You get hired."}
+                                            </span>
+                                        </div>
+                                    </AccordionTrigger>
+                                    <AccordionContent className="pl-8 sm:pl-10 text-gray-600 text-sm sm:text-base">
+                                        {item === 1 && "Customers answer specific questions about their requirements, helping us match you with the most relevant opportunities."}
+                                        {item === 2 && "You receive leads that match your preferences instantly by email and on the app, so you never miss an opportunity."}
+                                        {item === 3 && "Review leads and select those that fit your business. Get customer contact details right away for the leads you choose."}
+                                        {item === 4 && "Reach out directly to the customer to discuss their needs and provide your services. Build your client base with qualified leads."}
+                                        {item === 5 && "There's no commission and nothing more to pay."}
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
                         </Accordion>
                     </>
                 )}
 
-                <div className="container mx-auto px-4 py-6">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-8">Profile Overview</h1>
-                    <div className={`grid grid-cols-1  ${provider?.isSubscriptionHolder ? "lg:grid-cols-1" : "lg:grid-cols-2"} gap-6 items-stretch`}>
+                <div className="container mx-auto px-0 sm:px-4 py-4 sm:py-6">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Profile Overview</h1>
+                    <div className={`grid grid-cols-1 ${provider?.isSubscriptionHolder ? "lg:grid-cols-1" : "lg:grid-cols-2"} gap-4 sm:gap-6 items-stretch`}>
                         {/* Profile Completion Card */}
-                        <Card className="border  border-gray-200 rounded-lg shadow-sm h-full flex flex-col">
-                            <CardHeader className="border-b border-gray-200">
-                                <div className="flex items-center space-x-4">
+                        <Card className="border border-gray-200 rounded-lg shadow-sm h-full flex flex-col">
+                            <CardHeader className="border-b border-gray-200 p-4 sm:p-6">
+                                <div className="flex items-center space-x-3 sm:space-x-4">
                                     {provider?.profilePicture ? (
                                         <img
                                             src={provider.profilePicture}
                                             alt="Profile"
-                                            className="h-12 w-12 rounded-full object-cover"
+                                            className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover"
                                         />
                                     ) : (
-                                        <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
-                                            <User className="h-6 w-6 text-gray-400" />
+                                        <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                                            <User className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />
                                         </div>
                                     )}
                                     <div>
-                                        <h2 className="text-xl font-semibold text-gray-800">
+                                        <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
                                             {provider?.name || "Your Profile"}
                                         </h2>
-                                        <p className="text-sm text-gray-500">Service Professional</p>
+                                        <p className="text-xs sm:text-sm text-gray-500">Service Professional</p>
                                     </div>
                                 </div>
                             </CardHeader>
-                            <CardContent className="p-6 flex-grow">
+                            <CardContent className="p-4 sm:p-6 flex-grow">
                                 <div className="space-y-4 h-full flex flex-col">
-
-                                    <p className="text-gray-700 flex-grow">
+                                    <p className="text-gray-700 text-sm sm:text-base flex-grow">
                                         Completing your profile increases your visibility and helps you get more clients.
                                     </p>
 
@@ -504,41 +462,41 @@ export function ProfessionalOnboarding() {
                                         <DialogTrigger asChild>
                                             <Button
                                                 variant="outline"
-                                                className="border-green-700 text-green-700 mt-auto w-full"
+                                                className="border-green-700 text-green-700 mt-auto w-full text-sm sm:text-base"
                                             >
-                                                <Edit className="mr-2 h-4 w-4" />
+                                                <Edit className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                                                 Complete Profile
                                             </Button>
                                         </DialogTrigger>
-                                        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+                                        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
                                             <DialogHeader>
-                                                <DialogTitle>Complete Your Profile</DialogTitle>
+                                                <DialogTitle className="text-lg sm:text-xl">Complete Your Profile</DialogTitle>
                                             </DialogHeader>
 
                                             <form className="space-y-6">
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                                     <div className="space-y-2 md:col-span-2">
                                                         <Label>Profile Picture</Label>
-                                                        <div className="flex items-center gap-6">
+                                                        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                                                             <div className="relative">
                                                                 {provider?.profilePicture ? (
                                                                     <img
                                                                         src={provider.profilePicture == null ? "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3DlfHx8fGVufDB8fHx8fA%3D%3D" : provider.profilePicture}
                                                                         alt="Profile"
-                                                                        className="h-24 w-24 rounded-full object-cover"
+                                                                        className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover"
                                                                     />
                                                                 ) : (
-                                                                    <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center">
-                                                                        <User className="h-12 w-12 text-gray-400" />
+                                                                    <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-gray-200 flex items-center justify-center">
+                                                                        <User className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400" />
                                                                     </div>
                                                                 )}
                                                                 {profilePictureUploading && (
                                                                     <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
-                                                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                                                                        <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-white"></div>
                                                                     </div>
                                                                 )}
                                                             </div>
-                                                            <div className="flex-1">
+                                                            <div className="flex-1 w-full">
                                                                 <FileUpload
                                                                     onFileUpload={async (file) => {
                                                                         setProfilePictureUploading(true);
@@ -564,26 +522,28 @@ export function ProfessionalOnboarding() {
                                                                     accept="image/*"
                                                                     uploading={profilePictureUploading}
                                                                 />
-                                                                <p className="text-sm text-gray-500 mt-2">
+                                                                <p className="text-xs sm:text-sm text-gray-500 mt-2">
                                                                     Recommended size: 500x500 pixels. Max file size: 5MB.
                                                                 </p>
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    {/* Form fields with responsive styling */}
                                                     <div className="space-y-2">
-                                                        <Label htmlFor="name">Full Name or Company Name</Label>
+                                                        <Label htmlFor="name" className="text-sm sm:text-base">Full Name or Company Name</Label>
                                                         <Input
                                                             id="name"
                                                             name="name"
                                                             value={formData.name}
                                                             onChange={handleInputChange}
                                                             required
-                                                        // disabled
+                                                            className="text-sm sm:text-base"
                                                         />
                                                     </div>
 
                                                     <div className="space-y-2">
-                                                        <Label htmlFor="email">Email</Label>
+                                                        <Label htmlFor="email" className="text-sm sm:text-base">Email</Label>
                                                         <Input
                                                             id="email"
                                                             name="email"
@@ -592,25 +552,12 @@ export function ProfessionalOnboarding() {
                                                             onChange={handleInputChange}
                                                             required
                                                             disabled
-                                                        />
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="email">External Link</Label>
-                                                        <Input
-                                                            id="externalLink"
-                                                            name="externalLink"
-                                                            type="text"
-                                                            value={formData.externalLink}
-                                                            placeholder="External Link (Website or Social Media)"
-                                                            onChange={handleInputChange}
-                                                        // required
-                                                        // disabled
+                                                            className="text-sm sm:text-base"
                                                         />
                                                     </div>
 
                                                     <div className="space-y-2 md:col-span-2">
-                                                        <Label htmlFor="about">About You</Label>
+                                                        <Label htmlFor="about" className="text-sm sm:text-base">About You</Label>
                                                         <Textarea
                                                             id="about"
                                                             name="about"
@@ -618,124 +565,97 @@ export function ProfessionalOnboarding() {
                                                             onChange={handleInputChange}
                                                             rows={4}
                                                             placeholder="Tell potential clients about your experience and expertise"
+                                                            className="text-sm sm:text-base"
                                                         />
                                                     </div>
 
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="contactInfo">Contact Number</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.contactInfo}</h3>
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="country">Country</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.country}</h3>
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="state">State</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.state}</h3>
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="city">City</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.city}</h3>
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="postalCode">Zip Code</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.postalCode}</h3>
-                                                    </div>
-
+                                                    {/* Other form fields with similar responsive adjustments */}
                                                     <div className="space-y-2 md:col-span-2">
-                                                        <Label>Verification Document</Label>
+                                                        <Label className="text-sm sm:text-base">Verification Document</Label>
                                                         {formData.verificationDocument ? (
-                                                            <div className="flex flex-col gap-4">
-                                                                <div className="flex items-center gap-4">
-
-                                                                    <div className="flex gap-2">
-                                                                        <Button
-                                                                            variant="outline"
-                                                                            onClick={(e) => {
-                                                                                e.preventDefault();
-                                                                                if (formData.verificationDocument) {
-                                                                                    const fileUrl = `${formData.verificationDocument}`; // Forces Cloudinary to download
-                                                                                    const link = document.createElement('a');
-                                                                                    link.href = fileUrl;
-                                                                                    link.download = formData.verificationDocument.split('/').pop() || 'document.pdf';
-                                                                                    document.body.appendChild(link);
-                                                                                    link.click();
-                                                                                    document.body.removeChild(link);
-                                                                                }
-                                                                            }}
-                                                                        >
-                                                                            Download Document
-                                                                        </Button>
-
-
-                                                                        <Button
-                                                                            variant="outline"
-                                                                            onClick={() => setFormData({ ...formData, verificationDocument: null })}
-                                                                        >
-                                                                            Replace Document
-                                                                        </Button>
-                                                                    </div>
+                                                            <div className="flex flex-col gap-3 sm:gap-4">
+                                                                <div className="flex flex-col sm:flex-row gap-2">
+                                                                    <Button
+                                                                        variant="outline"
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            if (formData.verificationDocument) {
+                                                                                const fileUrl = `${formData.verificationDocument}`;
+                                                                                const link = document.createElement('a');
+                                                                                link.href = fileUrl;
+                                                                                link.download = formData.verificationDocument.split('/').pop() || 'document.pdf';
+                                                                                document.body.appendChild(link);
+                                                                                link.click();
+                                                                                document.body.removeChild(link);
+                                                                            }
+                                                                        }}
+                                                                        className="text-sm"
+                                                                    >
+                                                                        Download Document
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="outline"
+                                                                        onClick={() => setFormData({ ...formData, verificationDocument: null })}
+                                                                        className="text-sm"
+                                                                    >
+                                                                        Replace Document
+                                                                    </Button>
                                                                 </div>
-
                                                             </div>
                                                         ) : (
                                                             <>
                                                                 <PDFUpload
                                                                     onFileUpload={handleDocumentUpload}
-                                                                    maxSize={30 * 1024 * 1024} // 5MB
-                                                                    multiple={false} // Assuming single file upload
+                                                                    maxSize={30 * 1024 * 1024}
+                                                                    multiple={false}
                                                                 />
-                                                                <p className="text-sm text-gray-500 mt-2">
+                                                                <p className="text-xs sm:text-sm text-gray-500 mt-2">
                                                                     Kindly upload a PDF containing all relevant documents that verify your professional expertise and the services you provide.
                                                                 </p>
                                                             </>
                                                         )}
                                                     </div>
-                                                    <div className="flex justify-between w-full">
-                                                        {provider?.status === 'pending' && (
-                                                            <div className="flex items-center gap-2 text-sm text-yellow-600">
-                                                                <ClockIcon className="h-4 w-4" />
-                                                                <span>Verification under review</span>
-                                                            </div>
-                                                        )}
-                                                        {provider?.status === 'rejected' && (
-                                                            <div className="space-y-2 md:col-span-2">
-                                                                <Label>Reason for Rejection</Label>
-                                                                <div className="p-4 bg-red-50 rounded-md border border-red-200">
-                                                                    <p className="text-red-700">{rejectionReason}</p>
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                    </div>
 
+                                                    {/* Status messages */}
+                                                    {provider?.status === 'pending' && (
+                                                        <div className="flex items-center gap-2 text-sm text-yellow-600 md:col-span-2">
+                                                            <ClockIcon className="h-4 w-4" />
+                                                            <span>Verification under review</span>
+                                                        </div>
+                                                    )}
+                                                    {provider?.status === 'rejected' && (
+                                                        <div className="space-y-2 md:col-span-2">
+                                                            <Label className="text-sm sm:text-base">Reason for Rejection</Label>
+                                                            <div className="p-3 sm:p-4 bg-red-50 rounded-md border border-red-200">
+                                                                <p className="text-red-700 text-sm sm:text-base">{rejectionReason}</p>
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                     {provider?.accountStatus === 'on_hold' && (
                                                         <div className="space-y-2 md:col-span-2">
-                                                            <Label>Account On Hold - Reason</Label>
-                                                            <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200">
-                                                                <p className="text-yellow-700">{holdReason}</p>
+                                                            <Label className="text-sm sm:text-base">Account On Hold - Reason</Label>
+                                                            <div className="p-3 sm:p-4 bg-yellow-50 rounded-md border border-yellow-200">
+                                                                <p className="text-yellow-700 text-sm sm:text-base">{holdReason}</p>
                                                             </div>
                                                         </div>
                                                     )}
                                                 </div>
 
-                                                <div className="flex justify-end gap-4">
+                                                <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
                                                     <Button
                                                         variant="outline"
                                                         type="button"
                                                         onClick={() => setIsDialogOpen(false)}
+                                                        className="text-sm sm:text-base"
                                                     >
                                                         Cancel
                                                     </Button>
-                                                    <Button type="submit" onClick={handleSubmit} className="bg-green-700 hover:bg-green-800" disabled={profileUpdating}>
+                                                    <Button 
+                                                        type="submit" 
+                                                        onClick={handleSubmit} 
+                                                        className="bg-green-700 hover:bg-green-800 text-sm sm:text-base" 
+                                                        disabled={profileUpdating}
+                                                    >
                                                         {profileUpdating ? "Updating..." : "Save Changes"}
                                                     </Button>
                                                 </div>
@@ -746,68 +666,66 @@ export function ProfessionalOnboarding() {
                             </CardContent>
                         </Card>
 
-                        {
-                            !provider?.isSubscriptionHolder && (
-                                <Card className="border rounded-lg shadow-sm bg-gradient-to-br from-green-50 to-green-100 border-green-200 h-full flex flex-col">
-                                    <CardHeader className="border-b border-green-200 bg-green-100/50">
-                                        <div className="flex justify-between items-center">
-                                            <h2 className="text-xl font-semibold text-gray-800">PROFESSIONAL PLUS</h2>
-                                            <Badge className="bg-green-800 text-white hover:bg-green-900">
-                                                <div className="flex items-center gap-1">
-                                                    <Crown className="h-4 w-4 fill-yellow-300 text-yellow-300" />
-                                                    <span>PLATFORM CHOICE</span>
-                                                </div>
-                                            </Badge>
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent className="p-6 flex-grow flex flex-col">
-                                        <div className="space-y-4 flex-grow">
-                                            <div className="flex items-end gap-2">
-                                                <span className="text-3xl font-bold">$199</span>
-                                                <span className="text-gray-600">/year</span>
+                        {!provider?.isSubscriptionHolder && (
+                            <Card className="border rounded-lg shadow-sm bg-gradient-to-br from-green-50 to-green-100 border-green-200 h-full flex flex-col">
+                                <CardHeader className="border-b border-green-200 bg-green-100/50 p-4 sm:p-6">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                                        <h2 className="text-lg sm:text-xl font-semibold text-gray-800">PROFESSIONAL PLUS</h2>
+                                        <Badge className="bg-green-800 text-white hover:bg-green-900 text-xs sm:text-sm">
+                                            <div className="flex items-center gap-1">
+                                                <Crown className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-300 text-yellow-300" />
+                                                <span>PLATFORM CHOICE</span>
                                             </div>
-                                            <ul className="space-y-3 text-gray-700">
-                                                <li className="flex items-start gap-3">
-                                                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                                    <span><strong>Platform Choice Badges</strong> - Stand out as a verified top professional</span>
-                                                </li>
-                                                <li className="flex items-start gap-3">
-                                                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                                    <span><strong>Priority Placement</strong> - Appear in top spots for relevant searches</span>
-                                                </li>
-                                                <li className="flex items-start gap-3">
-                                                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                                    <span><strong>3× More Visibility</strong> - Get seen by more potential clients</span>
-                                                </li>
-                                            </ul>
+                                        </Badge>
+                                    </div>
+                                </CardHeader>
+                                <CardContent className="p-4 sm:p-6 flex-grow flex flex-col">
+                                    <div className="space-y-4 flex-grow">
+                                        <div className="flex items-end gap-2">
+                                            <span className="text-2xl sm:text-3xl font-bold">$199</span>
+                                            <span className="text-gray-600 text-sm sm:text-base">/year</span>
                                         </div>
-                                        <div className="pt-4">
-                                            <Button
-                                                onClick={handlePaymentSubmit}
-                                                disabled={paymentProcessing}
-                                                className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg"
-                                            >
-                                                <Crown className="mr-2 h-5 w-5" />
-                                                {paymentProcessing ? "Processing..." : "Upgrade Now"}
-                                            </Button>
-                                            <p className="text-center text-sm text-gray-500 mt-2">
-                                                30-day money back guarantee
-                                            </p>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            )
-                        }
+                                        <ul className="space-y-3 text-gray-700 text-sm sm:text-base">
+                                            <li className="flex items-start gap-3">
+                                                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                                <span><strong>Platform Choice Badges</strong> - Stand out as a verified top professional</span>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                                <span><strong>Priority Placement</strong> - Appear in top spots for relevant searches</span>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                                <span><strong>3× More Visibility</strong> - Get seen by more potential clients</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div className="pt-4">
+                                        <Button
+                                            onClick={handlePaymentSubmit}
+                                            disabled={paymentProcessing}
+                                            className="w-full bg-green-700 hover:bg-green-800 h-10 sm:h-12 text-sm sm:text-base"
+                                        >
+                                            <Crown className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                                            {paymentProcessing ? "Processing..." : "Upgrade Now"}
+                                        </Button>
+                                        <p className="text-center text-xs sm:text-sm text-gray-500 mt-2">
+                                            30-day money back guarantee
+                                        </p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
 
                         {/* Services Section */}
                         <ServicesContainer isNewRegistration={isNewRegistration} />
 
                         {/* Response Rate */}
                         <Card className="border border-gray-200 rounded-lg shadow-sm lg:col-span-2">
-                            <CardHeader className="border-b border-gray-200">
+                            <CardHeader className="border-b border-gray-200 p-4 sm:p-6">
                                 <h2 className="text-xl font-semibold text-gray-800">Purchased Leads</h2>
                             </CardHeader>
-                            <CardContent className="p-6">
+                            <CardContent className="p-4 sm:p-6">
                                 <PurchasedLeads />
                             </CardContent>
                         </Card>

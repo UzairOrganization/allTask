@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { API } from '@/lib/data-service';
 import axios from 'axios';
-import { Send, ChevronRight, ArrowLeft, MessageSquare } from 'lucide-react';
+import { Send, ChevronRight, ArrowLeft, MessageSquare, Menu, X } from 'lucide-react';
 import { io } from 'socket.io-client';
 
 export default function UserChatPage() {
@@ -22,6 +22,7 @@ export default function UserChatPage() {
   const [socketStatus, setSocketStatus] = useState('disconnected');
   const [isTyping, setIsTyping] = useState(false);
   const [typingUser, setTypingUser] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
 
@@ -63,9 +64,7 @@ export default function UserChatPage() {
 
     // Update the handleNewMessage function to properly handle the message structure:
     const handleNewMessage = (newMessage) => {
-
       // Make sure we're adding to the correct chat
-
       setMessages(prev => [...prev, {
         _id: newMessage._id,
         content: newMessage.content,
@@ -73,11 +72,11 @@ export default function UserChatPage() {
         senderModel: newMessage.senderType,
         receiver: newMessage.receiver,
         receiverModel: newMessage.receiverModel,
-        createdAt: newMessage.timestamp, // Fixed: using timestamp consistently
+        createdAt: newMessage.timestamp,
         read: newMessage.read
       }]);
-
     };
+
     const handleTyping = (data) => {
       if (data.chatId === activeChat && data.userType === 'provider') {
         setTypingUser(data.userId);
@@ -98,14 +97,11 @@ export default function UserChatPage() {
     socket.on('connect_error', handleConnectError);
     socket.on('new_message', handleNewMessage);
 
-    // socket.on('typing_indicator', handleTyping);
-
     return () => {
       socket.off('connect', handleConnect);
       socket.off('disconnect', handleDisconnect);
       socket.off('connect_error', handleConnectError);
       socket.off('new_message', handleNewMessage);
-      // socket.off('typing_indicator', handleTyping);
       socket.disconnect();
     };
   }, [user]);
@@ -117,7 +113,6 @@ export default function UserChatPage() {
       const res = await axios.get(`${API}/api/chats/user`, {
         withCredentials: true
       });
-      console.log(res.data.data);
       setChats(res.data.data);
     } catch (error) {
       console.error('Error fetching chats:', error);
@@ -125,9 +120,8 @@ export default function UserChatPage() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-
-
     fetchChats();
   }, [user]);
 
@@ -136,6 +130,7 @@ export default function UserChatPage() {
     if (activeChat && socketStatus === 'connected') {
       joinChat(activeChat);
       fetchMessages(activeChat);
+      setSidebarOpen(false); // Close sidebar on mobile when chat is selected
     }
   }, [activeChat, socketStatus]);
 
@@ -143,6 +138,23 @@ export default function UserChatPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarOpen && window.innerWidth < 768) {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar && !sidebar.contains(event.target)) {
+          setSidebarOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarOpen]);
 
   const joinChat = (payment) => {
     if (socketRef.current?.connected) {
@@ -177,8 +189,6 @@ export default function UserChatPage() {
       read: false
     };
 
-    // Optimistic update
-    // setMessages(prev => [...prev, newMessage]);
     setMessage('');
 
     // Send via socket
@@ -187,7 +197,6 @@ export default function UserChatPage() {
       text: message
     }, (ack) => {
       if (ack.status === 'error') {
-        // Revert optimistic update if failed
         setMessages(prev => prev.filter(m => m._id !== tempId));
       }
     });
@@ -207,12 +216,33 @@ export default function UserChatPage() {
     return words.map(word => word[0]).join('').toUpperCase().slice(0, 2);
   };
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
-    <div className="flex bg-gray-50 h-screen w-screen">
+    <div className="flex bg-gray-50 h-screen w-full overflow-hidden">
+      {/* Mobile menu button */}
+      {!sidebarOpen && (
+        <button
+          className="md:hidden fixed top-4 left-4 z-30 bg-white p-2 rounded-md shadow-md"
+          onClick={toggleSidebar}
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+      )}
+
       {/* Left Sidebar - Inbox */}
-      <div className={`${activeChat ? 'hidden md:block' : 'block'} fixed top-0 left-0 h-screen z-20 w-full md:w-[20%] bg-white border-r border-gray-200 flex flex-col`}>
-        <div className="p-4 border-b border-gray-200">
+      <div className={`sidebar ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} 
+        fixed md:relative top-0 left-0 h-full z-20 w-4/5 md:w-1/3 lg:w-1/4 bg-white border-r border-gray-200 flex flex-col transition-transform duration-300 ease-in-out`}>
+        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-800">Messages</h1>
+          <button 
+            className="md:hidden p-1 rounded-md hover:bg-gray-100"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
 
         <ScrollArea className="flex-1">
@@ -227,7 +257,7 @@ export default function UserChatPage() {
                 className={`p-4 border-b border-gray-200 flex items-center cursor-pointer hover:bg-gray-50 ${activeChat === chat.payment ? 'bg-blue-50' : ''}`}
                 onClick={() => setActiveChat(chat.payment)}
               >
-                <Avatar className="mr-3">
+                <Avatar className="mr-3 h-10 w-10">
                   <AvatarImage src={chat.provider?.avatar} />
                   <AvatarFallback>
                     {getInitials(chat.provider?.name)}
@@ -235,7 +265,7 @@ export default function UserChatPage() {
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center">
-                    <h3 className="font-medium text-gray-900 truncate">
+                    <h3 className="font-medium text-gray-900 truncate text-sm md:text-base">
                       {chat.provider?.name}
                     </h3>
                     {chat.unreadCount > 0 && (
@@ -257,55 +287,76 @@ export default function UserChatPage() {
 
       {/* Main Chat Area */}
       {activeChat ? (
-        <div className="flex-1 ml-0 md:ml-[20%] h-screen flex flex-col relative w-[80%]">
+        <div className="flex-1 h-full flex flex-col relative w-full">
           {/* Chat Header */}
-          <div className="p-4 border-b border-gray-200 bg-white flex items-center sticky left-0 top-0">
+          <div className="p-4 border-b border-gray-200 bg-white flex items-center sticky top-0 z-10">
             <button
-              className="md:hidden mr-2 text-gray-500"
+              className="md:hidden mr-3 text-gray-500 p-1 rounded-md hover:bg-gray-100"
               onClick={() => setActiveChat(null)}
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
-            <Avatar className="mr-3">
+            <Avatar className="mr-3 h-10 w-10">
               <AvatarImage src={chats.find(c => c.payment === activeChat)?.provider?.avatar} />
               <AvatarFallback>
                 {getInitials(chats.find(c => c.payment === activeChat)?.provider?.name)}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <h2 className="font-bold text-gray-900">
+              <h2 className="font-bold text-gray-900 text-sm md:text-base">
                 {chats.find(c => c.payment === activeChat)?.provider?.name}
               </h2>
-
+              <p className="text-xs text-gray-500">
+                {chats.find(c => c.payment === activeChat)?.serviceRequest?.type}
+              </p>
             </div>
+            <button
+              className="md:hidden p-1 rounded-md hover:bg-gray-100"
+              onClick={toggleSidebar}
+            >
+              <Menu className="h-5 w-5" />
+            </button>
           </div>
 
           {/* Messages */}
           <ScrollArea className="flex-1 p-4 bg-gray-100">
-            {messages.map((msg) => (
-              <div
-                key={msg._id}
-                className={`flex mb-4 ${msg.sender === user._id ? 'justify-end' : 'justify-start'}`}
-              >
-                <div className={`max-w-xs md:max-w-md rounded-lg px-4 py-2 ${msg.sender === user._id
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white border border-gray-200'
-                  }`}>
-                  <p>{msg.content}</p>
-                  <p className={`text-xs mt-1 ${msg.sender === user._id
-                    ? 'text-blue-100'
-                    : 'text-gray-500'
+            <div className="space-y-4">
+              {messages.map((msg) => (
+                <div
+                  key={msg._id}
+                  className={`flex ${msg.sender === user._id ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`max-w-xs md:max-w-md rounded-lg px-4 py-2 ${msg.sender === user._id
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white border border-gray-200'
                     }`}>
-                    {format(new Date(msg.createdAt), 'hh:mm a')}
-                  </p>
+                    <p className="text-sm md:text-base">{msg.content}</p>
+                    <p className={`text-xs mt-1 ${msg.sender === user._id
+                      ? 'text-blue-100'
+                      : 'text-gray-500'
+                      }`}>
+                      {format(new Date(msg.createdAt), 'hh:mm a')}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
             <div ref={messagesEndRef} />
           </ScrollArea>
 
           {/* Message Input */}
-          <div className="p-4 border-t border-gray-200 sticky bottom-0 bg-white w-full">
+          <div className="p-4 border-t border-gray-200 bg-white sticky bottom-0">
             <div className="flex items-center">
               <Input
                 type="text"
@@ -328,9 +379,10 @@ export default function UserChatPage() {
               <Button
                 onClick={handleSendMessage}
                 className="ml-2"
-                disabled={socketStatus !== 'connected'}
+                disabled={socketStatus !== 'connected' || !message.trim()}
+                size="icon"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-4 w-4" />
               </Button>
             </div>
             <div className="mt-1 text-xs">
@@ -350,13 +402,39 @@ export default function UserChatPage() {
           </div>
         </div>
       ) : (
-        <div className="hidden md:flex flex-1 items-center justify-center bg-gray-100">
+        <div className="flex-1 items-center justify-center bg-gray-100 hidden md:flex">
           <div className="text-center p-6">
             <MessageSquare className="h-16 w-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-700">Select a conversation</h3>
-            <p className="text-gray-500 mt-1">Status: {socketStatus}</p>
+            <p className="text-gray-500 mt-1">Choose a chat from the sidebar to start messaging</p>
+            <p className="text-xs text-gray-400 mt-2">Status: {socketStatus}</p>
           </div>
         </div>
+      )}
+
+      {/* Empty state for mobile */}
+      {!activeChat && (
+        <div className="md:hidden flex-1 flex items-center justify-center bg-gray-100 p-4">
+          <div className="text-center">
+            <MessageSquare className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+            <h3 className="text-base font-medium text-gray-700">No conversation selected</h3>
+            <p className="text-sm text-gray-500 mt-1">Tap the menu icon to view your conversations</p>
+            <button 
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md text-sm"
+              onClick={toggleSidebar}
+            >
+              Open Conversations
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Overlay for mobile sidebar */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
       )}
     </div>
   );

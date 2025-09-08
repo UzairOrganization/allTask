@@ -8,7 +8,6 @@ import StageFive from "./StageFive"
 import { toast, Toaster } from "sonner"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-
 import { API } from "@/lib/data-service"
 import { useRouter } from "next/navigation"
 import axios from "axios"
@@ -25,18 +24,15 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
     const [categoryPricing, setCategoryPricing] = useState()
     const [componentLoading, setComponentLoading] = useState(false)
     const finalFormData = new FormData()
+    
     useEffect(() => {
         const storedProviders = JSON.parse(localStorage.getItem('availableProviders') || '[]');
         const storedCategoryHierarchy = JSON.parse(localStorage.getItem('categoryHierarchy') || '{}');
         setAvailableProviders(storedProviders);
         setCategoryHierarchy(storedCategoryHierarchy);
-
-        console.log(user, "dsudsudhu");
-
     }, []);
-    useEffect(() => {
 
-        // Check if the code is running on the client-side  
+    useEffect(() => {
         const fetchCategoryPricing = async () => {
             try {
                 setLoading(true)
@@ -54,7 +50,6 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
                 const response = await axios.get(`${API}/api/leads/getFormConfig/${categoryHierarchy?.category}`)
                 if (response.data.success) {
                     setFormConfig(response.data.data)
-                    console.log(response.data.data);
                     setLoading(false)
                 } else {
                     console.error("Form configuration not found")
@@ -70,9 +65,7 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
             fetchFormConfig()
             // fetchCategoryPricing()
         }
-
     }, [categoryHierarchy])
-
 
     const next = () => setStep(prev => prev + 1)
     const back = () => setStep(prev => prev - 1)
@@ -152,8 +145,6 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
             finalFormData.append("serviceTypeSubCategory", categoryHierarchy.subcategory);
             finalFormData.append("serviceTypeSubSubCategory", categoryHierarchy.subSubcategory);
 
-           
-            
             // finalFormData.append("customer", user ? user._id : null)
 
             Object.keys(formData.customerDetails).forEach((key) => {
@@ -214,17 +205,27 @@ const MultiStepsForm = ({ questions, serviceProviders }) => {
         }
     };
 
-
-
-
     if (loading) {
-        return <div className="text-center py-8">Loading form...</div>
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#007D63] mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading form...</p>
+                </div>
+            </div>
+        )
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-4">
-            <ProgressBar steps={step} total={5} />
-            {renderCurrentStep()}
+        <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="p-4 sm:p-6">
+                    <ProgressBar steps={step} total={5} />
+                    <div className="mt-6">
+                        {renderCurrentStep()}
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

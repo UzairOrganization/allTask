@@ -91,10 +91,10 @@ const ProfessionalLoginWrapper = () => {
         <>
             <Header />
             <Toaster />
-            <div className="min-h-[80vh] flex flex-col justify-center items-center">
-                <div className="mt-12 w-5xl overflow-hidden flex items-center justify-center">
-                    <div className="max-w-lg w-full p-8 bg-white rounded-lg shadow-lg border ">
-                        <h1 className="text-3xl font-bold text-center text-black mb-6">
+            <div className="min-h-screen md:min-h-[80vh] flex flex-col justify-center items-center px-4 py-8 md:py-16">
+                <div className="w-full max-w-md md:max-w-lg overflow-hidden flex items-center justify-center">
+                    <div className="w-full p-6 md:p-8 bg-white rounded-lg shadow-lg border">
+                        <h1 className="text-2xl md:text-3xl font-bold text-center text-black mb-4 md:mb-6">
                             Professional Login
                         </h1>
 
@@ -116,6 +116,7 @@ const ProfessionalLoginWrapper = () => {
                                             handleLogin(e);
                                         }
                                     }}
+                                    className="w-full"
                                 />
                             </div>
 
@@ -135,17 +136,18 @@ const ProfessionalLoginWrapper = () => {
                                             handleLogin(e);
                                         }
                                     }}
+                                    className="w-full"
                                 />
                             </div>
 
                             {/* Remember Me & Forgot Password */}
-                            <div className="flex items-center justify-between mb-6">
+                            <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between mb-6 gap-2 xs:gap-0">
                                 <div className="flex items-center space-x-2">
                                     <Checkbox id="remember" />
-                                    <Label htmlFor="remember" className={"text-[#007D63]"}>Remember me</Label>
+                                    <Label htmlFor="remember" className="text-[#007D63]">Remember me</Label>
                                 </div>
                                 <Link href={"/forget-password"}>
-                                    <Button variant="link" className="text-sm p-0 h-auto text-[#007D63]">
+                                    <Button variant="link" className="text-sm p-0 h-auto text-[#007D63] whitespace-nowrap">
                                         Forgot password?
                                     </Button>
                                 </Link>
@@ -162,8 +164,8 @@ const ProfessionalLoginWrapper = () => {
                         </form>
                     </div>
                 </div>
-                <div className="mt-3">
-                    <h3 className="text-center font-semibold"> Join us as Professional.<span className="text-[#007D63]"> <Link href={"/register-professional"}> Create Account </Link> </span></h3>
+                <div className="mt-4 md:mt-6 text-center px-4">
+                    <h3 className="text-sm md:text-base font-semibold">Join us as Professional. <span className="text-[#007D63]"><Link href={"/register-professional"}>Create Account</Link></span></h3>
                 </div>
             </div>
         </>

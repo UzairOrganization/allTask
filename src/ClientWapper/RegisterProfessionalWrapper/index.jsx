@@ -17,6 +17,7 @@ import { Country, State, City } from 'country-state-city';
 import { API } from "@/lib/data-service";
 import axios from "axios";
 import { useMemo } from 'react';
+
 const RegisterProfessionalWrapper = () => {
     const dispatch = useDispatch();
     const router = useRouter();
@@ -53,9 +54,6 @@ const RegisterProfessionalWrapper = () => {
         selectedCategories: []
     });
 
-
-
-
     // Fetch categories on component mount
     useEffect(() => {
         const fetchCategories = async () => {
@@ -69,13 +67,10 @@ const RegisterProfessionalWrapper = () => {
         fetchCategories();
     }, []);
 
-
-
     // Update states when country changes
     const states = useMemo(() => {
         return selectedCountry ? State.getStatesOfCountry(selectedCountry.isoCode) : [];
     }, [selectedCountry]);
-
 
     // Update cities when state changes
     const cities = useMemo(() => {
@@ -108,7 +103,6 @@ const RegisterProfessionalWrapper = () => {
                 position: "bottom-left",
             });
         }
-
     };
 
     const handleInputChange = useCallback((e) => {
@@ -139,6 +133,7 @@ const RegisterProfessionalWrapper = () => {
             }
         });
     };
+    
     const handleSubSubcategoryToggle = (subcategory, subSubcategory) => {
         setSelectedSubSubcategories(prev => {
             const currentSubSubcategories = prev[subcategory] || [];
@@ -152,7 +147,6 @@ const RegisterProfessionalWrapper = () => {
             };
         });
     };
-
 
     const handleAddService = () => {
         const newService = {
@@ -178,7 +172,6 @@ const RegisterProfessionalWrapper = () => {
         setServiceRadius(10);
     };
 
-
     const handleRemoveService = (index) => {
         setFormData(prev => ({
             ...prev,
@@ -196,7 +189,6 @@ const RegisterProfessionalWrapper = () => {
                 ...formData,
                 selectedCategories: formData.selectedCategories
             };
-
 
             const result = await axios.post(`${API}/api/service-provider/service-provider-account-creation`, payload, { withCredentials: true })
             console.log(result);
@@ -227,18 +219,18 @@ const RegisterProfessionalWrapper = () => {
         <>
             <Header />
             <Toaster />
-            <div className="min-h-[85vh] flex flex-col justify-center items-center bg-gray-50 py-12  sm:px-6 lg:px-8">
-                <div className="w-3xl ">
+            <div className="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-4xl mx-auto">
                     <Card className="shadow-lg">
-                        <CardHeader>
-                            <CardTitle className="text-2xl font-bold text-center text-gray-800">
+                        <CardHeader className="px-4 sm:px-6">
+                            <CardTitle className="text-xl sm:text-2xl font-bold text-center text-gray-800">
                                 Professional Service Provider Registration
                             </CardTitle>
                             <div className="mt-4">
                                 <Progress value={progressValue} className="h-2" />
-                                <div className="flex justify-between mt-2 text-sm text-gray-600">
+                                <div className="flex flex-col sm:flex-row justify-between mt-2 text-sm text-gray-600 gap-1 sm:gap-0">
                                     <span>Step {step} of 6</span>
-                                    <span>
+                                    <span className="text-center sm:text-right">
                                         {step === 1 && "Email Verification"}
                                         {step === 2 && "Authenticated Email"}
                                         {step === 3 && "Basic Information"}
@@ -249,7 +241,7 @@ const RegisterProfessionalWrapper = () => {
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="px-4 sm:px-6 py-6">
                             {step === 1 && (
                                 <form onSubmit={handleEmailSubmit} className="space-y-6">
                                     <div>
@@ -273,11 +265,10 @@ const RegisterProfessionalWrapper = () => {
                                     >
                                         {stateLoading ? "Sending..." : "Send Verification Code"}
                                     </Button>
-
                                 </form>
                             )}
                             {step === 2 && (
-                                <>
+                                <div className="space-y-6">
                                     <div>
                                         <Label htmlFor="verificationCode" className="block text-sm font-medium text-gray-700">
                                             Verification Code
@@ -292,30 +283,29 @@ const RegisterProfessionalWrapper = () => {
                                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#007D63] focus:ring-[#007D63]"
                                         />
                                     </div>
-                                    <div className="flex justify-between mt-3">
+                                    <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 sm:gap-0">
                                         <Button
                                             type="button"
                                             variant="outline"
                                             onClick={() => setStep(1)}
-                                            className="flex items-center gap-1"
+                                            className="flex items-center justify-center gap-1 order-2 sm:order-1"
                                         >
                                             <ChevronLeft className="h-4 w-4" /> Back
                                         </Button>
                                         <Button
                                             type="button"
                                             onClick={() => setStep(3)}
-                                            className="bg-[#007D63] hover:bg-[#006a52] text-white flex items-center gap-1"
+                                            className="bg-[#007D63] hover:bg-[#006a52] text-white flex items-center justify-center gap-1 order-1 sm:order-2"
                                             disabled={!verificationCode}
                                         >
                                             Next <ChevronRight className="h-4 w-4" />
                                         </Button>
                                     </div>
-                                </>
+                                </div>
                             )}
                             {step === 3 && (
-                                <form className="space-y-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
+                                <div className="space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                         <div>
                                             <Label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                                 Full Name
@@ -377,26 +367,25 @@ const RegisterProfessionalWrapper = () => {
                                             />
                                         </div>
                                     </div>
-                                    <div className="flex justify-between">
+                                    <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 sm:gap-0">
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            onClick={() => setStep(1)}
-                                            className="flex items-center gap-1"
+                                            onClick={() => setStep(2)}
+                                            className="flex items-center justify-center gap-1 order-2 sm:order-1"
                                         >
                                             <ChevronLeft className="h-4 w-4" /> Back
                                         </Button>
                                         <Button
                                             type="button"
                                             onClick={() => setStep(4)}
-                                            className="bg-[#007D63] hover:bg-[#006a52] text-white flex items-center gap-1"
+                                            className="bg-[#007D63] hover:bg-[#006a52] text-white flex items-center justify-center gap-1 order-1 sm:order-2"
                                             disabled={!formData.name || !formData.contactInfo || !formData.password || !formData.postalCode}
                                         >
                                             Next <ChevronRight className="h-4 w-4" />
                                         </Button>
                                     </div>
-
-                                </form>
+                                </div>
                             )}
                             {step == 4 && (
                                 <div className="space-y-6">
@@ -407,9 +396,8 @@ const RegisterProfessionalWrapper = () => {
                                         <Select
                                             onValueChange={(isoCode) => {
                                                 const country = Country.getAllCountries().find(c => c.isoCode === isoCode);
-
                                                 setSelectedCountry(country);
-                                                setSelectedState(null); // reset state
+                                                setSelectedState(null);
                                                 setFormData(prev => ({
                                                     ...prev,
                                                     country: country.name,
@@ -430,7 +418,6 @@ const RegisterProfessionalWrapper = () => {
                                                             {country.name}
                                                         </SelectItem>
                                                     ))}
-
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -451,7 +438,6 @@ const RegisterProfessionalWrapper = () => {
                                             value={selectedState?.isoCode || ""}
                                             disabled={!selectedCountry}
                                         >
-
                                             <SelectTrigger className="mt-1 w-full">
                                                 <SelectValue placeholder="Select a state/province" />
                                             </SelectTrigger>
@@ -491,19 +477,19 @@ const RegisterProfessionalWrapper = () => {
                                         </Select>
                                     </div>
 
-                                    <div className="flex justify-between">
+                                    <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 sm:gap-0">
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            onClick={() => setStep(1)}
-                                            className="flex items-center gap-1"
+                                            onClick={() => setStep(3)}
+                                            className="flex items-center justify-center gap-1 order-2 sm:order-1"
                                         >
                                             <ChevronLeft className="h-4 w-4" /> Back
                                         </Button>
                                         <Button
                                             type="button"
                                             onClick={() => setStep(5)}
-                                            className="bg-[#007D63] hover:bg-[#006a52] text-white flex items-center gap-1"
+                                            className="bg-[#007D63] hover:bg-[#006a52] text-white flex items-center justify-center gap-1 order-1 sm:order-2"
                                             disabled={!formData.country && !formData.city}
                                         >
                                             Next <ChevronRight className="h-4 w-4" />
@@ -561,34 +547,21 @@ const RegisterProfessionalWrapper = () => {
                                                             <SelectValue placeholder="Select service radius" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="5">5 mi</SelectItem>
-                                                            <SelectItem value="10">10 mi</SelectItem>
-                                                            <SelectItem value="20">20 mi</SelectItem>
-                                                            <SelectItem value="30">30 mi</SelectItem>
-                                                            <SelectItem value="40">40 mi</SelectItem>
-                                                            <SelectItem value="50">50 mi</SelectItem>
-                                                            <SelectItem value="60">60 mi</SelectItem>
-                                                            <SelectItem value="70">70 mi</SelectItem>
-                                                            <SelectItem value="80">80 mi</SelectItem>
-                                                            <SelectItem value="90">90 mi</SelectItem>
-                                                            <SelectItem value="100">100 mi</SelectItem>
-                                                            <SelectItem value="110">110 mi</SelectItem>
-                                                            <SelectItem value="120">120 mi</SelectItem>
-                                                            <SelectItem value="130">130 mi</SelectItem>
-                                                            <SelectItem value="140">140 mi</SelectItem>
-                                                            <SelectItem value="150">150 mi</SelectItem>
+                                                            {[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150].map((radius) => (
+                                                                <SelectItem key={radius} value={radius.toString()}>
+                                                                    {radius} mi
+                                                                </SelectItem>
+                                                            ))}
                                                         </SelectContent>
                                                     </Select>
                                                 </div>
-
-
                                             </div>
                                         )}
 
                                         <Button
                                             type="button"
                                             onClick={handleAddService}
-                                            className="bg-[#007D63] hover:bg-[#006a52] text-white"
+                                            className="bg-[#007D63] hover:bg-[#006a52] text-white w-full sm:w-auto"
                                             disabled={!selectedCategory || !servicePostalCode || !serviceRadius}
                                         >
                                             Add Service
@@ -598,11 +571,11 @@ const RegisterProfessionalWrapper = () => {
                                     {formData.selectedCategories.length > 0 && (
                                         <div className="space-y-4">
                                             <h3 className="text-lg font-medium text-gray-900">Your Services</h3>
-                                            <div className="space-y-3">
+                                            <div className="space-y-3 max-h-60 overflow-y-auto">
                                                 {formData.selectedCategories.map((service, index) => (
                                                     <div key={index} className="p-4 border rounded-lg">
                                                         <div className="flex justify-between items-start">
-                                                            <div>
+                                                            <div className="flex-1">
                                                                 <h4 className="font-medium">{service.category}</h4>
                                                                 <div className="mt-1 text-sm text-gray-600">
                                                                     <p>Zip Code: {service.postalCode}</p>
@@ -627,7 +600,7 @@ const RegisterProfessionalWrapper = () => {
                                                                 variant="ghost"
                                                                 size="sm"
                                                                 onClick={() => handleRemoveService(index)}
-                                                                className="text-red-600 hover:text-red-800"
+                                                                className="text-red-600 hover:text-red-800 ml-2"
                                                             >
                                                                 Remove
                                                             </Button>
@@ -637,12 +610,12 @@ const RegisterProfessionalWrapper = () => {
                                             </div>
                                         </div>
                                     )}
-                                    <div className="flex justify-between">
+                                    <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 sm:gap-0">
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            onClick={() => setStep(2)}
-                                            className="flex items-center gap-1"
+                                            onClick={() => setStep(4)}
+                                            className="flex items-center justify-center gap-1 order-2 sm:order-1"
                                         >
                                             <ChevronLeft className="h-4 w-4" /> Back
                                         </Button>
@@ -650,7 +623,7 @@ const RegisterProfessionalWrapper = () => {
                                             type="button"
                                             onClick={() => setStep(6)}
                                             disabled={formData.selectedCategories.length === 0}
-                                            className="bg-[#007D63] hover:bg-[#006a52] text-white flex items-center gap-1"
+                                            className="bg-[#007D63] hover:bg-[#006a52] text-white flex items-center justify-center gap-1 order-1 sm:order-2"
                                         >
                                             Next <ChevronRight className="h-4 w-4" />
                                         </Button>
@@ -662,7 +635,7 @@ const RegisterProfessionalWrapper = () => {
                                     <div className="space-y-4">
                                         <h3 className="text-lg font-medium text-gray-900">Review Your Information</h3>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                             <div className="space-y-2">
                                                 <h4 className="font-medium text-gray-700">Personal Information</h4>
                                                 <div className="text-sm text-gray-600 space-y-1">
@@ -684,7 +657,7 @@ const RegisterProfessionalWrapper = () => {
 
                                         <div className="space-y-2">
                                             <h4 className="font-medium text-gray-700">Services Offered</h4>
-                                            <div className="space-y-3">
+                                            <div className="space-y-3 max-h-60 overflow-y-auto">
                                                 {formData.selectedCategories.map((service, index) => (
                                                     <div key={index} className="p-3 border rounded-lg">
                                                         <h5 className="font-medium">{service.category}</h5>
@@ -708,19 +681,19 @@ const RegisterProfessionalWrapper = () => {
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-between">
+                                    <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 sm:gap-0">
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            onClick={() => setStep(3)}
-                                            className="flex items-center gap-1"
+                                            onClick={() => setStep(5)}
+                                            className="flex items-center justify-center gap-1 order-2 sm:order-1"
                                         >
                                             <ChevronLeft className="h-4 w-4" /> Back
                                         </Button>
                                         <Button
                                             type="button"
                                             onClick={handleRegister}
-                                            className="bg-[#007D63] hover:bg-[#006a52] text-white"
+                                            className="bg-[#007D63] hover:bg-[#006a52] text-white order-1 sm:order-2"
                                             disabled={stateLoading}
                                         >
                                             {stateLoading ? "Registering..." : "Complete Registration"}
@@ -731,7 +704,7 @@ const RegisterProfessionalWrapper = () => {
                         </CardContent>
                     </Card>
                 </div>
-            </div >
+            </div>
         </>
     );
 };

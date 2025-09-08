@@ -56,7 +56,6 @@ export default function ServiceSelectionForm() {
                     const existingSubServicesMap = new Map(
                         estimationResponse.data.subServices.map(item => [item.name, item])
                     );
-                    console.log(existingSubServicesMap, "dsds");
 
                     setSubServices(
                         serviceResponse.subServices.map(sub => ({
@@ -144,12 +143,12 @@ export default function ServiceSelectionForm() {
     if (error) {
         return (
             <div className="flex items-center justify-center h-screen">
-                <Card className="w-full max-w-md border-green-700">
+                <Card className="w-full max-w-md mx-4 border-green-700">
                     <CardHeader>
-                        <CardTitle className="text-green-700">No Service available for estimation</CardTitle>
+                        <CardTitle className="text-green-700 text-center">No Service available for estimation</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-black">This Service has no Sub-Categories for estimation.</p>
+                        <p className="text-black text-center">This Service has no Sub-Categories for estimation.</p>
                     </CardContent>
                 </Card>
             </div>
@@ -160,45 +159,45 @@ export default function ServiceSelectionForm() {
         <>
             <ProfessionalHeader />
             <Toaster position='bottom-left' richColors />
-            <div className="min-h-screen text-white p-4 md:p-8">
+            <div className="min-h-screen bg-gray-50 p-4 md:p-8">
                 <div className="max-w-4xl mx-auto">
-                    <Card className="border-green-700 mb-8">
-                        <CardHeader>
-                            <CardTitle className="text-green-700 text-2xl md:text-3xl">
+                    <Card className="border-green-700 mb-6 md:mb-8">
+                        <CardHeader className="p-4 md:p-6">
+                            <CardTitle className="text-green-700 text-xl md:text-2xl lg:text-3xl text-center md:text-left">
                                 {service?.name} Service Estimation
                             </CardTitle>
-                            <p className="text-black">
+                            <p className="text-black text-sm md:text-base text-center md:text-left">
                                 Select the subservices you can provide and enter your estimated cost range.
                             </p>
                         </CardHeader>
                     </Card>
 
                     <form onSubmit={handleSubmit}>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
                             {subServices.map((subService, index) => (
                                 <Card
                                     key={index}
-                                    className={`border-2 transition-all ${subService.selected ? 'border-green-700' : 'border-gray-400 hover:border-gray-300'}`}
+                                    className={`border-2 transition-all ${subService.selected ? 'border-green-700' : 'border-gray-300 hover:border-gray-400'}`}
                                 >
-                                    <CardContent className="p-4 flex flex-col space-y-3">
-                                        <div className="flex items-center space-x-3">
+                                    <CardContent className="p-3 md:p-4 flex flex-col space-y-2 md:space-y-3">
+                                        <div className="flex items-center space-x-2 md:space-x-3">
                                             <Checkbox
                                                 id={`subservice-${index}`}
                                                 checked={subService.selected}
                                                 onCheckedChange={() => handleCheckboxChange(index)}
-                                                className="h-5 w-5 border-gray-400 data-[state=checked]:bg-green-700 data-[state=checked]:border-green-700"
+                                                className="h-4 w-4 md:h-5 md:w-5 border-gray-400 data-[state=checked]:bg-green-700 data-[state=checked]:border-green-700"
                                             />
                                             <Label
                                                 htmlFor={`subservice-${index}`}
-                                                className="text-lg font-medium cursor-pointer"
+                                                className="text-base md:text-lg font-medium cursor-pointer flex-1"
                                             >
                                                 {subService.name}
                                             </Label>
                                         </div>
 
                                         {subService.selected && (
-                                            <div className="flex flex-col gap-2 ">
-                                                <Label htmlFor={`cost-${index}`} className="text-black">
+                                            <div className="flex flex-col gap-1 md:gap-2">
+                                                <Label htmlFor={`cost-${index}`} className="text-black text-sm md:text-base">
                                                     Estimated Range:
                                                 </Label>
                                                 <Input
@@ -207,7 +206,7 @@ export default function ServiceSelectionForm() {
                                                     placeholder="$100-$200"
                                                     value={subService.estimatedCost}
                                                     onChange={(e) => handleCostChange(index, e.target.value)}
-                                                    className="border-gray-700 text-black focus:ring-green-700 focus:border-green-700"
+                                                    className="border-gray-300 text-black focus:ring-green-700 focus:border-green-700 text-sm md:text-base h-9 md:h-10"
                                                     required
                                                 />
                                             </div>
@@ -217,11 +216,11 @@ export default function ServiceSelectionForm() {
                             ))}
                         </div>
 
-                        <div className="flex justify-end">
+                        <div className="flex justify-center md:justify-end sticky bottom-0 bg-gray-50 p-3 md:p-0 md:relative z-10 md:z-auto">
                             <Button
                                 type="submit"
                                 disabled={isSubmitting || !subServices.some(sub => sub.selected)}
-                                className="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                                className="bg-green-700 hover:bg-green-800 text-white font-bold py-2 md:py-3 px-4 md:px-6 rounded-lg transition-colors w-full md:w-auto text-sm md:text-base"
                             >
                                 {isSubmitting ? (
                                     <>
@@ -236,20 +235,20 @@ export default function ServiceSelectionForm() {
                     </form>
 
                     {subServices.some(sub => sub.selected) && (
-                        <Card className="border-green-700 mt-8 sticky bottom-4">
-                            <CardHeader>
-                                <CardTitle className="text-green-700">Selected Services</CardTitle>
+                        <Card className="border-green-700 mt-6 md:mt-8">
+                            <CardHeader className="p-4 md:p-6">
+                                <CardTitle className="text-green-700 text-lg md:text-xl">Selected Services</CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                <div className="space-y-2">
+                            <CardContent className="p-4 md:p-6 pt-0">
+                                <div className="space-y-2 md:space-y-3">
                                     {subServices
                                         .filter(sub => sub.selected)
                                         .map((sub, idx) => (
-                                            <div key={idx} className="flex justify-between items-center">
-                                                <Badge variant="outline" className="border-green-700 text-green-700">
+                                            <div key={idx} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                                                <Badge variant="outline" className="border-green-700 text-green-700 text-xs md:text-sm">
                                                     {sub.name}
                                                 </Badge>
-                                                <span className="font-medium">
+                                                <span className="font-medium text-sm md:text-base">
                                                     {sub.estimatedCost || 'Not specified'}
                                                 </span>
                                             </div>

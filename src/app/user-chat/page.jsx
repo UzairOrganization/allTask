@@ -157,7 +157,7 @@ const page = () => {
   return (
     <>
       <Header />
-      <div className="flex bg-gray-50 h-[90vh]">
+      <div className="flex flex-col md:flex-row bg-gray-50 min-h-[calc(100vh-80px)]">
         {/* Left Sidebar - Inbox */}
         <div className={`${activeChat ? 'hidden md:block' : 'block'} w-full md:w-80 bg-white border-r border-gray-200 flex flex-col`}>
           <div className="p-4 border-b border-gray-200">
@@ -167,52 +167,55 @@ const page = () => {
           <div className="flex-1 overflow-y-auto">
             {loading ? (
               <div className="p-4 text-center">Loading conversations...</div>
-            ) : conversations.map(conversation => (
-              <div
-                key={conversation._id}
-                className={`p-4 border-b border-gray-200 flex items-center cursor-pointer hover:bg-gray-50 ${activeChat?._id === conversation._id ? 'bg-blue-50' : ''}`}
-                onClick={() => setActiveChat(conversation)}
-              >
-                <div className="w-16 h-16 rounded-full flex justify-center items-center p-2 border mr-3">
-                  <span className="text-black text-xl uppercase font-bold">
-                    {getInitials(conversation.provider.businessName || conversation.provider.name)}
-                  </span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-medium text-gray-900 truncate">
-                      {conversation.provider.businessName || conversation.provider.name}
-                    </h3>
-
+            ) : conversations.length === 0 ? (
+              <div className="p-4 text-center text-gray-500">No conversations yet</div>
+            ) : (
+              conversations.map(conversation => (
+                <div
+                  key={conversation._id}
+                  className={`p-4 border-b border-gray-200 flex items-center cursor-pointer hover:bg-gray-50 ${activeChat?._id === conversation._id ? 'bg-blue-50' : ''}`}
+                  onClick={() => setActiveChat(conversation)}
+                >
+                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-full flex justify-center items-center p-2 border mr-3 bg-gray-100">
+                    <span className="text-black text-lg md:text-xl uppercase font-bold">
+                      {getInitials(conversation.provider.businessName || conversation.provider.name)}
+                    </span>
                   </div>
-                  <p className="text-xs text-green-700 font-medium truncate">
-                    {conversation.lead.serviceTypeSubSubCategory}
-                  </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-medium text-gray-900 truncate text-sm md:text-base">
+                        {conversation.provider.businessName || conversation.provider.name}
+                      </h3>
+                    </div>
+                    <p className="text-xs text-green-700 font-medium truncate">
+                      {conversation.lead.serviceTypeSubSubCategory}
+                    </p>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-gray-400 ml-2 hidden md:block" />
                 </div>
-                <ChevronRight className="h-5 w-5 text-gray-400 ml-2" />
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
         {/* Main Chat Area */}
         {activeChat ? (
-          <div className="flex-1 flex flex-col ">
+          <div className="flex-1 flex flex-col">
             {/* Chat Header */}
             <div className="p-4 border-b border-gray-200 bg-white flex items-center">
               <button
-                className="md:hidden mr-2 text-gray-500"
+                className="md:hidden mr-3 text-gray-500 p-1"
                 onClick={() => setActiveChat(null)}
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
-              <div className="w-16 h-16 rounded-full flex justify-center items-center p-2 border">
-                <span className="text-black text-xl uppercase font-bold">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full flex justify-center items-center p-2 border bg-gray-100">
+                <span className="text-black text-lg md:text-xl uppercase font-bold">
                   {getInitials(activeChat.provider.businessName || activeChat.provider.name)}
                 </span>
               </div>
-              <div className="flex-1 ml-2">
-                <h2 className="font-bold text-gray-900">
+              <div className="flex-1 ml-3">
+                <h2 className="font-bold text-gray-900 text-base md:text-lg">
                   {activeChat.provider.businessName || activeChat.provider.name}
                 </h2>
                 <p className="text-xs text-gray-500">
@@ -222,30 +225,36 @@ const page = () => {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 p-4 overflow-y-auto bg-gray-100">
-              <div className="space-y-3">
-                {messages.map((msg) => (
-                  <div key={msg._id} className={`flex ${msg.senderId === activeChat.user ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-xs md:max-w-md rounded-lg px-4 py-2 ${msg.senderId === activeChat.user
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white border border-gray-200'
-                      }`}>
-                      <p>{msg.text}</p>
-                      <p className={`text-xs mt-1 ${msg.senderId === activeChat.user
-                        ? 'text-blue-100'
-                        : 'text-gray-500'
-                        }`}>
-                        {new Date(msg.timestamp).toLocaleTimeString()}
-                      </p>
-                    </div>
+            <div className="flex-1 p-3 md:p-4 overflow-y-auto bg-gray-100">
+              <div className="space-y-2 md:space-y-3">
+                {messages.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    No messages yet. Start the conversation!
                   </div>
-                ))}
+                ) : (
+                  messages.map((msg) => (
+                    <div key={msg._id} className={`flex ${msg.senderId === activeChat.user._id ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-xs md:max-w-md rounded-lg px-3 py-2 ${msg.senderId === activeChat.user._id
+                        ? 'bg-green-600 text-white'
+                        : 'bg-white border border-gray-200'
+                        }`}>
+                        <p className="text-sm md:text-base">{msg.text}</p>
+                        <p className={`text-xs mt-1 ${msg.senderId === activeChat.user._id
+                          ? 'text-blue-100'
+                          : 'text-gray-500'
+                          }`}>
+                          {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
                 <div ref={messagesEndRef} />
               </div>
             </div>
 
             {/* Message Input */}
-            <div className="p-4 border-t border-gray-200 bg-white">
+            <div className="p-3 md:p-4 border-t border-gray-200 bg-white">
               <div className="flex items-center">
                 <input
                   type="text"
@@ -253,15 +262,15 @@ const page = () => {
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Type a message..."
-                  className="flex-1 border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="flex-1 border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-sm md:text-base"
                   disabled={socketStatus !== 'connected'}
                 />
                 <button
                   onClick={handleSendMessage}
-                  className="bg-blue-600 ml-2 text-white rounded-full p-2 hover:bg-blue-700 disabled:bg-gray-400"
+                  className="bg-blue-600 ml-2 text-white rounded-full p-2 hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
                   disabled={!message.trim() || socketStatus !== 'connected'}
                 >
-                  <Send className="h-5 w-5" />
+                  <Send className="h-4 w-4 md:h-5 md:w-5" />
                 </button>
               </div>
               <div className="mt-1 text-xs">

@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 
 import axios from "axios";
 import { useRouter } from 'next/navigation'
+import { Search, Plus } from "lucide-react";
 
 
 export default function ProfessionalForumWrapper() {
@@ -28,7 +29,7 @@ export default function ProfessionalForumWrapper() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const router = useRouter()
-    // const forums = await getForums();
+    
     useEffect(() => {
         const fetchAllForums = async () => {
             try {
@@ -56,7 +57,6 @@ export default function ProfessionalForumWrapper() {
                     withCredentials: true
                 });
 
-
                 setProviderForums(data);
                 setError(null);
             } catch (err) {
@@ -73,68 +73,94 @@ export default function ProfessionalForumWrapper() {
         fetchAllForums()
         fetchProviderForums()
     }, [])
+    
     return (
         <>
             <ProfessionalHeader />
 
-            <div className="container mx-auto max-w-6xl py-8">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold">Community Forum</h1>
-                    <div className="flex gap-4">
-                        <Input placeholder="Search forums..." className="w-64" />
-                        <Link href="/forums/new-forum" className="cursor-pointer">
-                            <Button className="cursor-pointer">Start Discussion</Button>
+            <div className="container mx-auto max-w-6xl py-6 px-4 sm:px-6 lg:px-8">
+                {/* Header Section */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+                    <h1 className="text-2xl sm:text-3xl font-bold">Community Forum</h1>
+                    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                        <div className="relative w-full sm:w-64">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                            <Input 
+                                placeholder="Search forums..." 
+                                className="pl-10 w-full"
+                            />
+                        </div>
+                        <Link href="/forums/new-forum" className="w-full sm:w-auto">
+                            <Button className="w-full sm:w-auto cursor-pointer flex items-center gap-2">
+                                <Plus className="h-4 w-4" />
+                                <span>Start Discussion</span>
+                            </Button>
                         </Link>
                     </div>
                 </div>
-                <div className="container mx-auto my-8">
+                
+                {/* Tabs Section */}
+                <div className="container mx-auto my-6">
                     <Tabs defaultValue="All Discussions">
-                        <div className="flex justify-end my-4">
-
-                            <TabsList>
-                                <TabsTrigger value="All Discussions">All Discussions</TabsTrigger>
-                                <TabsTrigger value="Your Discussions">Your Discussions</TabsTrigger>
+                        <div className="flex justify-center sm:justify-end my-4">
+                            <TabsList className="grid grid-cols-2 w-full sm:w-auto">
+                                <TabsTrigger value="All Discussions" className="text-xs sm:text-sm">
+                                    All Discussions
+                                </TabsTrigger>
+                                <TabsTrigger value="Your Discussions" className="text-xs sm:text-sm">
+                                    Your Discussions
+                                </TabsTrigger>
                             </TabsList>
                         </div>
-                        <TabsContent value="All Discussions" className="my-10">
+                        
+                        {/* All Discussions Tab */}
+                        <TabsContent value="All Discussions" className="my-6 sm:my-10">
                             {loading ? (
                                 <ForumSkeleton />
                             ) : (
-                                <div className="grid gap-6">
+                                <div className="grid gap-4 sm:gap-6">
                                     {forums.length === 0 && (
                                         <Card>
-                                            <CardContent className="py-6 text-center">
-                                                <p>No forum posts yet. Be the first to start a discussion!</p>
+                                            <CardContent className="py-8 text-center">
+                                                <p className="text-gray-600">No forum posts yet. Be the first to start a discussion!</p>
                                             </CardContent>
                                         </Card>
                                     )}
 
                                     {forums.map((forum) => (
-                                        <Link key={forum._id} href={`/forums/${forum._id}`}>
-                                            <Card className="hover:shadow-lg transition-shadow">
-                                                <CardHeader>
+                                        <Link key={forum._id} href={`/forums/${forum._id}`} className="block">
+                                            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                                                <CardHeader className="p-4 sm:p-6">
                                                     <div className="flex justify-between items-start">
-                                                        <div>
-                                                            <CardTitle>{forum.title}</CardTitle>
-                                                            <CardDescription className="mt-2">
+                                                        <div className="w-full">
+                                                            <CardTitle className="text-lg sm:text-xl mb-2">
+                                                                {forum.title}
+                                                            </CardTitle>
+                                                            <CardDescription className="flex flex-wrap gap-2 items-center mt-2">
                                                                 {forum.tag && (
-                                                                    <span className="inline-block bg-green-100 dark:bg-green-800 rounded-full px-3 py-1 text-sm font-medium mr-2">
+                                                                    <span className="inline-block bg-green-100 text-green-800 rounded-full px-3 py-1 text-xs font-medium">
                                                                         {forum.tag}
                                                                     </span>
                                                                 )}
-                                                                <span>
+                                                                <span className="text-xs sm:text-sm">
                                                                     Posted {formatDistanceToNow(new Date(forum.createdAt), { addSuffix: true })}
                                                                 </span>
                                                             </CardDescription>
                                                         </div>
                                                     </div>
                                                 </CardHeader>
-                                                <CardContent>
-                                                    <p className="line-clamp-2 text-gray-600 dark:text-gray-400">
+                                                <CardContent className="p-4 sm:p-6 pt-0">
+                                                    <p className="line-clamp-3 text-gray-600 text-sm sm:text-base mb-4">
                                                         {forum.content.slice(0, 500)}...
                                                     </p>
-                                                    <div className="w-full my-4 flex justify-end">
-                                                        <Button className="bg-green-700 cursor-pointer" onClick={() => router.push(`/${forum._id}}`)}>
+                                                    <div className="flex justify-end">
+                                                        <Button 
+                                                            className="bg-green-700 hover:bg-green-800 cursor-pointer text-xs sm:text-sm"
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                router.push(`/forums/${forum._id}`);
+                                                            }}
+                                                        >
                                                             Read More
                                                         </Button>
                                                     </div>
@@ -145,44 +171,54 @@ export default function ProfessionalForumWrapper() {
                                 </div>
                             )}
                         </TabsContent>
-                        <TabsContent value="Your Discussions" className="my-10">
+                        
+                        {/* Your Discussions Tab */}
+                        <TabsContent value="Your Discussions" className="my-6 sm:my-10">
                             {loading ? (
                                 <ForumSkeleton />
                             ) : (
-                                <div className="grid gap-6">
+                                <div className="grid gap-4 sm:gap-6">
                                     {providerForums.length === 0 ? (
                                         <Card>
-                                            <CardContent className="py-6 text-center">
-                                                <p>No forum posts yet. Be the first to start a discussion!</p>
+                                            <CardContent className="py-8 text-center">
+                                                <p className="text-gray-600">No forum posts yet. Be the first to start a discussion!</p>
                                             </CardContent>
                                         </Card>
                                     ) : (
                                         providerForums.map((forum) => (
-                                            <Link key={forum._id} href={`/forums/${forum._id}`}>
-                                                <Card className="hover:shadow-lg transition-shadow">
-                                                    <CardHeader>
+                                            <Link key={forum._id} href={`/forums/${forum._id}`} className="block">
+                                                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                                                    <CardHeader className="p-4 sm:p-6">
                                                         <div className="flex justify-between items-start">
-                                                            <div>
-                                                                <CardTitle>{forum.title}</CardTitle>
-                                                                <CardDescription className="mt-2">
+                                                            <div className="w-full">
+                                                                <CardTitle className="text-lg sm:text-xl mb-2">
+                                                                    {forum.title}
+                                                                </CardTitle>
+                                                                <CardDescription className="flex flex-wrap gap-2 items-center mt-2">
                                                                     {forum.tag && (
-                                                                        <span className="inline-block bg-green-100 dark:bg-green-800 rounded-full px-3 py-1 text-sm font-medium mr-2">
+                                                                        <span className="inline-block bg-green-100 text-green-800 rounded-full px-3 py-1 text-xs font-medium">
                                                                             {forum.tag}
                                                                         </span>
                                                                     )}
-                                                                    <span>
+                                                                    <span className="text-xs sm:text-sm">
                                                                         Posted {formatDistanceToNow(new Date(forum.createdAt), { addSuffix: true })}
                                                                     </span>
                                                                 </CardDescription>
                                                             </div>
                                                         </div>
                                                     </CardHeader>
-                                                    <CardContent>
-                                                        <p className="line-clamp-2 text-gray-600 dark:text-gray-400">
+                                                    <CardContent className="p-4 sm:p-6 pt-0">
+                                                        <p className="line-clamp-3 text-gray-600 text-sm sm:text-base mb-4">
                                                             {forum.content.slice(0, 500)}...
                                                         </p>
-                                                        <div className="w-full my-4 flex justify-end">
-                                                            <Button className="bg-green-700 cursor-pointer" onClick={() => router.push(`/${forum._id}}`)}>
+                                                        <div className="flex justify-end">
+                                                            <Button 
+                                                                className="bg-green-700 hover:bg-green-800 cursor-pointer text-xs sm:text-sm"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    router.push(`/forums/${forum._id}`);
+                                                                }}
+                                                            >
                                                                 Read More
                                                             </Button>
                                                         </div>
@@ -196,8 +232,6 @@ export default function ProfessionalForumWrapper() {
                         </TabsContent>
                     </Tabs>
                 </div>
-
-
             </div>
         </>
     );
@@ -205,18 +239,20 @@ export default function ProfessionalForumWrapper() {
 
 export function ForumSkeleton() {
     return (
-        <div className="container mx-auto py-8">
-
-            <div className="grid gap-6">
+        <div className="container mx-auto py-6">
+            <div className="grid gap-4 sm:gap-6">
                 {[...Array(3)].map((_, i) => (
-                    <Card key={i}>
-                        <CardHeader>
-                            <Skeleton className="h-6 w-3/4" />
-                            <Skeleton className="h-4 w-1/2 mt-2" />
+                    <Card key={i} className="p-4 sm:p-6">
+                        <CardHeader className="p-0 pb-4">
+                            <Skeleton className="h-6 w-3/4 mb-2" />
+                            <Skeleton className="h-4 w-1/2" />
                         </CardHeader>
-                        <CardContent>
-                            <Skeleton className="h-4 w-full" />
-                            <Skeleton className="h-4 w-5/6 mt-2" />
+                        <CardContent className="p-0">
+                            <Skeleton className="h-4 w-full mb-2" />
+                            <Skeleton className="h-4 w-5/6" />
+                            <div className="flex justify-end mt-4">
+                                <Skeleton className="h-9 w-24" />
+                            </div>
                         </CardContent>
                     </Card>
                 ))}
