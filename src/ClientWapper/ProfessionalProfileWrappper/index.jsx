@@ -288,148 +288,169 @@ export default function ProfessionalProfile({ name }) {
                     )}
 
                     {/* Reviews Section */}
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center justify-between">
-                                <CardTitle className="text-green-800">Customer Reviews</CardTitle>
-                                <div className="flex items-center gap-4">
-                                    <div className="flex items-center">
-                                        <Star className="w-5 h-5 text-yellow-500 fill-yellow-500 mr-1" />
-                                        <span className="font-medium">{avgRating.toFixed(1)} out of 5</span>
-                                    </div>
-                                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                                        <DialogTrigger asChild>
-                                            <Button className="bg-green-700 hover:bg-green-800">
-                                                Add Review
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent className="sm:max-w-[600px]">
-                                            <DialogHeader>
-                                                <DialogTitle className="text-green-800">Add Your Review</DialogTitle>
-                                            </DialogHeader>
-                                            <div className="grid gap-4 py-4">
-                                                <div className="space-y-2">
-                                                    <label htmlFor="name" className="text-sm font-medium text-gray-700">
-                                                        Your Name
-                                                    </label>
-                                                    <Input
-                                                        id="name"
-                                                        placeholder="John Doe"
-                                                        value={reviewData.name}
-                                                        onChange={(e) => setReviewData({ ...reviewData, name: e.target.value })}
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                                                        Your Email
-                                                    </label>
-                                                    <Input
-                                                        id="email"
-                                                        type="email"
-                                                        placeholder="john@example.com"
-                                                        value={reviewData.email}
-                                                        onChange={(e) => setReviewData({ ...reviewData, email: e.target.value })}
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-sm font-medium text-gray-700">
-                                                        Your Rating
-                                                    </label>
-                                                    <Rating
-                                                        style={{ maxWidth: 150 }}
-                                                        value={reviewData.rating}
-                                                        onChange={(rating) => setReviewData({ ...reviewData, rating })}
-                                                        itemStyles={{
-                                                            itemShapes: ThinStar,
-                                                            activeFillColor: '#15803d', // green-700
-                                                            inactiveFillColor: '#D7D7D7', // green-100
-                                                        }}
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label htmlFor="description" className="text-sm font-medium text-gray-700">
-                                                        Your Review
-                                                    </label>
-                                                    <Textarea
-                                                        id="description"
-                                                        placeholder="Share your experience..."
-                                                        rows={4}
-                                                        value={reviewData.description}
-                                                        onChange={(e) => setReviewData({ ...reviewData, description: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <Button
-                                                className="bg-green-700 hover:bg-green-800"
-                                                onClick={handleReviewSubmit}
-                                                disabled={isSubmitting}
-                                            >
-                                                {isSubmitting ? (
-                                                    <>
-                                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                        Submitting...
-                                                    </>
-                                                ) : 'Submit Review'}
-                                            </Button>
-                                        </DialogContent>
-                                    </Dialog>
-                                </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            {/* Rating Breakdown */}
-                            <div className="mb-6">
-                                {[5, 4, 3, 2, 1].map((star) => {
-                                    const count = professional?.reviews?.filter(r => r?.rating === star).length || 0;
-                                    const percentage = professional?.reviews?.length
-                                        ? (count / professional.reviews.length) * 100
-                                        : 0;
+                    <Card className="shadow-md border border-green-100 rounded-2xl overflow-hidden">
+  {/* Header */}
+  <CardHeader className="bg-green-700 text-white p-6 rounded-t-2xl">
+    <div className="flex items-center justify-between">
+      <CardTitle className="text-xl font-semibold tracking-wide">
+        Customer Reviews
+      </CardTitle>
+      <div className="flex items-center gap-4">
+        <div className="flex items-center bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
+          <Star className="w-5 h-5 text-yellow-400 fill-yellow-400 mr-1" />
+          <span className="font-medium text-sm">
+            {avgRating.toFixed(1)} / 5
+          </span>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="bg-white text-green-800 hover:bg-green-100 font-medium">
+              + Add Review
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[600px] rounded-xl">
+            <DialogHeader>
+              <DialogTitle className="text-green-800 text-lg">
+                Add Your Review
+              </DialogTitle>
+            </DialogHeader>
 
-                                    return (
-                                        <div key={star} className="flex items-center gap-4 mb-2">
-                                            <div className="flex items-center w-16">
-                                                <span className="w-4">{star}</span>
-                                                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 ml-1" />
-                                            </div>
-                                            <Progress value={percentage} className="h-2 flex-1 bg-green-100" indicatorClassName="bg-green-700" />
-                                            <span className="text-sm text-gray-600 w-8 text-right">{count}</span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+            {/* Review Form */}
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <label htmlFor="name" className="text-sm font-medium text-gray-700">
+                  Your Name
+                </label>
+                <Input
+                  id="name"
+                  placeholder="John Doe"
+                  value={reviewData.name}
+                  onChange={(e) => setReviewData({ ...reviewData, name: e.target.value })}
+                />
+              </div>
 
-                            {/* Reviews List */}
-                            <div className="space-y-6">
-                                {professional?.reviews?.length > 0 ? (
-                                    professional.reviews.map((review, index) => (
-                                        <div key={index} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
-                                            <div className="flex justify-between mb-2">
-                                                <div>
-                                                    <h4 className="font-medium text-gray-900">{review?.name || 'Anonymous'}</h4>
-                                                    <p className="text-sm text-gray-500">
-                                                        {review?.createdAt ? new Date(review.createdAt).toLocaleDateString('en-US', {
-                                                            year: 'numeric',
-                                                            month: 'long',
-                                                            day: 'numeric'
-                                                        }) : 'Date unknown'}
-                                                    </p>
-                                                </div>
-                                                <div className="flex items-center">
-                                                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                                                    <span className="ml-1 font-medium">{review?.rating || 0}</span>
-                                                </div>
-                                            </div>
-                                            <p className="text-gray-700">{review?.description || 'No description provided'}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="text-center py-8">
-                                        <p className="text-gray-500">No reviews yet. Be the first to review!</p>
-                                    </div>
-                                )}
-                            </div>
-                        </CardContent>
-                    </Card>
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                  Your Email
+                </label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="john@example.com"
+                  value={reviewData.email}
+                  onChange={(e) => setReviewData({ ...reviewData, email: e.target.value })}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Your Rating</label>
+                <Rating
+                  style={{ maxWidth: 150 }}
+                  value={reviewData.rating}
+                  onChange={(rating) => setReviewData({ ...reviewData, rating })}
+                  itemStyles={{
+                    itemShapes: ThinStar,
+                    activeFillColor: '#15803d',
+                    inactiveFillColor: '#E5E7EB',
+                  }}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="description" className="text-sm font-medium text-gray-700">
+                  Your Review
+                </label>
+                <Textarea
+                  id="description"
+                  placeholder="Share your experience..."
+                  rows={4}
+                  value={reviewData.description}
+                  onChange={(e) => setReviewData({ ...reviewData, description: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <Button
+              className="bg-green-700 hover:bg-green-800 text-white font-semibold"
+              onClick={handleReviewSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                'Submit Review'
+              )}
+            </Button>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
+  </CardHeader>
+
+  {/* Reviews Section */}
+  <CardContent className="p-6 space-y-6 bg-green-50">
+    {professional?.reviews?.length > 0 ? (
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {professional.reviews.map((review, index) => (
+          <div
+            key={index}
+            className="relative bg-white rounded-2xl shadow-md p-5 border border-green-100 transition-all hover:shadow-xl hover:-translate-y-1"
+          >
+            {/* Decorative "cart" tab */}
+            <div className="absolute -top-3 left-5 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+              Verified
+            </div>
+
+            {/* Reviewer Info */}
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <h4 className="font-semibold text-gray-900">{review?.name || 'Anonymous'}</h4>
+                <p className="text-xs text-gray-500">
+                  {review?.createdAt
+                    ? new Date(review.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    : 'Date unknown'}
+                </p>
+              </div>
+              <div className="flex items-center bg-green-100 px-2 py-1 rounded-full">
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                <span className="ml-1 font-medium text-sm text-green-800">
+                  {review?.rating || 0}
+                </span>
+              </div>
+            </div>
+
+            {/* Review Text */}
+            <p className="text-gray-700 text-sm leading-relaxed mb-3">
+              {review?.description || 'No description provided'}
+            </p>
+
+            {/* Cart-style Footer */}
+            <div className="flex items-center justify-between text-xs text-gray-500 mt-4 pt-3 border-t border-gray-100">
+              <span>Customer ID #{index + 101}</span>
+              <span className="text-green-700 font-medium cursor-pointer hover:underline">
+                Helpful?
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div className="text-center py-8">
+        <p className="text-gray-500 italic">
+          No reviews yet — be the first to share your experience!
+        </p>
+      </div>
+    )}
+  </CardContent>
+</Card>
+
                 </TabsContent>
                 <TabsContent value="Additional Information">
                     <ProfessionalEstimations />

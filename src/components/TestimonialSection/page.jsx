@@ -49,11 +49,12 @@ export default function TestimonialSection() {
                   <div className="author-box">
                     <figure className="author-thumb">
                       <img
-                        src="assets/images/testimonial/manager.jpg"
+                        src="assets/images/testimonial/manager-1.jpg"
                         alt=""
+                        className='object-cover'
                       />
                     </figure>
-                    <h3>Theresa Webb</h3>
+                    <h3>David James</h3>
                     <span className="designation">Manager</span>
                     <ul className="rating clearfix">
                       <li>
@@ -93,9 +94,9 @@ export default function TestimonialSection() {
                   </div>
                   <div className="author-box">
                     <figure className="author-thumb">
-                      <img src="assets/images/testimonial/ceo.jpg" alt="" />
+                      <img src="assets/images/testimonial/ceo-1.jpg" alt="" className='object-cover'/>
                     </figure>
-                    <h3>Haris Gulati</h3>
+                    <h3>Henry Wright</h3>
                     <span className="designation">CEO</span>
                     <ul className="rating clearfix">
                       <li>
@@ -139,8 +140,8 @@ export default function TestimonialSection() {
                         alt=""
                       />
                     </figure>
-                    <h3>Theresa Webb</h3>
-                    <span className="designation">Manager</span>
+                    <h3>Luke Ferro</h3>
+                    <span className="designation">Team Leader</span>
                     <ul className="rating clearfix">
                       <li>
                         <i className="icon-15"></i>
@@ -180,8 +181,8 @@ export default function TestimonialSection() {
                     <figure className="author-thumb">
                       <img src="assets/images/testimonial/ceo.jpg" alt="" />
                     </figure>
-                    <h3>Haris Gulati</h3>
-                    <span className="designation">CEO</span>
+                    <h3>Haris Khan</h3>
+                    <span className="designation">COO</span>
                     <ul className="rating clearfix">
                       <li>
                         <i className="icon-15"></i>
