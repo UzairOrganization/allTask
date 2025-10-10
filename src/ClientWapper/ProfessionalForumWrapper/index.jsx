@@ -78,10 +78,10 @@ export default function ProfessionalForumWrapper() {
             <ProfessionalHeader />
 
             <div className="container mx-auto max-w-6xl py-8">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold">Community Forum</h1>
+                <div className="flex  justify-between items-center mb-8 mx-4 lg:mx-0">
+                    <h1 className="text-2xl lg:text-3xl font-bold">Community Forum</h1>
                     <div className="flex gap-4">
-                        <Input placeholder="Search forums..." className="w-64" />
+                        {/* <Input placeholder="Search forums..." className="w-64" /> */}
                         <Link href="/forums/new-forum" className="cursor-pointer">
                             <Button className="cursor-pointer">Start Discussion</Button>
                         </Link>
@@ -89,7 +89,7 @@ export default function ProfessionalForumWrapper() {
                 </div>
                 <div className="container mx-auto my-8">
                     <Tabs defaultValue="All Discussions">
-                        <div className="flex justify-end my-4">
+                        <div className="flex justify-end my-4 mr-3 lg:mr-0">
 
                             <TabsList>
                                 <TabsTrigger value="All Discussions">All Discussions</TabsTrigger>
@@ -145,7 +145,7 @@ export default function ProfessionalForumWrapper() {
                                 </div>
                             )}
                         </TabsContent>
-                        <TabsContent value="Your Discussions" className="my-10">
+                        <TabsContent value="Your Discussions" className="my-10 ">
                             {loading ? (
                                 <ForumSkeleton />
                             ) : (
@@ -159,7 +159,7 @@ export default function ProfessionalForumWrapper() {
                                     ) : (
                                         providerForums.map((forum) => (
                                             <Link key={forum._id} href={`/forums/${forum._id}`}>
-                                                <Card className="hover:shadow-lg transition-shadow">
+                                                <Card className="hover:shadow-lg transition-shadow ">
                                                     <CardHeader>
                                                         <div className="flex justify-between items-start">
                                                             <div>

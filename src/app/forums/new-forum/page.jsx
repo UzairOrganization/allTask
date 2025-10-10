@@ -63,7 +63,7 @@ export default function NewForumPage() {
         <>
             <ProfessionalHeader />
             <Toaster position="bottom-left" richColors />
-            <div className="container mx-auto py-8">
+            <div className="container w-[90%] lg:w-full mx-auto py-8">
                 <div className="max-w-2xl mx-auto">
                     <div className="mb-6">
                         <Button

@@ -23,7 +23,7 @@ export default function PaymentSuccess({ searchParams }) {
     }, [])
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50/50 to-white">
+        <div className="min-h-screen  bg-gradient-to-br from-green-50/50 to-white">
             <div className="max-w-lg mx-auto pt-24 px-4 sm:px-6 lg:px-8">
                 <div className="text-center space-y-6">
                     {/* Animated checkmark */}
@@ -91,7 +91,7 @@ export default function PaymentSuccess({ searchParams }) {
                                         Go to Dashboard <ArrowRight className="h-4 w-4" />
                                     </Link>
                                 </Button>
-                                <Button variant="outline" asChild className="px-6 py-3">
+                                <Button variant="outline" asChild className="px-6 py-3 mb-8">
                                     <Link href="/purchased-leads" className="flex items-center gap-2">
                                         Browse Purchased Leads
                                     </Link>

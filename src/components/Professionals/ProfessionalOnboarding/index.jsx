@@ -337,14 +337,14 @@ export function ProfessionalOnboarding() {
         <>
 
             <Toaster />
-            <div className="w-full my-4 max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm">
-                <div className="flex w-full items-center justify-between">
+            <div className="w-full my-4  lg:max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+                <div className="flex w-full flex-col lg:flex-row lg:items-center lg:justify-between ">
 
                     <div className="mb-8">
                         <h1 className="text-2xl font-bold text-gray-900">Hello, {provider?.name}</h1>
                         <p className="text-gray-500">{dateTime}</p>
                     </div>
-                    <div className="flex items-center w-[200px] justify-around">
+                    <div className="flex items-center justify-between lg:justify-start  mb-8 lg:mb-0 lg:w-[200px] w-full ">
                         <div className="flex items-center gap-2">
                             {isLoading ? (
                                 // Loading state
@@ -467,11 +467,11 @@ export function ProfessionalOnboarding() {
                     </>
                 )}
 
-                <div className="container mx-auto px-4 py-6">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-8">Profile Overview</h1>
-                    <div className={`grid grid-cols-1  ${provider?.isSubscriptionHolder ? "lg:grid-cols-1" : "lg:grid-cols-2"} gap-6 items-stretch`}>
+                <div className="container lg:mx-auto px-4 py-6 ">
+                    <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-8">Profile Overview</h1>
+                    <div className={`grid grid-cols-1 ${provider?.isSubscriptionHolder ? "lg:grid-cols-1" : "lg:grid-cols-2"} gap-6 items-stretch`}>
                         {/* Profile Completion Card */}
-                        <Card className="border  border-gray-200 rounded-lg shadow-sm h-full flex flex-col">
+                        <Card className="border w-full border-gray-200 rounded-lg shadow-sm h-full flex flex-col">
                             <CardHeader className="border-b border-gray-200">
                                 <div className="flex items-center space-x-4">
                                     {provider?.profilePicture ? (
@@ -750,8 +750,8 @@ export function ProfessionalOnboarding() {
                             !provider?.isSubscriptionHolder && (
                                 <Card className="border rounded-lg shadow-sm bg-gradient-to-br from-green-50 to-green-100 border-green-200 h-full flex flex-col">
                                     <CardHeader className="border-b border-green-200 bg-green-100/50">
-                                        <div className="flex justify-between items-center">
-                                            <h2 className="text-xl font-semibold text-gray-800">PROFESSIONAL PLUS</h2>
+                                        <div className="flex flex-col gap-2 lg:gap-0 lg:flex-row justify-between items-center">
+                                            <h2 className="text-xl font-bold text-gray-800 ">PROFESSIONAL PLUS</h2>
                                             <Badge className="bg-green-800 text-white hover:bg-green-900">
                                                 <div className="flex items-center gap-1">
                                                     <Crown className="h-4 w-4 fill-yellow-300 text-yellow-300" />

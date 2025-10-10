@@ -1,9 +1,9 @@
 'use client';
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Country, State, City } from 'country-state-city';
+import CountrySelect from './CountryStep';
+import StateSelect from './StateStep';
+import CitySelect from './CityStep';
 
 const LocationStep = ({
   step,
@@ -15,105 +15,30 @@ const LocationStep = ({
   formData,
   setFormData
 }) => {
-  // Get states based on selected country
-  const states = selectedCountry ? State.getStatesOfCountry(selectedCountry.isoCode) : [];
-  
-  // Get cities based on selected state and country
-  const cities = selectedState && selectedCountry
-    ? City.getCitiesOfState(selectedCountry.isoCode, selectedState.isoCode)
-    : [];
-
   if (step !== 4) return null;
 
   return (
     <div className="space-y-6">
-      <div>
-        <Label htmlFor="country" className="block text-sm font-medium text-gray-700">
-          Country
-        </Label>
-        <Select
-          onValueChange={(isoCode) => {
-            const country = Country.getAllCountries().find(c => c.isoCode === isoCode);
-            setSelectedCountry(country);
-            setSelectedState(null); // reset state
-            setFormData(prev => ({
-              ...prev,
-              country: country.name,
-              state: "",
-              city: ""
-            }));
-          }}
-          value={selectedCountry?.isoCode || ""}
-        >
-          <SelectTrigger className="mt-1 w-full">
-            <SelectValue placeholder="Select a country" />
-          </SelectTrigger>
-          <SelectContent className="max-h-[300px]">
-            {Country.getAllCountries()
-              .filter(country => country.isoCode === 'US' || country.isoCode === 'CA')
-              .map((country) => (
-                <SelectItem key={country.isoCode} value={country.isoCode}>
-                  {country.name}
-                </SelectItem>
-              ))}
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
-        <Label htmlFor="state" className="block text-sm font-medium text-gray-700">
-          State/Province
-        </Label>
-        <Select
-          onValueChange={(isoCode) => {
-            const state = states.find(s => s.isoCode === isoCode);
-            setSelectedState(state);
-            setFormData(prev => ({
-              ...prev,
-              state: state.name,
-              city: ""
-            }));
-          }}
-          value={selectedState?.isoCode || ""}
-          disabled={!selectedCountry}
-        >
-          <SelectTrigger className="mt-1 w-full">
-            <SelectValue placeholder="Select a state/province" />
-          </SelectTrigger>
-          <SelectContent className="max-h-[300px]">
-            {states.map((state) => (
-              <SelectItem key={state.isoCode} value={state.isoCode}>
-                {state.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
-        <Label htmlFor="city" className="block text-sm font-medium text-gray-700">
-          City
-        </Label>
-        <Select
-          onValueChange={(cityName) => {
-            setFormData(prev => ({
-              ...prev,
-              city: cityName
-            }));
-          }}
-          value={formData.city}
-          disabled={!selectedState}
-        >
-          <SelectTrigger className="mt-1 w-full">
-            <SelectValue placeholder="Select a city" />
-          </SelectTrigger>
-          <SelectContent className="max-h-[300px]">
-            {cities.map((city) => (
-              <SelectItem key={city.name} value={city.name}>
-                {city.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <CountrySelect
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+        setSelectedState={setSelectedState}
+        setFormData={setFormData}
+      />
+      
+      <StateSelect
+        selectedCountry={selectedCountry}
+        selectedState={selectedState}
+        setSelectedState={setSelectedState}
+        setFormData={setFormData}
+      />
+      
+      <CitySelect
+        selectedCountry={selectedCountry}
+        selectedState={selectedState}
+        formData={formData}
+        setFormData={setFormData}
+      />
 
       <div className="flex justify-between">
         <Button

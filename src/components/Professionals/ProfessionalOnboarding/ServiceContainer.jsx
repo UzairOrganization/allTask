@@ -186,9 +186,9 @@ export function ServicesContainer({ isNewRegistration }) {
         <>
             <Card className="border h-[400px] overflow-y-scroll border-gray-200 rounded-lg shadow-sm lg:col-span-2">
                 <Toaster />
-                <CardHeader className="border-b border-gray-200 flex flex-row justify-between items-center">
+                <CardHeader className="border-b border-gray-200 flex flex-col lg:flex-row justify-between items-center">
                     <div>
-                        <h2 className="text-xl font-semibold text-gray-800">Services</h2>
+                        <h2 className="text-xl font-bold text-center lg:text-start text-gray-800">Services</h2>
                         <p className="text-gray-600 text-sm">You'll receive leads in these categories</p>
                     </div>
                     <Dialog open={openAddDialog} onOpenChange={setOpenAddDialog}>
