@@ -101,7 +101,9 @@ export default function PurchasedLeadsPage() {
                     `${API}/api/chats/init/${payment._id}`
                 );
 
+                console.log(result.data);
                 navigation.push("/chat/professional")
+                
                 return result.data;
 
             } catch (error) {

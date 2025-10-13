@@ -105,8 +105,8 @@ export default function ProjectSection() {
                         key={project._id}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer
                 ${selectedTitle === project._id
-                            ? 'bg-green-600 text-white shadow-md'
-                            : 'bg-gray-100 text-gray-800 hover:bg-blue-100 hover:text-green-600'
+                            ? 'bg-[#008B6E] text-white shadow-md'
+                            : 'bg-gray-100 text-gray-800 hover:bg-blue-100 hover:text-[#008B6E]'
                           }`}
                         onClick={() => handleTitleClick(project._id)}
                       >
@@ -117,7 +117,7 @@ export default function ProjectSection() {
                     {remainingTitles > 0 ? (
                       <button
                         onClick={handleShowMore}
-                        className="px-4 py-2 bg-blue-50 rounded-full text-sm font-medium text-green-600 hover:bg-blue-100 transition-colors"
+                        className="px-4 py-2 bg-blue-50 rounded-full text-sm font-medium text-[#008B6E] hover:bg-blue-100 transition-colors"
                       >
                         +{remainingTitles} more
                       </button>

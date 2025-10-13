@@ -98,7 +98,7 @@ const PurchasedLeads = () => {
                 const result = await axios.post(
                     `${API}/api/chats/init/${payment._id}`
                 );
-
+                
                 navigation.push("/chat/professional")
                 return result.data;
 

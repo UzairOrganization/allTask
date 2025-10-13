@@ -37,7 +37,7 @@ const HelpPage = () => {
       icon: <Wallet className="w-6 h-6 text-green-700" />,
       description: "Financial questions",
       topics: ["Pricing structure", "Payment methods", "Refunds"],
-      urls: ["/help/pricing-structure", "/help/payment-methods", "/help/refunds"],
+      urls: ["/help/pricing-structures", "/help/payment-methods", "/help/refunds"],
     },
   ];
 
@@ -45,22 +45,22 @@ const HelpPage = () => {
     {
       title: "How to get your first booking",
       icon: <CalendarCheck className="w-5 h-5 mr-2 text-green-700" />,
-      url: "/help/getting-first-booking",
+      url: "/help/how-to-get-your-first-booking",
     },
     {
       title: "Setting up secure payments",
       icon: <Wallet className="w-5 h-5 mr-2 text-green-700" />,
-      url: "/help/secure-payments",
+      url: "/help/setting-up-secure-payments",
     },
     {
       title: "Managing your service calendar",
       icon: <CalendarCheck className="w-5 h-5 mr-2 text-green-700" />,
-      url: "/help/service-calendar",
+      url: "/help/managing-your-service-calender",
     },
     {
       title: "Writing great service descriptions",
       icon: <MessageSquare className="w-5 h-5 mr-2 text-green-700" />,
-      url: "/help/service-descriptions",
+      url: "/help/writing-great-service-description",
     },
   ];
 
@@ -68,7 +68,7 @@ const HelpPage = () => {
     <>
       <ProfessionalHeader />
 
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+      <div className="container max-w-6xl mx-auto px-4 py-8 my-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4 text-green-700">
@@ -79,7 +79,7 @@ const HelpPage = () => {
           </p>
 
           <div className="mt-8 max-w-2xl mx-auto relative">
-  <input
+  {/* <input
     type="text"
     placeholder="Search help articles..."
     className="w-full pl-12 pr-4 py-3 text-base border border-green-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
@@ -96,7 +96,7 @@ const HelpPage = () => {
       strokeWidth={2}
       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
     />
-  </svg>
+  </svg> */}
 </div>
         </div>
 
@@ -151,7 +151,7 @@ const HelpPage = () => {
         </div>
 
         {/* Support Section */}
-        <div className="bg-green-50 rounded-xl p-8 text-center border border-green-200">
+        {/* <div className="bg-green-50 rounded-xl p-8 text-center border border-green-200">
           <div className="max-w-2xl mx-auto">
             <LifeBuoy className="w-12 h-12 mx-auto text-green-700 mb-4" />
             <h2 className="text-2xl font-semibold mb-2 text-green-700">
@@ -173,7 +173,7 @@ const HelpPage = () => {
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
