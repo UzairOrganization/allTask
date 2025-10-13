@@ -336,7 +336,7 @@ export function ProfessionalOnboarding() {
         }
     };
     return (
-        <Suspense fallback={<div>Loading dashboard...</div>}>
+        <>
 
             <Toaster />
             <div className="w-full my-4  lg:max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm">
@@ -816,6 +816,6 @@ export function ProfessionalOnboarding() {
                     </div>
                 </div>
             </div>
-        </Suspense>
+        </>
     )
 }
