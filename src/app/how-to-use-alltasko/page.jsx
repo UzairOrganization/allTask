@@ -260,9 +260,7 @@ export default function HowToUseGuide() {
                 <p className="text-black mt-6">
                     Alltasko is here to save you time, reduce stress, and make getting things done effortless.
                 </p>
-                <Button className="mt-6 bg-green-700 hover:bg-green-800">
-                    Post your requirement today
-                </Button>
+               
             </section>
 
             <Separator className="my-12" />

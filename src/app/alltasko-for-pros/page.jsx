@@ -225,7 +225,9 @@ export default function ProfessionalsPage() {
                         Alltasko is your partner in business growth. We connect you with real customers, help manage your jobs, and boost your credibility so you can focus on delivering exceptional service.
                     </p>
                     <Button className="bg-green-700 hover:bg-green-800 px-8 py-4 text-lg">
-                        Sign Up Now
+                     <a href="/professional-login">
+                     Sign Up Now
+                        </a>  
                     </Button>
                 </section>
 

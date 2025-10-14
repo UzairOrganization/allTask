@@ -127,7 +127,10 @@ export default function HomeResourceCenter() {
                         Our Home Resource Center is continuously updated with fresh tips, new how to articles, and trends in home care. Whether you're a first time homeowner or an experienced renovator, there's always something new to learn here.
                     </p>
                     <Button className="bg-green-700 hover:bg-green-800">
+                        <a href="/service">
+
                         Explore Resources
+                        </a>
                     </Button>
                 </section>
 

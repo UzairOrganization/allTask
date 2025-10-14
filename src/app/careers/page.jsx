@@ -161,9 +161,7 @@ export default function CareersPage() {
                     <p className="text-black max-w-3xl mx-auto mb-8">
                         If you'd like to be considered for future roles, feel free to send us your resume and a short introduction at careers@alltasko.com. We'll keep your details on file and reach out if a suitable position opens up.
                     </p>
-                    <Button className="px-8 py-4 bg-green-700 text-white rounded-lg font-bold hover:bg-green-800 transition text-lg">
-                        Email Your Resume
-                    </Button>
+
                 </section>
 
                 <section className="mb-16 text-center">

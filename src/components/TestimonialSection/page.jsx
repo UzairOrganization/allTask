@@ -6,6 +6,7 @@ import { Autoplay } from "swiper/modules";
 import axios from "axios";
 import { API } from "@/lib/data-service";
 import { FaStar } from "react-icons/fa"; // ⭐ Import React Icon
+import Testimonials from "./Testimonials";
 
 export default function TestimonialSection() {
   const [loading, setLoading] = useState(false);
@@ -98,10 +99,10 @@ export default function TestimonialSection() {
 
         <div className="auto-container" style={{ marginBottom: 40 }}>
           <div className="sec-title h2 mb_60 centred">
-            <h2>Client Feedback</h2>
+            <h2>Customer Feedback</h2>
           </div>
-
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
+          <Testimonials/>
+          {/* <div style={{ textAlign: "center", marginBottom: 40 }}>
             <button
               onClick={() => setShowModal(true)}
               style={{
@@ -120,9 +121,9 @@ export default function TestimonialSection() {
             >
               {loading ? "Loading..." : "Add a Review"}
             </button>
-          </div>
+          </div> */}
 
-          <Swiper
+          {/* <Swiper
             modules={[Autoplay]}
             spaceBetween={10}
             slidesPerView={2}
@@ -231,12 +232,12 @@ export default function TestimonialSection() {
                 </div>
               </SwiperSlide>
             ))}
-          </Swiper>
+          </Swiper> */}
         </div>
       </section>
 
       {/* ✅ Modal */}
-      {showModal && (
+      {/* {showModal && (
         <div style={overlayStyle}>
           <div style={modalStyle}>
             <h3 style={{ marginTop: 20, fontWeight: 600, fontSize: 20, color: "#111" }}>
@@ -263,7 +264,7 @@ export default function TestimonialSection() {
             </select>
             {errors.gender && <p style={errorText}>{errors.gender}</p>}
 
-            {/* ✅ Star Rating with React Icons */}
+          
             <div style={{ marginBottom: 15,display:"flex" }}>
               {[1, 2, 3, 4, 5].map((star) => (
                 <FaStar
@@ -305,7 +306,7 @@ export default function TestimonialSection() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

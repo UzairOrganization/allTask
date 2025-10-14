@@ -157,9 +157,7 @@ export default function CostEstimatesPage() {
                     <p className="text-black text-lg mb-6">
                         With Alltasko's cost estimate feature, you're always in control of your spending and your service choice.
                     </p>
-                    <Button className="bg-green-700 hover:bg-green-800">
-                        Post Your Requirement Now
-                    </Button>
+                    
                 </section>
 
                 <Separator className="my-12" />

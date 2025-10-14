@@ -102,9 +102,7 @@ export default function PressPage() {
                     <p className="text-black mb-6">
                         For consistency in coverage, please follow our brand usage guidelines. Logos, imagery, and approved descriptions can be shared upon request.
                     </p>
-                    <Button className="bg-green-700 hover:bg-green-800">
-                        Request Brand Assets
-                    </Button>
+                 
                 </section>
 
                 <Separator className="my-12" />

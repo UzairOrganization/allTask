@@ -183,11 +183,11 @@ export default function SupportPage() {
                     <p className="text-black mb-6">
                         We aim to respond to all queries as quickly as possible. Your time matters, and we know that many of the tasks posted on Alltasko are urgent. That's why we prioritize fast, clear, and effective solutions.
                     </p>
-                    <div className="text-center">
+                    {/* <div className="text-center">
                         <Button className="bg-green-700 hover:bg-green-800">
                             Need help now? Contact us today
                         </Button>
-                    </div>
+                    </div> */}
                 </section>
 
                 <Separator className="my-12" />
