@@ -33,18 +33,25 @@ export default function PurchasedLeadsPage() {
     const navigation = useRouter()
     useEffect(() => {
         const fetchPayments = async () => {
-            try {
-                setLoading(true)
-                const res = await axios.get(`${API}/api/payments`, { withCredentials: true })
-                // if (res.success) setPayments(res.data.result)
-                setPayments(res.data.result)
-
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchPayments()
-    }, [])
+          try {
+            setLoading(true);
+            const res = await axios.get(`${API}/api/payments`, { withCredentials: true });
+      
+            // ✅ Filter out "professional_plus" payments
+            const filteredPayments = res.data.result.filter(
+              (payment) => payment.paymentType !== "professional_plus"
+            );
+      
+            setPayments(filteredPayments);
+          } catch (error) {
+            console.error("Error fetching payments:", error);
+          } finally {
+            setLoading(false);
+          }
+        };
+      
+        fetchPayments();
+      }, []);
 
     const StatusBadge = ({ status }) => {
         const variants = {
