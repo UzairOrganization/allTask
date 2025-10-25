@@ -356,7 +356,7 @@ export function ProfessionalOnboarding() {
                                 // Offline state
                                 <div className="h-3 w-3 rounded-full bg-gray-400"></div>
                             )}
-                            <span className="text-sm font-medium">
+                            <span className="text-sm font-medium mr-2">
                                 {isLoading ? 'Loading...' : activityStatus ? 'Online' : 'Offline'}
                             </span>
                         </div>

@@ -94,7 +94,7 @@ export const BookingDialog = ({ triggerText, categoryName }) => {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button className="bg-green-700 cursor-pointer hover:bg-green-600 text-white font-bold py-6 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-700/30 animate-pulse-slow">
+                <Button className="bg-[#008b6e] cursor-pointer hover:bg-green-900 text-white font-bold py-6 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-700/30 animate-pulse-slow">
                     {triggerText}
                 </Button>
             </DialogTrigger>
@@ -172,14 +172,14 @@ const Service = ({ name }) => {
             <Toaster position='bottom-left' richColors />
             <div className="min-h-screen text-gray-100">
                 {/* Hero Section */}
-                <div className="relative h-[90vh] w-full overflow-hidden">
+                <div className="relative h-[60vh] w-full overflow-hidden">
                     <div
-                        className="absolute inset-0 bg-cover bg-center"
+                        className="absolute inset-0 bg-cover h-180 bg-center  "
                         style={{ backgroundImage: `url(${category.servicePicture})` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/40" />
                     <div className="relative h-full flex flex-col justify-center items-center text-center px-4">
-                        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-green-600 drop-shadow-lg">
+                        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#008b6e] drop-shadow-lg">
                             {category.name}
                         </h1>
                         <p className="text-xl md:text-3xl max-w-2xl text-gray-200 font-medium mb-8">
@@ -214,7 +214,7 @@ const Service = ({ name }) => {
                                     "Satisfaction guaranteed"
                                 ].map((item, index) => (
                                     <li key={index} className="flex items-start">
-                                        <span className="text-green-500 text-2xl mr-3">✓</span>
+                                        <span className="text-[#008b6e] text-2xl mr-3">✓</span>
                                         <span className="text-black text-lg">{item}</span>
                                     </li>
                                 ))}
@@ -223,7 +223,7 @@ const Service = ({ name }) => {
 
                         <div className="h-full bg-gray-200 rounded-xl p-8 border border-green-700/30 shadow-lg flex flex-col justify-between">
                             <div>
-                                <h2 className="text-2xl font-bold text-green-600 mb-2">Pricing</h2>
+                                <h2 className="text-2xl font-bold text-[#008b6e] mb-2">Pricing</h2>
                                 <p className="text-4xl font-bold text-black mb-2">{category.estimatedPrice}</p>
                                 <p className="text-gray-500">Flexible pricing based on your needs</p>
                             </div>

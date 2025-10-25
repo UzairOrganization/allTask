@@ -29,7 +29,7 @@ const ServiceCard = ({ category }) => {
             </CardContent>
             <CardFooter>
 
-                <Button className="w-[90%] cursor-pointer bg-green-700 hover:bg-green-800 absolute bottom-4">
+                <Button className="w-[90%] cursor-pointer bg-[#008b6e] hover:bg-green-900 absolute bottom-4">
                     <Link href={`/service/${category.name}`}>
                         Book Now
                     </Link>

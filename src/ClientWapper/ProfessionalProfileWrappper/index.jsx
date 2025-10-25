@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API } from "@/lib/data-service";
-
+import { FaCrown } from "react-icons/fa";
 import { Rating, ThinStar } from '@smastrom/react-rating'
 
 import '@smastrom/react-rating/style.css'
@@ -158,8 +158,9 @@ export default function ProfessionalProfile({ name }) {
                             <div className="flex items-center gap-6 flex-wrap">
                                 <h1 className="text-3xl font-bold text-gray-900">{professional?.name || 'Professional'}</h1>
                                 {professional?.isSubscriptionHolder && (
-                                    <Badge className="bg-purple-100 text-green-800 hover:bg-purple-200 text-lg">
+                                    <Badge className="bg-green-700  hover:bg-green-800 text-md">
                                         Platform Choice
+                                        <FaCrown className="text-yellow-500 w-5 h-5" />
                                     </Badge>
                                 )}
                             </div>
