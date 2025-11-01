@@ -272,7 +272,9 @@ export default function PartnerWithUsPage() {
                         We are committed to creating a win-win environment for professionals. By partnering with Alltasko, you're joining a growing network of skilled workers who are building stronger, more profitable businesses through better connections with customers.
                     </p>
                     <button className="px-8 py-4 bg-green-700 text-white rounded-lg font-bold hover:bg-green-800 transition text-lg">
-                        Sign up today and start getting real leads tomorrow
+                     <a href="/professional-login">
+                     Sign up today and start getting real leads tomorrow
+                        </a>   
                     </button>
                 </section>
 

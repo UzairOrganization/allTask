@@ -65,7 +65,7 @@ export default function Header() {
         window.location.href = "/service-request"
     }
     return (
-        <header className="bg-white w-full border-b shadow-lg">
+        <header className="bg-white w-full border-b shadow-lg overflow-x-hidden">
             <div className="w-[95%] mx-auto p-3 flex justify-between items-center">
                 {/* Logo */}
                 <div className="logo w-[210px]">
@@ -119,7 +119,7 @@ export default function Header() {
                                                     <span className="ml-2">All Requests</span>
                                                 </DropdownMenuItem>
                                             </Link>
-                                            <Link href={"/user-chat"} className="text-black cursor-pointer">
+                                            <Link href={"/chat/user"} className="text-black cursor-pointer">
                                                 <DropdownMenuItem className="p-1">
                                                     <MessageCircle />
                                                     <span className="ml-2">Chats</span>

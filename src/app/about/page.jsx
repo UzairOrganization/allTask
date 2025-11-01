@@ -292,10 +292,14 @@ export default function AboutPage() {
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
                         <button className="px-6 py-3 bg-green-700 text-white rounded-lg font-medium hover:bg-green-800 transition">
+                        <a href="/">
                             Customers – Post your requirement today
+                        </a>
                         </button>
                         <button className="px-6 py-3 bg-white text-green-700 border border-green-700 rounded-lg font-medium hover:bg-green-50 transition">
-                            Professionals – Sign up to receive quality leads
+                           <a href="/professional-login">
+                           Professionals – Sign up to receive quality leads
+                            </a> 
                         </button>
                     </div>
                 </section>

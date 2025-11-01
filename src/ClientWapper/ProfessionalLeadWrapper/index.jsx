@@ -9,6 +9,7 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibFbf1ijemDQ1TkHwjsb5oJ2AG3ePLAi8Np9FLNZsmz4N2CA4sKEhn00vHNOmlYC");
 import { Elements } from '@stripe/react-stripe-js';
+import PurchasedLeads from "@/components/PurchasedLeads";
 const ProfessionalLeadWrapper = () => {
     const [activeTab, setActiveTab] = useState('yours');
     const [selectedLead, setSelectedLead] = useState(null);
@@ -213,13 +214,28 @@ const ProfessionalLeadWrapper = () => {
                         >
                             All Leads
                         </button>
+                        <button
+                            onClick={() => setActiveTab('purchased-leads')}
+                            className={`pb-3 px-4 text-sm font-medium transition-colors ${activeTab === 'purchased-leads'
+                                ? 'text-green-700 border-b-2 border-green-700'
+                                : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                        >
+                            Purchased Leads
+                        </button>
                     </div>
                 </div>
             </div>
 
             {/* Your existing content area below */}
             <div className="flex-1 overflow-y-auto">
-                {selectedLead ? (
+            {activeTab === 'purchased-leads' ? (
+                <div className="max-w-[90%] m-auto">
+
+                    <PurchasedLeads/>
+                </div>
+            ) :
+                selectedLead ? (
                     <LeadDetailView
                         lead={selectedLead}
                         onBack={() => setSelectedLead(null)}

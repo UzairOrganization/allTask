@@ -42,6 +42,8 @@ import PDFUpload from "@/components/PDFUpload/PDFUpload";
 import { loadStripe } from '@stripe/stripe-js';
 import PurchasedLeadsPage from "@/ClientWapper/PurchasedLeadsWrapper";
 import PurchasedLeads from "@/components/PurchasedLeads";
+import { Suspense } from "react";
+
 const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibFbf1ijemDQ1TkHwjsb5oJ2AG3ePLAi8Np9FLNZsmz4N2CA4sKEhn00vHNOmlYC");
 // FileUpload component
 const FileUpload = ({ onFileUpload, accept, uploading }) => {

@@ -1,5 +1,6 @@
 import ProfessionalHeader from "@/components/Professionals/ProfessionalHeader";
 import { ProfessionalOnboarding } from "@/components/Professionals/ProfessionalOnboarding";
+import { Suspense } from "react";
 
 export const metadata = {
     title: "Professional Dashboard - Alltasko"
@@ -9,10 +10,10 @@ export const metadata = {
 const Page = async () => {
 
     return (
-        <>
+        <Suspense   fallback={<div>Loading dashboard...</div>}>
             <ProfessionalHeader />
             <ProfessionalOnboarding />
-        </>
+        </Suspense>
     );
 };
 

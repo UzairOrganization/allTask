@@ -90,14 +90,12 @@ export default function BlogPage() {
       <section className="mb-16 bg-green-50 rounded-xl p-8">
         <h2 className="text-3xl font-bold mb-6 text-green-700">Join the Conversation</h2>
         <p className="text-black mb-6">
-          Our blog isn't just about us sharing ideas — it's about building a community. We welcome your feedback, topic suggestions, and even guest posts from experienced professionals.
+          Our blog isn't just about us sharing ideas it's about building a community. We welcome your feedback, topic suggestions, and even guest posts from experienced professionals.
         </p>
         <p className="text-black mb-8">
           Check back regularly for fresh content, success stories, and expert advice. Together, we can make finding and offering services simpler, faster, and more reliable.
         </p>
-        <Button className="bg-green-700 hover:bg-green-800">
-          Visit the Alltasko Blog today and get inspired!
-        </Button>
+        
       </section>
 
       <Separator className="my-12" />

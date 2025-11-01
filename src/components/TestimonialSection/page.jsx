@@ -1,37 +1,86 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Autoplay } from "swiper/modules";
+import axios from "axios";
+import { API } from "@/lib/data-service";
+import { FaStar } from "react-icons/fa"; // ⭐ Import React Icon
+import Testimonials from "./Testimonials";
 
 export default function TestimonialSection() {
-  const reviewerImage = "assets/images/testimonial/profile.jpg";
+  const [loading, setLoading] = useState(false);
+
+  const maleImage = "assets/images/testimonial/profile.jpg";
+  const femaleImage = "assets/images/testimonial/female.png";
 
   const [testimonials, setTestimonials] = useState([
     {
       name: "Sophia Davis",
       rating: 5,
+      gender: "female",
       text: "Really happy with AllTasko! I booked a carpenter through the app and he was polite, skilled, and finished the job fast. Prices are reasonable too. Just wish they had more service options in my area.",
     },
     {
       name: "Daniel Wilson",
       rating: 5,
+      gender: "male",
       text: "AllTasko is a game-changer! I’ve tried many service apps before, but this one stands out for its smooth interface and trustworthy professionals. I found an AC technician in no time. Great work team!",
     },
   ]);
 
+  const fetchReviews = async () => {
+    try {
+      const res = await axios.get(`${API}/api/publicreviews`);
+      if (res.data?.data) {
+        setTestimonials([...res.data.data, ...testimonials]);
+      }
+    } catch (err) {
+      console.error("Failed to load reviews:", err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchReviews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [showModal, setShowModal] = useState(false);
   const [newReview, setNewReview] = useState({
     name: "",
+    gender: "",
     rating: 0,
     text: "",
   });
 
-  const handleAddReview = () => {
-    if (!newReview.name || !newReview.text) return;
-    setTestimonials([...testimonials, newReview]);
-    setNewReview({ name: "", rating: 0, text: "" });
-    setShowModal(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!newReview.name.trim()) newErrors.name = "Full name is required";
+    if (!newReview.gender) newErrors.gender = "Please select a gender";
+    if (!newReview.rating) newErrors.rating = "Please select a rating";
+    if (!newReview.text.trim()) newErrors.text = "Review text cannot be empty";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleAddReview = async () => {
+    if (!validateForm()) return;
+    setLoading(true);
+    try {
+      const res = await axios.post(`${API}/api/publicreviews`, newReview);
+      if (res.data?.data) {
+        setTestimonials([res.data.data, ...testimonials]);
+        setNewReview({ name: "", gender: "", rating: 0, text: "" });
+        setErrors({});
+        setShowModal(false);
+      }
+    } catch (err) {
+      console.error("Failed to submit review:", err.response?.data || err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,14 +99,14 @@ export default function TestimonialSection() {
 
         <div className="auto-container" style={{ marginBottom: 40 }}>
           <div className="sec-title h2 mb_60 centred">
-            <h2>Client Feedback</h2>
+            <h2>Customer Feedback</h2>
           </div>
-
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
+          <Testimonials/>
+          {/* <div style={{ textAlign: "center", marginBottom: 40 }}>
             <button
               onClick={() => setShowModal(true)}
               style={{
-                padding: "12px 28px",
+                padding: "8px 22px",
                 background: "#008b6e",
                 color: "#fff",
                 border: "none",
@@ -67,13 +116,14 @@ export default function TestimonialSection() {
                 fontSize: 16,
                 transition: "0.3s",
                 boxShadow: "0 3px 10px rgba(0,0,0,0.15)",
+                marginTop: 10,
               }}
             >
-              Add a Review
+              {loading ? "Loading..." : "Add a Review"}
             </button>
-          </div>
+          </div> */}
 
-          <Swiper
+          {/* <Swiper
             modules={[Autoplay]}
             spaceBetween={10}
             slidesPerView={2}
@@ -90,7 +140,7 @@ export default function TestimonialSection() {
             {testimonials.map((t, index) => (
               <SwiperSlide key={index}>
                 <div
-                  className="testimonial-block-one"
+                  className="testimonial-block-one w-full"
                   style={{
                     display: "flex",
                     justifyContent: "flex-start",
@@ -98,7 +148,7 @@ export default function TestimonialSection() {
                   }}
                 >
                   <div
-                    className="inner-box"
+                    className="inner-box w-full"
                     style={{
                       textAlign: "left",
                       padding: "45px 35px",
@@ -109,13 +159,7 @@ export default function TestimonialSection() {
                       <img src="assets/images/icons/icon-3.png" alt="" />
                     </div>
 
-                    <div
-                      className="author-box"
-                      style={{
-                        marginLeft: "0px",
-                        marginBottom: "14px",
-                      }}
-                    >
+                    <div className="author-box" style={{ marginBottom: "14px" }}>
                       <div
                         className="author-content"
                         style={{
@@ -128,7 +172,7 @@ export default function TestimonialSection() {
                         }}
                       >
                         <img
-                          src={reviewerImage}
+                          src={t.gender === "female" ? femaleImage : maleImage}
                           alt="Reviewer"
                           className="reviewer-image"
                           style={{
@@ -160,12 +204,12 @@ export default function TestimonialSection() {
                           >
                             {[...Array(5)].map((_, i) => (
                               <li key={i}>
-                                <i
-                                  className="icon-15"
+                                <FaStar
                                   style={{
                                     color: i < t.rating ? "#FFD700" : "#ddd",
+                                    fontSize: 18,
                                   }}
-                                ></i>
+                                />
                               </li>
                             ))}
                           </ul>
@@ -188,21 +232,15 @@ export default function TestimonialSection() {
                 </div>
               </SwiperSlide>
             ))}
-          </Swiper>
+          </Swiper> */}
         </div>
       </section>
 
-      {showModal && (
+      {/* ✅ Modal */}
+      {/* {showModal && (
         <div style={overlayStyle}>
           <div style={modalStyle}>
-            <h3
-              style={{
-                marginBottom: 20,
-                fontWeight: 600,
-                fontSize: 20,
-                color: "#111",
-              }}
-            >
+            <h3 style={{ marginTop: 20, fontWeight: 600, fontSize: 20, color: "#111" }}>
               Add a Review
             </h3>
 
@@ -210,19 +248,28 @@ export default function TestimonialSection() {
               type="text"
               placeholder="Full Name"
               value={newReview.name}
-              onChange={(e) =>
-                setNewReview({ ...newReview, name: e.target.value })
-              }
+              onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
               style={inputStyle}
             />
+            {errors.name && <p style={errorText}>{errors.name}</p>}
 
-            <div style={{ marginBottom: 15 }}>
+            <select
+              value={newReview.gender}
+              onChange={(e) => setNewReview({ ...newReview, gender: e.target.value })}
+              style={inputStyle}
+            >
+              <option value="">Select Gender</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+            {errors.gender && <p style={errorText}>{errors.gender}</p>}
+
+          
+            <div style={{ marginBottom: 15,display:"flex" }}>
               {[1, 2, 3, 4, 5].map((star) => (
-                <span
+                <FaStar
                   key={star}
-                  onClick={() =>
-                    setNewReview({ ...newReview, rating: star })
-                  }
+                  onClick={() => setNewReview({ ...newReview, rating: star })}
                   style={{
                     fontSize: 26,
                     cursor: "pointer",
@@ -230,89 +277,55 @@ export default function TestimonialSection() {
                     marginRight: 4,
                     transition: "0.2s",
                   }}
-                >
-                  ★
-                </span>
+                />
               ))}
             </div>
+            {errors.rating && <p style={errorText}>{errors.rating}</p>}
 
             <textarea
               placeholder="Write your review..."
               value={newReview.text}
-              onChange={(e) =>
-                setNewReview({ ...newReview, text: e.target.value })
-              }
+              onChange={(e) => setNewReview({ ...newReview, text: e.target.value })}
               style={{ ...inputStyle, height: 100, resize: "none" }}
             />
+            {errors.text && <p style={errorText}>{errors.text}</p>}
 
             <div style={{ textAlign: "right", marginTop: 15 }}>
               <button
-                onClick={() => setShowModal(false)}
+                onClick={() => {
+                  setShowModal(false);
+                  setErrors({});
+                }}
                 style={cancelButtonStyle}
               >
                 Cancel
               </button>
               <button onClick={handleAddReview} style={postButtonStyle}>
-                Post Review
+                {loading ? "Posting..." : "Post Review"}
               </button>
             </div>
           </div>
         </div>
-      )}
-
-      {/* ✅ RESPONSIVE CSS ONLY — design unchanged */}
-      <style jsx>{`
-        @media (max-width: 992px) {
-          .author-content {
-            margin-left: 0 !important;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .inner-box {
-            padding: 35px 25px !important;
-          }
-          .reviewer-image {
-            width: 80px !important;
-            height: 80px !important;
-          }
-          .author-content {
-            flex-direction: row !important;
-            align-items: flex-start !important;
-            margin-left: 0 !important;
-          }
-          .text-box p {
-            font-size: 15px !important;
-          }
-        }
-
-        @media (max-width: 576px) {
-          .author-content {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            margin-left: 0 !important;
-          }
-          .reviewer-image {
-            margin-bottom: 10px !important;
-          }
-          .inner-box {
-            padding: 25px 20px !important;
-          }
-        }
-      `}</style>
+      )} */}
     </>
   );
 }
 
-/* ===== Modal & Input Styles ===== */
-
+/* ===== Styles ===== */
 const inputStyle = {
   width: "100%",
   padding: "10px 12px",
-  marginBottom: "12px",
+  marginBottom: "8px",
   borderRadius: "8px",
   border: "1px solid #ccc",
   fontSize: 14,
+};
+
+const errorText = {
+  color: "red",
+  fontSize: 13,
+  marginTop: "-6px",
+  marginBottom: "8px",
 };
 
 const overlayStyle = {

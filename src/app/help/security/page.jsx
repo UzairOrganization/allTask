@@ -6,6 +6,7 @@ import { CheckCircle } from "lucide-react";
 import Header from "@/components/Header/index";
 import Footer from "@/components/Footer/page";
 import "@/assets/css/homepage.css"
+import ProfessionalHeader from "@/components/Professionals/ProfessionalHeader";
 // import "../globals.css"
 export const metadata = {
     title: "How to Use Alltasko - Complete Guideline"
@@ -14,7 +15,7 @@ export const metadata = {
 export default function Notifications() {
     return (
         <>
-            <Header />
+            <ProfessionalHeader />
             <div className="container mx-auto max-w-6xl px-4 my-12">
                 <section className="mb-16 text-center">
                     <h1 className="text-4xl font-bold mb-4 text-green-700">New to AllTasko? Start here</h1>
@@ -163,7 +164,7 @@ export default function Notifications() {
                     <p className="text-black">Your Job, Our Connection.</p>
                 </footer>
             </div>
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

@@ -208,7 +208,7 @@ export default function UserChatPage() {
   };
 
   return (
-    <div className="flex bg-gray-50 h-screen w-screen">
+    <div className="flex bg-gray-50 h-screen w-screen overflow-x-hidden">
       {/* Left Sidebar - Inbox */}
       <div className={`${activeChat ? 'hidden md:block' : 'block'} fixed top-0 left-0 h-screen z-20 w-full md:w-[20%] bg-white border-r border-gray-200 flex flex-col`}>
         <div className="p-4 border-b border-gray-200">
