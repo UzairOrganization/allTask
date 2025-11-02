@@ -193,7 +193,7 @@ export function ServicesContainer({ isNewRegistration }) {
                     </div>
                     <Dialog open={openAddDialog} onOpenChange={setOpenAddDialog}>
                         <DialogTrigger asChild>
-                            <Button size="sm" className="bg-green-700 hover:bg-green-800">
+                            <Button size="sm" className="bg-[#008b6e] hover:bg-green-900">
                                 <Plus className="h-4 w-4 mr-2" />
                                 Add Service
                             </Button>
@@ -257,7 +257,7 @@ export function ServicesContainer({ isNewRegistration }) {
                                         Cancel
                                     </Button>
                                     <Button
-                                        className="bg-green-700 hover:bg-green-800"
+                                        className="bg-[#008b6e] hover:bg-green-900"
                                         onClick={handleAddService}
                                         disabled={loading || !formData.category}
                                     >
@@ -346,7 +346,7 @@ export function ServicesContainer({ isNewRegistration }) {
                             <p className="text-gray-500">No services added yet</p>
                             <Button
                                 variant="link"
-                                className="text-green-700 mt-2"
+                                className="text-[#008b6e] mt-2"
                                 onClick={() => setOpenAddDialog(true)}
                             >
                                 <Plus className="h-4 w-4 mr-2" />
