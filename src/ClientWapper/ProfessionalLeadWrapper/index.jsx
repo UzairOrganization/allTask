@@ -184,7 +184,7 @@ const ProfessionalLeadWrapper = () => {
                         <div>
                             <h1 className="text-xl font-bold text-gray-800">Leads</h1>
                             <div className="flex items-center mt-1 mb-4">
-                                <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
+                                <div className="w-3 h-3 rounded-full bg-[#008b6e] mr-2"></div>
                                 <span className="text-sm text-gray-600">
                                     {activeTab === 'all'
                                         ? `${allLeads.length} available leads`
@@ -199,7 +199,7 @@ const ProfessionalLeadWrapper = () => {
                         <button
                             onClick={() => setActiveTab('yours')}
                             className={`pb-3 px-4 mr-4 text-sm font-medium transition-colors ${activeTab === 'yours'
-                                ? 'text-green-700 border-b-2 border-green-700'
+                                ? 'text-[#008b6e] border-b-2 border-[#008b6e]'
                                 : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
@@ -208,7 +208,7 @@ const ProfessionalLeadWrapper = () => {
                         <button
                             onClick={() => setActiveTab('all')}
                             className={`pb-3 px-4 text-sm font-medium transition-colors ${activeTab === 'all'
-                                ? 'text-green-700 border-b-2 border-green-700'
+                                ? 'text-[#008b6e] border-b-2 border-[#008b6e]'
                                 : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
@@ -217,7 +217,7 @@ const ProfessionalLeadWrapper = () => {
                         <button
                             onClick={() => setActiveTab('purchased-leads')}
                             className={`pb-3 px-4 text-sm font-medium transition-colors ${activeTab === 'purchased-leads'
-                                ? 'text-green-700 border-b-2 border-green-700'
+                                ? 'text-[#008b6e] border-b-2 border-[#008b6e]'
                                 : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
@@ -292,7 +292,7 @@ const LeadCard = ({ lead, onClick, provider }) => {
                         <h3 className="font-bold text-gray-900">{lead.name}</h3>
                     </div>
                     {lead.verified && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-[#008b6e]">
                             Verified
                         </span>
                     )}
@@ -311,7 +311,7 @@ const LeadCard = ({ lead, onClick, provider }) => {
                 </div>
 
                 <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-green-700">{lead.credits}</span>
+                <span className="text-sm font-medium text-[#008b6e]">{lead.credits}</span>
                 </div>
             </div>
 
@@ -319,7 +319,7 @@ const LeadCard = ({ lead, onClick, provider }) => {
                 <button
                     className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white  ${provider?.accountStatus === 'on_hold' || provider?.status === 'rejected'
                         ? 'bg-gray-600 hover:bg-gray-600 cursor-not-allowed'
-                        : 'bg-green-700 hover:bg-green-800'
+                        : 'bg-[#008b6e] hover:bg-[#008b6e]'
                         }`}
                     onClick={onClick}
                     disabled={provider?.accountStatus === 'on_hold' || provider?.status === 'rejected'}
@@ -377,7 +377,7 @@ const LeadDetailView = ({ lead, onBack }) => {
                         <p className="text-gray-600 mb-6">You've successfully accepted this lead.</p>
                         <button
                             onClick={onBack}
-                            className="w-full max-w-xs mx-auto py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                            className="w-full max-w-xs mx-auto py-3 px-6 bg-[#008b6e] hover:bg-green-900 text-white font-medium rounded-lg transition-colors"
                         >
                             Back to Leads
                         </button>
@@ -397,7 +397,7 @@ const LeadDetailView = ({ lead, onBack }) => {
                             <h2 className="text-2xl font-bold text-gray-900">{lead.name}</h2>
                         </div>
                         {lead.verified && (
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-[#008b6e]">
                                 Verified
                             </span>
                         )}
@@ -416,8 +416,8 @@ const LeadDetailView = ({ lead, onBack }) => {
 
                     {lead.requested && (
                         <div className="p-4 bg-green-50 rounded-lg border border-green-200 mb-6">
-                            <h4 className="font-medium text-green-800 mb-1">Client Requested You Specifically</h4>
-                            <p className="text-sm text-green-700">This client asked for you by name.</p>
+                            <h4 className="font-medium text-[#008b6e] mb-1">Client Requested You Specifically</h4>
+                            <p className="text-sm text-[#008b6e]">This client asked for you by name.</p>
                         </div>
                     )}
                 </div>
@@ -488,7 +488,7 @@ const LeadDetailView = ({ lead, onBack }) => {
                         <div className="grid grid-cols-2 gap-4 mb-6">
                             <div>
                                 <p className="text-sm text-gray-500">Lead Price</p>
-                                <p className="text-xl font-bold text-green-600">{lead.credits}</p>
+                                <p className="text-xl font-bold text-[#008b6e]">{lead.credits}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500">Timeline</p>
@@ -499,7 +499,7 @@ const LeadDetailView = ({ lead, onBack }) => {
                             <button
                                 type="submit"
                                 disabled={paymentProcessing}
-                                className="flex-1 py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="flex-1 py-3 px-6 bg-[#008b6e] hover:bg-green-900 text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 onClick={handlePaymentSubmit}
                             >
                                 {paymentProcessing ? (

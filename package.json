@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "dev": "node init && next dev --turbopack",
+    "build": "node init && next build",
     "lint": "next lint",
-    "start": "NODE_ENV=production node server.js"
+    "start": "node init && NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.4",

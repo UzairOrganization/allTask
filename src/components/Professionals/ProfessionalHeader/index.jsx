@@ -64,7 +64,7 @@ const ProfessionalHeader = () => {
             <div key={item.href} className="relative group">
               <Link
                 href={item.href}
-                className={`text-xl font-medium px-2 hover:text-green-700 transition-colors duration-300 ${pathname === item.href ? "text-green-700" : "text-gray-800"
+                className={`text-xl font-medium px-2 hover:text-[#008b6e] transition-colors duration-300 ${pathname === item.href ? "text-[#008b6e]" : "text-gray-800"
                   }`}
               >
                 {item.label}
