@@ -28,8 +28,8 @@ export async function middleware(req) {
             '/my-responses',
             '/purchased-leads',
             '/forums',
-            '/new-forum'
-
+            '/new-forum',
+            '/estimated-price'
         ];
 
         const isUserRoute = userRoutes.some(route => req.nextUrl.pathname.startsWith(route));
@@ -118,8 +118,21 @@ export async function middleware(req) {
 export const config = {
     matcher: [
         '/',
-        '/about', '/user-profile', '/user-requests',
+        '/about',
+        '/user-profile',
+        '/user-requests',
         '/professional-dashboard',
-        '/login', '/professional-login', '/register-email', '/register-professional', '/forget-password', '/user-chat', '/leads', '/my-responses', '/purchased-leads'
+        '/login',
+        '/professional-login',
+        '/register-email',
+        '/register-professional',
+        '/forget-password',
+        '/user-chat',
+        '/leads',
+        '/my-responses',
+        '/purchased-leads',
+        '/forums/:path*', 
+        '/new-forum',
+        '/estimated-price/:path*'
     ],
 };

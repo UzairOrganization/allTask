@@ -22,21 +22,51 @@ const geistMono = Geist_Mono({
 export default function RootLayout({ children }) {
 
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Provider store={store}>
-          <AuthProvider>
-            <ThemeProvider attribute="class"
-              defaultTheme="light"
-              disableTransitionOnChange
+    <html lang="en" >
+  <body
+    className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
+    >
+    <Provider store={store}>
+      <AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
+          {children}
+
+          <div>
+            <a
+              href="https://t.me/AllTasko_Bot"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                position: "fixed",
+                bottom: "30px",
+                right: "20px",
+                backgroundColor: "#008b6e",
+                color: "white",
+                padding: "12px 20px",
+                fontSize: "16px",
+                borderRadius: "50px",
+                textDecoration: "none",
+                fontFamily: "sans-serif",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                zIndex: 9999,
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
             >
-              {children}
-            </ThemeProvider>
-          </AuthProvider>
-        </Provider>
-      </body>
-    </html>
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
+                alt="Telegram logo"
+                width="24"
+                height="24"
+              />
+              Chat with us
+            </a>
+          </div>
+        </ThemeProvider>
+      </AuthProvider>
+    </Provider>
+  </body>
+</html>
   );
 }

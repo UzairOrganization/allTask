@@ -748,12 +748,36 @@ export function ProfessionalOnboarding() {
                             </CardContent>
                         </Card>
 
-                        {
+                        {!provider ? (
+                            // Loader while provider is not ready
+                            <div className="flex justify-center items-center h-64">
+                                <svg
+                                    className="animate-spin h-8 w-8 text-green-600"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v8H4z"
+                                    ></path>
+                                </svg>
+                            </div>
+                        ) : (
                             !provider?.isSubscriptionHolder && (
                                 <Card className="border rounded-lg shadow-sm bg-gradient-to-br from-green-50 to-green-100 border-green-200 h-full flex flex-col">
                                     <CardHeader className="border-b border-green-200 bg-green-100/50">
                                         <div className="flex flex-col gap-2 lg:gap-0 lg:flex-row justify-between items-center">
-                                            <h2 className="text-xl font-bold text-gray-800 ">PROFESSIONAL PLUS</h2>
+                                            <h2 className="text-xl font-bold text-gray-800">PROFESSIONAL PLUS</h2>
                                             <Badge className="bg-green-800 text-white hover:bg-green-900">
                                                 <div className="flex items-center gap-1">
                                                     <Crown className="h-4 w-4 fill-yellow-300 text-yellow-300" />
@@ -771,15 +795,21 @@ export function ProfessionalOnboarding() {
                                             <ul className="space-y-3 text-gray-700">
                                                 <li className="flex items-start gap-3">
                                                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                                    <span><strong>Platform Choice Badges</strong> - Stand out as a verified top professional</span>
+                                                    <span>
+                                                        <strong>Platform Choice Badges</strong> - Stand out as a verified top professional
+                                                    </span>
                                                 </li>
                                                 <li className="flex items-start gap-3">
                                                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                                    <span><strong>Priority Placement</strong> - Appear in top spots for relevant searches</span>
+                                                    <span>
+                                                        <strong>Priority Placement</strong> - Appear in top spots for relevant searches
+                                                    </span>
                                                 </li>
                                                 <li className="flex items-start gap-3">
                                                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                                    <span><strong>3× More Visibility</strong> - Get seen by more potential clients</span>
+                                                    <span>
+                                                        <strong>3× More Visibility</strong> - Get seen by more potential clients
+                                                    </span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -799,7 +829,8 @@ export function ProfessionalOnboarding() {
                                     </CardContent>
                                 </Card>
                             )
-                        }
+                        )}
+
 
                         {/* Services Section */}
                         <ServicesContainer isNewRegistration={isNewRegistration} />

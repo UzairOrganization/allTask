@@ -56,7 +56,8 @@ export default function ProfessionalForumWrapper() {
                     withCredentials: true
                 });
 
-
+                console.log(data);
+                
                 setProviderForums(data);
                 setError(null);
             } catch (err) {

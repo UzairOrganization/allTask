@@ -17,6 +17,7 @@ import {
 
 import { Loader2, ArrowLeft } from "lucide-react";
 import { toast, Toaster } from "sonner";
+import axios from "axios";
 
 export default function NewForumPage() {
     const router = useRouter();
@@ -32,24 +33,20 @@ export default function NewForumPage() {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch(`${API}/api/forum`, {  // Fixed: Added missing slash
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
+            const response = await axios.post(`${API}/api/forum`, formData, {
+                withCredentials: true
             });
 
-            if (!response.ok) {
-                throw new Error(response.statusText || "Failed to create post");
-            }
+            // if (!response.ok) {
+            //     throw new Error(response.statusText || "Failed to create post");
+            // }
 
-            const data = await response.json();
+            // const data = await response.json();
 
             toast.success("Your discussion has been created!");
 
-            router.push(`/forums/${data._id}`);
-            router.refresh(); // Refresh to ensure the new post appears in listings
+            router.push(`/forums/${response.data._id}`);
+            router.refresh();
 
         } catch (error) {
             console.error("Error creating post:", error);
