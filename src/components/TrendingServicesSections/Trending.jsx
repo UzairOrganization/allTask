@@ -67,7 +67,7 @@ const TrendingItem = ({ item, onBook }) => {
           <div className="flex justify-end mt-4">
             <Button
               type="button"
-              className="bg-green-700 cursor-pointer hover:bg-green-600"
+              className="bg-[#008b6e] cursor-pointer hover:bg-green-900"
               disabled={!zipCode.trim() || !loading}
               onClick={handleContinue}
             >

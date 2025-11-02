@@ -13,28 +13,28 @@ const HelpPage = () => {
   const categories = [
     {
       title: "Getting Started",
-      icon: <Rocket className="w-6 h-6 text-green-700" />,
+      icon: <Rocket className="w-6 h-6 text-[#008b6e]" />,
       description: "New to AllTasko? Start here",
       topics: ["Account setup", "Profile completion", "First steps"],
       urls: ["/help/account-setup", "/help/profile-completion", "/help/first-steps"],
     },
     {
       title: "For Professionals",
-      icon: <User className="w-6 h-6 text-green-700" />,
+      icon: <User className="w-6 h-6 text-[#008b6e]" />,
       description: "Tools for service providers",
       topics: ["Service listings", "Client management", "Payments"],
       urls: ["/help/service-listings", "/help/client-management", "/help/payments"],
     },
     {
       title: "Account & Settings",
-      icon: <Settings className="w-6 h-6 text-green-700" />,
+      icon: <Settings className="w-6 h-6 text-[#008b6e]" />,
       description: "Manage your preferences",
       topics: ["Profile management", "Notifications", "Security"],
       urls: ["/help/profile-management", "/help/notifications", "/help/security"],
     },
     {
       title: "Payments & Pricing",
-      icon: <Wallet className="w-6 h-6 text-green-700" />,
+      icon: <Wallet className="w-6 h-6 text-[#008b6e]" />,
       description: "Financial questions",
       topics: ["Pricing structure", "Payment methods", "Refunds"],
       urls: ["/help/pricing-structures", "/help/payment-methods", "/help/refunds"],
@@ -44,22 +44,22 @@ const HelpPage = () => {
   const popularArticles = [
     {
       title: "How to get your first booking",
-      icon: <CalendarCheck className="w-5 h-5 mr-2 text-green-700" />,
+      icon: <CalendarCheck className="w-5 h-5 mr-2 text-[#008b6e]" />,
       url: "/help/how-to-get-your-first-booking",
     },
     {
       title: "Setting up secure payments",
-      icon: <Wallet className="w-5 h-5 mr-2 text-green-700" />,
+      icon: <Wallet className="w-5 h-5 mr-2 text-[#008b6e]" />,
       url: "/help/setting-up-secure-payments",
     },
     {
       title: "Managing your service calendar",
-      icon: <CalendarCheck className="w-5 h-5 mr-2 text-green-700" />,
+      icon: <CalendarCheck className="w-5 h-5 mr-2 text-[#008b6e]" />,
       url: "/help/managing-your-service-calender",
     },
     {
       title: "Writing great service descriptions",
-      icon: <MessageSquare className="w-5 h-5 mr-2 text-green-700" />,
+      icon: <MessageSquare className="w-5 h-5 mr-2 text-[#008b6e]" />,
       url: "/help/writing-great-service-description",
     },
   ];
@@ -71,7 +71,7 @@ const HelpPage = () => {
       <div className="container max-w-6xl mx-auto px-4 py-8 my-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4 text-green-700">
+          <h1 className="text-4xl font-bold mb-4 text-[#008b6e]">
             How can we help you today?
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -108,7 +108,7 @@ const HelpPage = () => {
                 <div className="flex items-center space-x-4">
                   {category.icon}
                   <div>
-                    <CardTitle className="text-green-700">{category.title}</CardTitle>
+                    <CardTitle className="text-[#008b6e]">{category.title}</CardTitle>
                     <CardDescription>{category.description}</CardDescription>
                   </div>
                 </div>
@@ -120,7 +120,7 @@ const HelpPage = () => {
                       <Link
                         href={category.urls[i]}
                         target="_blank"
-                        className="text-sm hover:text-green-700 cursor-pointer transition-colors"
+                        className="text-sm hover:text-[#008b6e] cursor-pointer transition-colors"
                       >
                         
                         {topic}
@@ -135,7 +135,7 @@ const HelpPage = () => {
 
         {/* Popular Articles */}
         <div className="mb-16">
-          <h2 className="text-2xl font-semibold mb-6 text-green-700">Popular Articles</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-[#008b6e]">Popular Articles</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {popularArticles.map((article, index) => (
               <Link
@@ -144,7 +144,7 @@ const HelpPage = () => {
                 className="border rounded-lg p-4 hover:bg-green-50 transition-colors cursor-pointer border-green-200 flex items-center"
               >
                 {article.icon}
-                <span className="font-medium text-green-800">{article.title}</span>
+                <span className="font-medium text-[#008b6e]">{article.title}</span>
               </Link>
             ))}
           </div>

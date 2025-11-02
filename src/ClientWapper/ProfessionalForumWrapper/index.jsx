@@ -119,7 +119,7 @@ export default function ProfessionalForumWrapper() {
                                                             <CardTitle>{forum.title}</CardTitle>
                                                             <CardDescription className="mt-2">
                                                                 {forum.tag && (
-                                                                    <span className="inline-block bg-green-100 dark:bg-green-800 rounded-full px-3 py-1 text-sm font-medium mr-2">
+                                                                    <span className="inline-block bg-green-100 dark:bg-[#008b6e] rounded-full px-3 py-1 text-sm font-medium mr-2">
                                                                         {forum.tag}
                                                                     </span>
                                                                 )}
@@ -135,7 +135,7 @@ export default function ProfessionalForumWrapper() {
                                                         {forum.content.slice(0, 500)}...
                                                     </p>
                                                     <div className="w-full my-4 flex justify-end">
-                                                        <Button className="bg-green-700 cursor-pointer" onClick={() => router.push(`/${forum._id}}`)}>
+                                                        <Button className="bg-[#008b6e] cursor-pointer" onClick={() => router.push(`/${forum._id}}`)}>
                                                             Read More
                                                         </Button>
                                                     </div>
@@ -167,7 +167,7 @@ export default function ProfessionalForumWrapper() {
                                                                 <CardTitle>{forum.title}</CardTitle>
                                                                 <CardDescription className="mt-2">
                                                                     {forum.tag && (
-                                                                        <span className="inline-block bg-green-100 dark:bg-green-800 rounded-full px-3 py-1 text-sm font-medium mr-2">
+                                                                        <span className="inline-block bg-green-100 dark:bg-[#008b6e] rounded-full px-3 py-1 text-sm font-medium mr-2">
                                                                             {forum.tag}
                                                                         </span>
                                                                     )}
@@ -183,7 +183,7 @@ export default function ProfessionalForumWrapper() {
                                                             {forum.content.slice(0, 500)}...
                                                         </p>
                                                         <div className="w-full my-4 flex justify-end">
-                                                            <Button className="bg-green-700 cursor-pointer" onClick={() => router.push(`/${forum._id}}`)}>
+                                                            <Button className="bg-[#008b6e] cursor-pointer" onClick={() => router.push(`/${forum._id}}`)}>
                                                                 Read More
                                                             </Button>
                                                         </div>
