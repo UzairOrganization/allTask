@@ -64,7 +64,7 @@ const ServicesPage = () => {
     return (
         <>
             <Header />
-            <div className="container max-w-[90vw] mx-auto py-8 mb-12">
+            <div className="container max-w-[90vw] mx-auto py-20 mb-12">
                 <h1 className="text-3xl font-bold mb-8 text-black mt-8">All Services</h1>
 
                 {loading ? (

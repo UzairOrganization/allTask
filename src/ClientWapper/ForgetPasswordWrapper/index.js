@@ -31,7 +31,9 @@ const ForgetPasswordWrapper = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await API.post(`${API}/api/users/forget-password`, { email });
+            const data = await axios.post(`${API}/api/users/forget-password`, { email });
+            console.log(data);
+            
             toast.success("Verification code sent!", {
                 description: "Check your email",
                 duration: 3000,
