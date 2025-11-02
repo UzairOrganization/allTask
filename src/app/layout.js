@@ -33,6 +33,11 @@ export default function RootLayout({ children }) {
               disableTransitionOnChange
             >
               {children}
+              <div>
+                
+              </div>
+              
+              
             </ThemeProvider>
           </AuthProvider>
         </Provider>

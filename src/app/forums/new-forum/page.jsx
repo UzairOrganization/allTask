@@ -145,7 +145,7 @@ export default function NewForumPage() {
                             </Button>
                             <Button
                                 type="submit"
-                                className="bg-green-600 hover:bg-green-700 text-white"
+                                className="bg-[#008b6e] hover:bg-green-900 text-white"
                                 disabled={isSubmitting || !formData.title || !formData.content || !formData.tag}
                             >
                                 {isSubmitting ? (

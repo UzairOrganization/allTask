@@ -80,7 +80,7 @@ const PDFUpload = ({
     <div className="space-y-4">
       <div 
         className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-          disabled ? 'bg-gray-100 border-gray-200' : 'border-gray-300 hover:border-green-500 cursor-pointer'
+          disabled ? 'bg-gray-100 border-gray-200' : 'border-gray-300 hover:border-[#008b6e] cursor-pointer'
         }`}
         onClick={!disabled ? triggerFileInput : undefined}
       >
@@ -97,7 +97,7 @@ const PDFUpload = ({
         <div className="flex flex-col items-center justify-center space-y-2">
           <Upload className="h-8 w-8 text-gray-400" />
           <div className="flex flex-col items-center">
-            <Label className="text-sm font-medium text-green-600 hover:text-green-500 cursor-pointer">
+            <Label className="text-sm font-medium text-[#008b6e] hover:text-green-900 cursor-pointer">
               {multiple ? "Upload PDF files" : "Upload a PDF file"}
             </Label>
             <p className="text-xs text-gray-500 mt-1">

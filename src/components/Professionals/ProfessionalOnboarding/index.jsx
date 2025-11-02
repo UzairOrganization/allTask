@@ -90,7 +90,7 @@ const FileUpload = ({ onFileUpload, accept, uploading }) => {
                     <div className="flex flex-col items-center justify-center space-y-2">
                         <Upload className="h-8 w-8 text-gray-400" />
                         <div className="flex text-sm text-gray-600">
-                            <Label htmlFor="file-upload" className="relative cursor-pointer rounded-md font-medium text-green-600 hover:text-green-500">
+                            <Label htmlFor="file-upload" className="relative cursor-pointer rounded-md font-medium text-[#008b6e] hover:text-green-900">
                                 <span>Upload a file</span>
                                 <input
                                     id="file-upload"
@@ -506,7 +506,7 @@ export function ProfessionalOnboarding() {
                                         <DialogTrigger asChild>
                                             <Button
                                                 variant="outline"
-                                                className="border-green-700 text-green-700 mt-auto w-full"
+                                                className="border-[#008b6e] text-[#008b6e] mt-auto w-full"
                                             >
                                                 <Edit className="mr-2 h-4 w-4" />
                                                 Complete Profile
@@ -737,7 +737,7 @@ export function ProfessionalOnboarding() {
                                                     >
                                                         Cancel
                                                     </Button>
-                                                    <Button type="submit" onClick={handleSubmit} className="bg-green-700 hover:bg-green-800" disabled={profileUpdating}>
+                                                    <Button type="submit" onClick={handleSubmit} className="bg-[#008b6e] hover:bg-green-900" disabled={profileUpdating}>
                                                         {profileUpdating ? "Updating..." : "Save Changes"}
                                                     </Button>
                                                 </div>
@@ -787,7 +787,7 @@ export function ProfessionalOnboarding() {
                                             <Button
                                                 onClick={handlePaymentSubmit}
                                                 disabled={paymentProcessing}
-                                                className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg"
+                                                className="w-full bg-[#008b6e] hover:bg-green-900 h-12 text-lg"
                                             >
                                                 <Crown className="mr-2 h-5 w-5" />
                                                 {paymentProcessing ? "Processing..." : "Upgrade Now"}

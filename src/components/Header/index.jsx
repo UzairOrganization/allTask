@@ -139,13 +139,13 @@ export default function Header() {
                         <>
                             <Link
                                 href="/service"
-                                className="flex text-lg font-semibold items-center text-black hover:text-green-700"
+                                className="flex text-lg font-semibold items-center text-black hover:text-[#008b6e]"
                             >
                                 EXPLORE &nbsp;
                             </Link>
                             <Link
                                 href="/login"
-                                className="flex text-lg font-semibold items-center text-black hover:text-green-700"
+                                className="flex text-lg font-semibold items-center text-black hover:text-[#008b6e]"
                             >
                                 LOGIN &nbsp;<CiLogin size={22} className="ml-1" />
                             </Link>
