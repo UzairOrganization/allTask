@@ -5,23 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast, Toaster } from "sonner";
 import Header from "@/components/Header";
-
 import { API } from "@/lib/data-service";
 import { useRouter } from "next/navigation";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
 import axios from "axios";
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+} from "@/components/ui/select";
 
 const ForgetPasswordWrapper = () => {
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
-
+    const [role, setRole] = useState("user"); // user | professional
     const [email, setEmail] = useState("");
     const [resetCode, setResetCode] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -31,11 +29,15 @@ const ForgetPasswordWrapper = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const data = await axios.post(`${API}/api/users/forget-password`, { email });
-            console.log(data);
-            
+            const endpoint =
+                role === "professional"
+                    ? `${API}/api/service-provider/forget-password-provider`
+                    : `${API}/api/users/forget-password`;
+
+            await axios.post(endpoint, { email });
+
             toast.success("Verification code sent!", {
-                description: "Check your email",
+                description: "Check your email for the verification code.",
                 duration: 3000,
                 position: "bottom-left",
             });
@@ -55,17 +57,24 @@ const ForgetPasswordWrapper = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.post(`${API}/api/users/reset-password`, {
+            const endpoint =
+                role === "professional"
+                    ? `${API}/api/service-provider/reset-password-provider`
+                    : `${API}/api/users/reset-password`;
+
+            await axios.post(endpoint, {
                 email,
                 resetCode,
                 newPassword,
             });
+
             toast.success("Password reset successful!", {
-                description: "You can now log in",
+                description: "You can now log in.",
                 duration: 3000,
                 position: "bottom-left",
             });
-            router.push("/login");
+
+            router.push(role === "professional" ? "/professional-login" : "/login");
         } catch (error) {
             toast.error("Reset failed", {
                 description: error?.response?.data?.message || "Please try again.",
@@ -86,6 +95,22 @@ const ForgetPasswordWrapper = () => {
                     <h1 className="text-2xl font-bold text-center text-black mb-6">
                         {step === 1 ? "Reset Your Password" : "Enter Verification Code"}
                     </h1>
+
+                    {/* Role selection */}
+                    {step === 1 && (
+                        <div className="space-y-2 mb-4 w-full">
+                            <Label htmlFor="role">Account Type</Label>
+                            <Select value={role} onValueChange={setRole}>
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select Account Type" />
+                                </SelectTrigger>
+                                <SelectContent className="w-full">
+                                    <SelectItem value="user">User</SelectItem>
+                                    <SelectItem value="professional">Professional</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    )}
 
                     {step === 1 ? (
                         <form onSubmit={handleEmailSubmit}>

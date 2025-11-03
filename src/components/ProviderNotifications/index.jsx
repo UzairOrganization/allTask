@@ -111,7 +111,7 @@ export function NotificationDropdownForProvider() {
                                     )}
                                     onClick={() => markAsRead(notification._id)}
                                 >
-                                    <div className="flex items-start gap-3 cursor-pointer">
+                                    <div className="flex items-start gap-3 cursor-pointer p-2">
                                         {notification.type === 'message' ? (
                                             <div className="p-2 rounded-full bg-green-100 text-green-700">
                                                 <MessageSquare className="h-5 w-5" />
@@ -122,7 +122,7 @@ export function NotificationDropdownForProvider() {
                                             </div>
                                         )}
 
-                                        <div className="flex-1">
+                                        <div className="flex-1 ">
                                             <div className="flex justify-between items-start">
                                                 <h4 className="font-medium">
                                                     {notification.type === 'message' && notification.metadata?.sender?.name

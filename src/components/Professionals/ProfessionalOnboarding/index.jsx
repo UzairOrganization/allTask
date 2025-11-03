@@ -272,40 +272,51 @@ export function ProfessionalOnboarding() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setProfileUpdateing(true)
+        setProfileUpdateing(true);
         try {
-            const response = await axios.put(`${API}/api/service-provider/update-provider-profile`, { name: formData.name, about: formData.about, contactInfo: formData.contactInfo, postalCode: formData.postalCode, externalLink: formData.externalLink }, { withCredentials: true });
+            const response = await axios.put(
+                `${API}/api/service-provider/update-provider-profile`,
+                {
+                    name: formData.name,
+                    about: formData.about,
+                    contactInfo: formData.contactInfo,
+                    postalCode: formData.postalCode,
+                    externalLink: formData.externalLink,
+                    country: formData.country,
+                    state: formData.state,
+                    city: formData.city,
+                },
+                { withCredentials: true }
+            );
 
             if (response.status === 200) {
-                setFormData(prev => ({
+                setFormData((prev) => ({
                     ...prev,
-                    about: response?.data.provider.about,
-                    status: 'pending'
+                    ...response.data.provider,
                 }));
                 toast.success("Profile Updated Successfully!", {
-                    description: "Your Profile has been updated.",
+                    description: "Your profile details have been updated.",
                     duration: 3000,
                     position: "bottom-left",
-                })
+                });
 
-                window.location.reload()
+                dispatch(checkProviderAuthStatus());
             } else {
-                throw new Error('update failed');
-
+                throw new Error("Update failed");
             }
         } catch (error) {
-            console.error('Error uploading document:', error);
+            console.error("Error updating profile:", error);
             toast.error("Error Updating Profile!", {
                 description: "Something went wrong. Try again later.",
                 duration: 3000,
                 position: "bottom-left",
-            })
-            // Show error toast/notification
+            });
         } finally {
             setIsDialogOpen(false);
             setProfileUpdateing(false);
         }
     };
+
     const handleStatusToggle = async () => {
         const newStatus = !activityStatus;
         setUpdatingStatus(true);
@@ -625,32 +636,57 @@ export function ProfessionalOnboarding() {
 
                                                     <div className="space-y-2">
                                                         <Label htmlFor="contactInfo">Contact Number</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.contactInfo}</h3>
+                                                        <Input
+                                                            id="contactInfo"
+                                                            name="contactInfo"
+                                                            type="text"
+                                                            value={formData.contactInfo}
+                                                            onChange={handleInputChange}
+                                                        />
                                                     </div>
 
                                                     <div className="space-y-2">
                                                         <Label htmlFor="country">Country</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.country}</h3>
+                                                        <Input
+                                                            id="country"
+                                                            name="country"
+                                                            type="text"
+                                                            value={formData.country}
+                                                            onChange={handleInputChange}
+                                                        />
                                                     </div>
 
                                                     <div className="space-y-2">
                                                         <Label htmlFor="state">State</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.state}</h3>
+                                                        <Input
+                                                            id="state"
+                                                            name="state"
+                                                            type="text"
+                                                            value={formData.state}
+                                                            onChange={handleInputChange}
+                                                        />
                                                     </div>
 
                                                     <div className="space-y-2">
                                                         <Label htmlFor="city">City</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.city}</h3>
+                                                        <Input
+                                                            id="city"
+                                                            name="city"
+                                                            type="text"
+                                                            value={formData.city}
+                                                            onChange={handleInputChange}
+                                                        />
                                                     </div>
 
                                                     <div className="space-y-2">
                                                         <Label htmlFor="postalCode">Zip Code</Label>
-
-                                                        <h3 className="text-gray-800 text-sm p-1">{formData.postalCode}</h3>
+                                                        <Input
+                                                            id="postalCode"
+                                                            name="postalCode"
+                                                            type="text"
+                                                            value={formData.postalCode}
+                                                            onChange={handleInputChange}
+                                                        />
                                                     </div>
 
                                                     <div className="space-y-2 md:col-span-2">

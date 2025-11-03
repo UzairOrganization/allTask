@@ -140,7 +140,7 @@ export default function ProfessionalProfile({ name }) {
     );
 
     return (
-        <div className="container mx-auto max-w-6xl px-4 py-8">
+        <div className="container mx-auto max-w-6xl px-4 my-12">
             {/* Profile Header */}
             <div className="flex flex-col md:flex-row gap-8 mb-8">
                 <div className="flex-shrink-0">
