@@ -25,33 +25,45 @@ import { API } from '@/lib/data-service'
 import axios from 'axios'
 import ProfessionalHeader from '@/components/Professionals/ProfessionalHeader'
 import { useRouter } from 'next/navigation'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 export default function PurchasedLeadsPage() {
     const [payments, setPayments] = useState([])
     const [loading, setLoading] = useState(true)
     const [selectedPayment, setSelectedPayment] = useState(null)
+    const [selectedRequest, setSelectedRequest] = useState(null)
+    const [selectedStatus, setSelectedStatus] = useState('')
+    const [statusModal, setStatusModal] = useState(false)
+    const [updating, setUpdating] = useState(false)
+    const statusOptions = [
+        "Completed",
+        "In Progress",
+        "Declined",
+        "Scheduled",
+        "Not Scheduled Yet"
+    ]
     const navigation = useRouter()
     useEffect(() => {
         const fetchPayments = async () => {
-          try {
-            setLoading(true);
-            const res = await axios.get(`${API}/api/payments`, { withCredentials: true });
-      
-            // ✅ Filter out "professional_plus" payments
-            const filteredPayments = res.data.result.filter(
-              (payment) => payment.paymentType !== "professional_plus"
-            );
-      
-            setPayments(filteredPayments);
-          } catch (error) {
-            console.error("Error fetching payments:", error);
-          } finally {
-            setLoading(false);
-          }
+            try {
+                setLoading(true);
+                const res = await axios.get(`${API}/api/payments`, { withCredentials: true });
+
+                // ✅ Filter out "professional_plus" payments
+                const filteredPayments = res.data.result.filter(
+                    (payment) => payment.paymentType !== "professional_plus"
+                );
+
+                setPayments(filteredPayments);
+            } catch (error) {
+                console.error("Error fetching payments:", error);
+            } finally {
+                setLoading(false);
+            }
         };
-      
+
         fetchPayments();
-      }, []);
+    }, []);
 
     const StatusBadge = ({ status }) => {
         const variants = {
@@ -66,6 +78,26 @@ export default function PurchasedLeadsPage() {
                 {status?.charAt(0).toUpperCase() + status?.slice(1)}
             </Badge>
         )
+    }
+    const handleStatusUpdate = async () => {
+        if (!selectedRequest || !selectedStatus) return
+        setUpdating(true)
+
+        try {
+            await axios.patch(
+                `${API}/api/leads/update-lead-status/${selectedRequest._id}`,
+                { status: selectedStatus },
+                { withCredentials: true }
+            )
+
+            setSelectedStatus('')
+            setStatusModal(false)
+            window.location.reload()
+        } catch (err) {
+            console.error(err)
+        } finally {
+            setUpdating(false)
+        }
     }
 
     const renderServiceDetails = (serviceRequest, payment) => {
@@ -110,7 +142,7 @@ export default function PurchasedLeadsPage() {
 
                 console.log(result.data);
                 navigation.push("/chat/professional")
-                
+
                 return result.data;
 
             } catch (error) {
@@ -198,6 +230,26 @@ export default function PurchasedLeadsPage() {
                         </div>
                     </div>
                 )}
+                {serviceRequest.status && (
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <p className="text-sm font-medium text-gray-500">Status</p>
+                            <p className="capitalize">{serviceRequest.status}</p>
+                        </div>
+
+                        <Button
+                            size="sm"
+                            className="bg-[#007D63] text-white"
+                            onClick={() => {
+                                setSelectedRequest(serviceRequest)
+                                setStatusModal(true)
+                            }}
+                        >
+                            Change Status
+                        </Button>
+                    </div>
+                )}
+
                 {serviceRequest.customer && serviceRequest.isPurchased && !payment?.isConversationStarted ? (
                     <div className=''>
                         <Button
@@ -228,6 +280,37 @@ export default function PurchasedLeadsPage() {
                         </div>
                     </div>
                 )}
+                <Dialog open={statusModal} onOpenChange={setStatusModal}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Change Request Status</DialogTitle>
+                        </DialogHeader>
+
+                        <div className="grid gap-3">
+                            {statusOptions.map(status => (
+                                <Button
+                                    key={status}
+                                    variant={selectedStatus === status ? "default" : "outline"}
+                                    className="justify-start"
+                                    onClick={() => setSelectedStatus(status)}
+                                >
+                                    {status}
+                                </Button>
+                            ))}
+                        </div>
+
+                        <DialogFooter>
+                            <Button
+                                disabled={updating || !selectedStatus}
+                                onClick={handleStatusUpdate}
+                                className="bg-[#007D63]"
+                            >
+                                {updating ? "Updating..." : "Confirm"}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
             </div>
         )
     }

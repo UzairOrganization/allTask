@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
 }
 const Page = async ({ params }) => {
     const { name } = params;
-
+    const decodedName = decodeURIComponent(name);
 
     return (
         <>

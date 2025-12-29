@@ -43,8 +43,9 @@ import { loadStripe } from '@stripe/stripe-js';
 import PurchasedLeadsPage from "@/ClientWapper/PurchasedLeadsWrapper";
 import PurchasedLeads from "@/components/PurchasedLeads";
 import { Suspense } from "react";
+import ProfessionalCalendar from "@/components/Calender/ProfessionalCalender";
 
-const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibFbf1ijemDQ1TkHwjsb5oJ2AG3ePLAi8Np9FLNZsmz4N2CA4sKEhn00vHNOmlYC");
+const stripePromise = loadStripe("pk_test_51ST0xs32vr5uocVGtKIPNsvzmzyX52yLMYfODz7Qkhg4TOZxAEProyL1P2buTsJmSRFJHOtSqq6A3gjSzFlGAn6Y001wE4hcmt");
 // FileUpload component
 const FileUpload = ({ onFileUpload, accept, uploading }) => {
     const [file, setFile] = useState(null);
@@ -206,6 +207,7 @@ export function ProfessionalOnboarding() {
     useEffect(() => {
         if (provider) {
             console.log(provider);
+
 
             setFormData({
                 name: provider.name || "",
@@ -880,6 +882,12 @@ export function ProfessionalOnboarding() {
                                 <PurchasedLeads />
                             </CardContent>
                         </Card>
+
+
+                        <div className="col-span-full">
+                            <ProfessionalCalendar provider={provider} />
+                        </div>
+
                     </div>
                 </div>
             </div>

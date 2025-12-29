@@ -17,6 +17,7 @@ export default function UserChatPage() {
   const [activeChat, setActiveChat] = useState(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(false);
   const [socketStatus, setSocketStatus] = useState('disconnected');
@@ -69,15 +70,20 @@ export default function UserChatPage() {
       setMessages(prev => [...prev, {
         _id: newMessage._id,
         content: newMessage.content,
+        attachment: newMessage.attachment || null, // ✅ ADD THIS
         sender: newMessage.sender,
         senderModel: newMessage.senderType,
         receiver: newMessage.receiver,
         receiverModel: newMessage.receiverModel,
-        createdAt: newMessage.timestamp, // Fixed: using timestamp consistently
+        createdAt: newMessage.timestamp,
         read: newMessage.read
       }]);
 
+
+
     };
+
+
     const handleTyping = (data) => {
       if (data.chatId === activeChat && data.userType === 'provider') {
         setTypingUser(data.userId);
@@ -206,7 +212,40 @@ export default function UserChatPage() {
     const words = name.split(' ');
     return words.map(word => word[0]).join('').toUpperCase().slice(0, 2);
   };
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !activeChat || !socketRef.current?.connected) return;
 
+    try {
+      setUploading(true);
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await axios.post(
+        `${API}/api/chats/upload/attachments`,
+        formData,
+        { withCredentials: true }
+      );
+
+      socketRef.current.emit('send_message', {
+        payment: activeChat,
+        attachment: {
+          url: res.data.url,
+          resourceType: res.data.resourceType, // raw | image
+          format: res.data.format,
+          name: res.data.name,
+          size: res.data.size
+        }
+      });
+
+    } catch (err) {
+      console.error('File upload failed', err);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
   return (
     <div className="flex bg-gray-50 h-screen w-screen overflow-x-hidden">
       {/* Left Sidebar - Inbox */}
@@ -287,11 +326,33 @@ export default function UserChatPage() {
                 key={msg._id}
                 className={`flex mb-4 ${msg.sender === user._id ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`max-w-xs md:max-w-md rounded-lg px-4 py-2 ${msg.sender === user._id
+                <div className={`w-auto  rounded-lg px-4 py-2 ${msg.sender === user._id
                   ? 'bg-blue-500 text-white'
                   : 'bg-white border border-gray-200'
                   }`}>
-                  <p>{msg.content}</p>
+                  {/* Image preview */}
+                  {msg.attachment?.resourceType === 'image' && (
+                    <img
+                      src={msg.attachment.url}
+                      className="max-w-xs rounded-lg mb-1"
+                      alt={msg.attachment.name}
+                    />
+                  )}
+
+                  {/* File download */}
+                  {msg.attachment?.resourceType === 'raw' && (
+                    <a
+                      href={msg.attachment.url}
+                      target="_blank"
+                      className="text-blue-600 underline block mb-1"
+                    >
+                      📄 {msg.attachment.name}
+                    </a>
+                  )}
+
+                  {/* Text */}
+                  {msg.content && <p>{msg.content}</p>}
+
                   <p className={`text-xs mt-1 ${msg.sender === user._id
                     ? 'text-blue-100'
                     : 'text-gray-500'
@@ -306,7 +367,17 @@ export default function UserChatPage() {
 
           {/* Message Input */}
           <div className="p-4 border-t border-gray-200 sticky bottom-0 bg-white w-full">
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              <label className="cursor-pointer text-gray-500 hover:text-gray-700">
+                📎
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.zip"
+                  onChange={handleFileUpload}
+                />
+              </label>
+
               <Input
                 type="text"
                 value={message}
@@ -321,7 +392,7 @@ export default function UserChatPage() {
                     handleSendMessage();
                   }
                 }}
-                placeholder="Type a message..."
+                placeholder={uploading ? 'Uploading file...' : 'Type a message...'}
                 className="flex-1"
                 disabled={socketStatus !== 'connected'}
               />

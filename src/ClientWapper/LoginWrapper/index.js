@@ -136,7 +136,7 @@ const LoginWrapper = () => {
 
                         {/* Social Login Buttons */}
                         <div className="space-y-3">
-                            <Button variant="outline" className="w-full gap-2" onClick={handleGoogleSignin}>
+                            <Button variant="outline" className="w-full gap-2 text-black" onClick={handleGoogleSignin}>
                                 <AiFillGoogleCircle className="w-6 h-6" />
                                 Continue with Google
                             </Button>

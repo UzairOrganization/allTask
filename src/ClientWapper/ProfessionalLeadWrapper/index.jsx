@@ -7,7 +7,7 @@ import { API } from "@/lib/data-service";
 import { useSelector } from "react-redux";
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-const stripePromise = loadStripe("pk_test_51RJj3ZCkhStwG9g0TqEdDFkjXh56MvomnCibFbf1ijemDQ1TkHwjsb5oJ2AG3ePLAi8Np9FLNZsmz4N2CA4sKEhn00vHNOmlYC");
+const stripePromise = loadStripe("pk_test_51ST0xs32vr5uocVGtKIPNsvzmzyX52yLMYfODz7Qkhg4TOZxAEProyL1P2buTsJmSRFJHOtSqq6A3gjSzFlGAn6Y001wE4hcmt");
 import { Elements } from '@stripe/react-stripe-js';
 import PurchasedLeads from "@/components/PurchasedLeads";
 const ProfessionalLeadWrapper = () => {
@@ -144,35 +144,9 @@ const ProfessionalLeadWrapper = () => {
             lead.serviceType;
     };
 
-    // Remove getDynamicDetails function as we're now building details in transformLead
 
-    const getDynamicDetails = (lead) => {
-        const details = {};
-        const excludeFields = [
-            '_id', '__v', 'createdAt', 'updatedAt',
-            'customerDetails', 'serviceProvider',
-            'photos', 'status', 'serviceType',
-            'serviceTypeSubCategory', 'serviceTypeSubSubCategory'
-        ];
 
-        for (const [key, value] of Object.entries(lead)) {
-            if (!excludeFields.includes(key) && value !== undefined && value !== null) {
-                if (Array.isArray(value)) {
-                    if (value.length > 0) {
-                        details[key] = value.join(', ');
-                    }
-                }
-                else if (typeof value === 'object' && value !== null) {
-                    details[key] = JSON.stringify(value);
-                }
-                else {
-                    details[key] = value;
-                }
-            }
-        }
-
-        return details;
-    };
+   
 
     return (
         <>

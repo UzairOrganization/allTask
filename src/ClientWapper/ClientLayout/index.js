@@ -20,10 +20,10 @@ export default function ClientLayout({ children }) {
             style={{
               position: "fixed",
               bottom: "30px",
-              right: "20px",
+              left: "20px",
               backgroundColor: "#008b6e",
               color: "white",
-              padding: "12px 20px",
+              padding: "20px 20px",
               fontSize: "16px",
               borderRadius: "50px",
               textDecoration: "none",
@@ -41,7 +41,7 @@ export default function ClientLayout({ children }) {
               width="24"
               height="24"
             />
-            Chat with us
+            {/* Chat with us */}
           </a>
         </ThemeProvider>
       </AuthProvider>

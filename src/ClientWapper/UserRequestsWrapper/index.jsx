@@ -33,10 +33,14 @@ export default function UserRequestsWrapper() {
     const [selectedStatus, setSelectedStatus] = useState('')
     const [updating, setUpdating] = useState(false)
     const router = useRouter()
+    const [detailsModal, setDetailsModal] = useState(false)
+
     const fetchRequests = async () => {
         try {
             const response = await axios.get(`${API}/api/leads/getUserRequest`, { withCredentials: true })
-            setRequests(response.data)
+
+
+            setRequests(response.data.requests)
         } catch (err) {
             setRequests([])
             setError('Failed to fetch requests.')
@@ -161,21 +165,31 @@ export default function UserRequestsWrapper() {
                                 </div>
 
                                 <div className="mt-4 flex space-x-3">
-                                    <Button variant="outline" size="sm" onClick={() => setSelectedRequest(request)}>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                            setSelectedRequest(request)
+                                            setDetailsModal(true)
+                                        }}
+                                    >
                                         View Details
                                     </Button>
 
+
                                     {/* 🔹 New button to open status modal */}
-                                    <Button
+                                    {/* <Button
                                         size="sm"
                                         className="bg-[#007D63] text-white"
                                         onClick={() => {
+                                         
+
                                             setSelectedRequest(request)
                                             setStatusModal(true)
                                         }}
                                     >
                                         Change Status
-                                    </Button>
+                                    </Button> */}
                                 </div>
                             </CardContent>
                         </Card>
@@ -211,6 +225,73 @@ export default function UserRequestsWrapper() {
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
+                {/* 🔹 View Details Modal */}
+                <Dialog open={detailsModal} onOpenChange={setDetailsModal}>
+                    <DialogContent className="max-w-2xl h-[500px] overflow-y-scroll">
+                        <DialogHeader>
+                            <DialogTitle>Service Request Details</DialogTitle>
+                        </DialogHeader>
+
+                        {selectedRequest && (
+                            <div className="space-y-4 text-sm">
+
+                                {/* Service Info */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-muted-foreground">Service Type</p>
+                                        <p className="font-medium">{selectedRequest.serviceType}</p>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-muted-foreground">Status</p>
+                                        <Badge className="bg-[#008b6e] text-white">
+                                            {selectedRequest.status}
+                                        </Badge>
+                                    </div>
+                                </div>
+
+                                {/* Customer Info */}
+                                <div className="border rounded-lg p-4 space-y-2">
+                                    <h4 className="font-semibold">Customer Details</h4>
+                                    <p><b>Name:</b> {selectedRequest.customerDetails?.name}</p>
+                                    <p><b>Email:</b> {selectedRequest.customerDetails?.email}</p>
+                                    <p><b>Phone:</b> {selectedRequest.customerDetails?.phoneNo}</p>
+                                    <p><b>Address:</b> {selectedRequest.customerDetails?.address}</p>
+                                    <p><b>Zip Code:</b> {selectedRequest.customerDetails?.zipCode}</p>
+                                </div>
+
+                              
+
+                             
+
+                                {/* Uploaded Photos */}
+                                {selectedRequest.photos?.length > 0 && (
+                                    <div>
+                                        <h4 className="font-semibold mb-2">Uploaded Photos</h4>
+                                        <div className="grid grid-cols-3 gap-3">
+                                            {selectedRequest.photos.map((img, i) => (
+                                                <img
+                                                    key={i}
+                                                    src={`${API}${img}`}
+                                                    alt="service"
+                                                    className="rounded-md border object-cover h-24 w-full"
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}                               
+
+                            </div>
+                        )}
+
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setDetailsModal(false)}>
+                                Close
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
             </div>
         </>
     )

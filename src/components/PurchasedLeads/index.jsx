@@ -24,33 +24,47 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { API } from '@/lib/data-service'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog'
 const PurchasedLeads = () => {
     const [payments, setPayments] = useState([])
     const [loading, setLoading] = useState(true)
     const [selectedPayment, setSelectedPayment] = useState(null)
     const navigation = useRouter()
-    useEffect(() => {
-        const fetchPayments = async () => {
-          try {
+    const [selectedRequest, setSelectedRequest] = useState(null)
+    const [selectedStatus, setSelectedStatus] = useState('')
+    const [updating, setUpdating] = useState(false)
+    const [statusModal, setStatusModal] = useState(false)
+    const fetchPayments = async () => {
+        try {
             setLoading(true);
             const res = await axios.get(`${API}/api/payments`, { withCredentials: true });
-      
+
             // ✅ Filter out "professional_plus" payments
             const filteredPayments = res.data.result.filter(
-              (payment) => payment.paymentType !== "professional_plus"
+                (payment) => payment.paymentType !== "professional_plus"
             );
-      
+
             setPayments(filteredPayments);
-          } catch (error) {
+        } catch (error) {
             console.error("Error fetching payments:", error);
-          } finally {
+        } finally {
             setLoading(false);
-          }
-        };
-      
+        }
+    };
+    useEffect(() => {
+
+
         fetchPayments();
-      }, []);
-      
+    }, []);
+
+    const statusOptions = [
+        "Completed",
+        "In Progress",
+        "Declined",
+        "Scheduled",
+        "Not Scheduled Yet"
+    ]
 
     const StatusBadge = ({ status }) => {
         const variants = {
@@ -106,7 +120,7 @@ const PurchasedLeads = () => {
                 const result = await axios.post(
                     `${API}/api/chats/init/${payment._id}`
                 );
-                
+
                 navigation.push("/chat/professional")
                 return result.data;
 
@@ -173,7 +187,24 @@ const PurchasedLeads = () => {
                         </div>
                     </div>
                 )}
-
+                {serviceRequest.status && (
+                    <div className='flex justify-between items-center'>
+                        <div>
+                            <p className="text-sm font-medium text-gray-500">Status</p>
+                            <p className="capitalize ">{serviceRequest.status}</p>
+                        </div>
+                        <Button
+                            size="sm"
+                            className="bg-[#007D63] text-white"
+                            onClick={() => {
+                                setSelectedRequest(serviceRequest)
+                                setStatusModal(true)
+                            }}
+                        >
+                            Change Status
+                        </Button>
+                    </div>
+                )}
 
 
                 {/* Photos if available */}
@@ -225,8 +256,56 @@ const PurchasedLeads = () => {
                         </div>
                     </div>
                 )}
+                <Dialog open={statusModal} onOpenChange={setStatusModal}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Change Request Status</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid gap-3">
+                            {statusOptions.map(status => (
+                                <Button
+                                    key={status}
+                                    variant={selectedStatus === status ? "default" : "outline"}
+                                    className="justify-start"
+                                    onClick={() => setSelectedStatus(status)}
+                                >
+                                    {status}
+                                </Button>
+                            ))}
+                        </div>
+                        <DialogFooter>
+                            <Button
+                                disabled={updating || !selectedStatus}
+                                onClick={handleStatusUpdate}
+                                className="bg-[#007D63]"
+                            >
+                                {updating ? 'Updating...' : 'Confirm'}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </div>
         )
+    }
+
+    const handleStatusUpdate = async () => { // 🔹 update request status
+        if (!selectedRequest || !selectedStatus) return
+        setUpdating(true)
+        try {
+            await axios.patch(`${API}/api/leads/update-lead-status/${selectedRequest._id}`, {
+                status: selectedStatus
+            }, { withCredentials: true })
+
+            
+            setSelectedStatus('')
+            setStatusModal(false)
+            window.location.reload()
+        } catch (err) {
+            console.error(err)
+            toast.error('Failed to update status.')
+        } finally {
+            setUpdating(false)
+        }
     }
     return (
         <div >
@@ -325,6 +404,7 @@ const PurchasedLeads = () => {
                     </Card>
                 </div>
             )}
+
         </div>
     )
 }
