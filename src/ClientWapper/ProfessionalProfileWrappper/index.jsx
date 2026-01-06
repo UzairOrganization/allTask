@@ -70,7 +70,12 @@ export default function ProfessionalProfile({ name }) {
 
     fetchProfessional();
   }, [name]);
-
+  const normalizeUrl = (url) => {
+    if (!url) return "";
+    return url.startsWith("http://") || url.startsWith("https://")
+      ? url
+      : `https://${url}`;
+  };
   // Handle review submission
   const handleReviewSubmit = async () => {
     setIsSubmitting(true);
@@ -183,11 +188,13 @@ export default function ProfessionalProfile({ name }) {
                 <div className="flex items-center gap-2 mt-2">
                   <div className="flex items-center">
                     <Link className="w-5 h-5" />
-                    {/* <span className="ml-1 font-medium">{avgRating.toFixed(1)}</span> */}
-                    <a href={professional.externalLink} target="_blank" className="text-blue-600">
-                      <span className="ml-1 text-blue-600">
-                        {professional.externalLink}
-                      </span>
+                    <a
+                      href={normalizeUrl(professional.externalLink)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 ml-1"
+                    >
+                      {professional.externalLink}
                     </a>
                   </div>
                 </div>
