@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getAllCategories, getSubCategoryWithSubSubCategories } from "@/lib/data-service";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -7,6 +8,7 @@ import Header from "@/components/Header";
 import SearchBar from "@/components/SearchBar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FaRocket } from "react-icons/fa";
+
 export const metadata = {
     title: "All Services - AllTasko"
 }
