@@ -229,7 +229,7 @@ const RegisterProfessionalWrapper = () => {
             <Header />
             <Toaster />
             <div className="min-h-[85vh] flex flex-col justify-center items-center bg-gray-50 py-12  sm:px-6 lg:px-8">
-                <div className="w-3xl ">
+                <div className="w-full max-w-4xl">
                     <Card className="shadow-lg">
                         <CardHeader>
                             <CardTitle className="text-2xl font-bold text-center text-gray-800">

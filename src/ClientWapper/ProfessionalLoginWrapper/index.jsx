@@ -91,8 +91,8 @@ const ProfessionalLoginWrapper = () => {
         <>
             <Header />
             <Toaster />
-            <div className="min-h-[80vh] flex flex-col justify-center items-center">
-                <div className="mt-12 w-5xl overflow-hidden flex items-center justify-center">
+            <div className="min-h-[80vh]  flex flex-col justify-center items-center">
+                <div className="mt-12 w-full overflow-hidden flex items-center justify-center">
                     <div className="max-w-lg w-full p-8 bg-white rounded-lg shadow-lg border ">
                         <h1 className="text-3xl font-bold text-center text-black mb-6">
                             Professional Login

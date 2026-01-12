@@ -18,6 +18,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { saveDateOverride, fetchDateOverrides } from "@/services/calenderService";
+import TimePicker from "react-time-picker";
 
 /* ---------------- HELPERS ---------------- */
 
@@ -39,6 +40,17 @@ const DateOverrides = () => {
   const [overrides, setOverrides] = useState([]);
 
   const [open, setOpen] = useState(false);
+  const toMinutes = (time) => {
+    if (!time) return 0;
+
+    const [t, modifier] = time.split(" ");
+    let [h, m] = t.split(":").map(Number);
+
+    if (modifier === "PM" && h !== 12) h += 12;
+    if (modifier === "AM" && h === 12) h = 0;
+
+    return h * 60 + m;
+  };
 
   useEffect(() => {
     fetchOverrides();
@@ -56,6 +68,11 @@ const DateOverrides = () => {
   };
 
   const handleSave = async () => {
+    if (isAvailable) {
+      if (toMinutes(timeSlots[0].from) >= toMinutes(timeSlots[0].to)) {
+        return alert("Start time must be before end time");
+      }
+    }
     const payload = {
       date,
       isAvailable,
@@ -138,12 +155,14 @@ const DateOverrides = () => {
                   <label className="text-xs text-muted-foreground">
                     From
                   </label>
-                  <Input
-                    type="time"
+                  <TimePicker
                     value={timeSlots[0].from}
-                    onChange={(e) =>
-                      setTimeSlots([{ ...timeSlots[0], from: e.target.value }])
+                    onChange={(value) =>
+                      setTimeSlots([{ ...timeSlots[0], from: value }])
                     }
+                    disableClock
+                    clearIcon={null}
+                    locale="en-US"   // ✅ forces 12-hour
                   />
                 </div>
 
@@ -151,13 +170,16 @@ const DateOverrides = () => {
                   <label className="text-xs text-muted-foreground">
                     To
                   </label>
-                  <Input
-                    type="time"
+                  <TimePicker
                     value={timeSlots[0].to}
-                    onChange={(e) =>
-                      setTimeSlots([{ ...timeSlots[0], to: e.target.value }])
+                    onChange={(value) =>
+                      setTimeSlots([{ ...timeSlots[0], to: value }])
                     }
+                    disableClock
+                    clearIcon={null}
+                    locale="en-US"   // ✅ forces 12-hour
                   />
+
                 </div>
 
                 {timeSlots[0].from && timeSlots[0].to && (

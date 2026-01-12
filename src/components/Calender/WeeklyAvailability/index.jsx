@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Plus, Trash } from "lucide-react";
 import { saveWeeklyAvailability } from "@/services/calenderService";
 import { fetchWeeklyAvailability } from "@/services/calenderService";
+import TimePicker from "react-time-picker";
+
 
 /* -------------------- CONSTANTS -------------------- */
 
@@ -47,7 +49,15 @@ const WeeklyAvailability = () => {
 
         setWeek(updated);
     };
+    const toMinutes = (time) => {
+        const [t, modifier] = time.split(" ");
+        let [h, m] = t.split(":").map(Number);
 
+        if (modifier === "PM" && h !== 12) h += 12;
+        if (modifier === "AM" && h === 12) h = 0;
+
+        return h * 60 + m;
+    };
     const addSlot = (index) => {
         const updated = [...week];
         updated[index].timeSlots.push({ from: "", to: "" });
@@ -86,7 +96,7 @@ const WeeklyAvailability = () => {
                         return;
                     }
 
-                    if (slot.from >= slot.to) {
+                    if (toMinutes(slot.from) >= toMinutes(slot.to)) {
                         setError("Start time must be before end time.");
                         return;
                     }
@@ -163,23 +173,39 @@ const WeeklyAvailability = () => {
                                 {day.timeSlots.map((slot, slotIndex) => (
                                     <div
                                         key={slotIndex}
-                                        className="flex items-center gap-2"
+                                        className="grid grid-cols-[1fr_1fr_auto] gap-2 items-center"
                                     >
-                                        <Input
-                                            type="time"
-                                            value={slot.from}
-                                            onChange={(e) =>
-                                                updateSlot(index, slotIndex, "from", e.target.value)
-                                            }
-                                        />
+                                        <div className="time-picker-wrapper">
+                                            <TimePicker
+                                                value={slot.from || null}
+                                                onChange={(value) =>
+                                                    updateSlot(index, slotIndex, "from", value)
+                                                }
+                                                disableClock
+                                                clearIcon={null}
+                                                locale="en-US"
+                                                hourPlaceholder="hh"
+                                                minutePlaceholder="mm"
+                                            />
 
-                                        <Input
-                                            type="time"
-                                            value={slot.to}
-                                            onChange={(e) =>
-                                                updateSlot(index, slotIndex, "to", e.target.value)
-                                            }
-                                        />
+                                        </div>
+
+                                        <div className="time-picker-wrapper">
+                                            <TimePicker
+                                                value={slot.to || null}
+                                                onChange={(value) =>
+                                                    updateSlot(index, slotIndex, "to", value)
+                                                }
+                                                disableClock
+                                                clearIcon={null}
+                                                locale="en-US"
+                                                hourPlaceholder="hh"
+                                                minutePlaceholder="mm"
+                                            />
+                                        </div>
+
+
+
 
                                         <Button
                                             variant="ghost"
