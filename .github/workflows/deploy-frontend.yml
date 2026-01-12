@@ -36,11 +36,18 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          command_timeout: 20m     # ✅ THIS FIXES THE PIPELINE
           script: |
+            set -e
+
             docker pull ${{ secrets.DOCKER_USERNAME }}/alltask-frontend:latest
+
             docker stop alltasko-frontend || true
             docker rm alltasko-frontend || true
+
             docker run -d \
+              --restart unless-stopped \
               --name alltasko-frontend \
               -p 0.0.0.0:3000:3000 \
               ${{ secrets.DOCKER_USERNAME }}/alltask-frontend:latest
