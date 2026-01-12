@@ -71,10 +71,7 @@ export default function PaymentSuccess({ searchParams }) {
                                             </Button>
                                         </span>
                                     </div>
-                                    <div className="flex justify-between py-2 border-b border-gray-100">
-                                        <span className="text-gray-500">Amount</span>
-                                        <span className="font-medium text-gray-900">$15.00</span>
-                                    </div>
+                                 
                                     <div className="flex justify-between py-2">
                                         <span className="text-gray-500">Status</span>
                                         <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700">
