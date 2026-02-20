@@ -1,26 +1,26 @@
-'use client';
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { format } from 'date-fns';
-import { useSelector } from 'react-redux';
-import { API } from '@/lib/data-service';
-import axios from 'axios';
-import { Send, ChevronRight, ArrowLeft, MessageSquare } from 'lucide-react';
-import { io } from 'socket.io-client';
+"use client";
+import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { format } from "date-fns";
+import { useSelector } from "react-redux";
+import { API } from "@/lib/data-service";
+import axios from "axios";
+import { Send, ChevronRight, ArrowLeft, MessageSquare } from "lucide-react";
+import { io } from "socket.io-client";
 
 export default function UserChatPage() {
   const { user } = useSelector((state) => state.auth);
   const [activeChat, setActiveChat] = useState(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [socketStatus, setSocketStatus] = useState('disconnected');
+  const [socketStatus, setSocketStatus] = useState("disconnected");
   const [isTyping, setIsTyping] = useState(false);
   const [typingUser, setTypingUser] = useState(null);
   const socketRef = useRef(null);
@@ -28,7 +28,7 @@ export default function UserChatPage() {
 
   // Initialize socket connection
   useEffect(() => {
-    setSocketStatus('connecting');
+    setSocketStatus("connecting");
 
     socketRef.current = io(`${API}`, {
       withCredentials: true,
@@ -36,15 +36,15 @@ export default function UserChatPage() {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
-      transports: ['websocket']
+      transports: ["websocket"],
     });
 
     const socket = socketRef.current;
 
     const handleConnect = () => {
-      setSocketStatus('connected');
+      setSocketStatus("connected");
       if (user._id) {
-        socket.emit('authenticate', { userId: user._id });
+        socket.emit("authenticate", { userId: user._id });
       }
       if (activeChat) {
         joinChat(activeChat);
@@ -52,40 +52,38 @@ export default function UserChatPage() {
     };
 
     const handleDisconnect = (reason) => {
-      setSocketStatus('disconnected');
-      if (reason === 'io server disconnect') {
+      setSocketStatus("disconnected");
+      if (reason === "io server disconnect") {
         socket.connect();
       }
     };
 
     const handleConnectError = (error) => {
-      setSocketStatus('error');
+      setSocketStatus("error");
     };
 
     // Update the handleNewMessage function to properly handle the message structure:
     const handleNewMessage = (newMessage) => {
-
       // Make sure we're adding to the correct chat
 
-      setMessages(prev => [...prev, {
-        _id: newMessage._id,
-        content: newMessage.content,
-        attachment: newMessage.attachment || null, // ✅ ADD THIS
-        sender: newMessage.sender,
-        senderModel: newMessage.senderType,
-        receiver: newMessage.receiver,
-        receiverModel: newMessage.receiverModel,
-        createdAt: newMessage.timestamp,
-        read: newMessage.read
-      }]);
-
-
-
+      setMessages((prev) => [
+        ...prev,
+        {
+          _id: newMessage._id,
+          content: newMessage.content,
+          attachment: newMessage.attachment || null, // ✅ ADD THIS
+          sender: newMessage.sender,
+          senderModel: newMessage.senderType,
+          receiver: newMessage.receiver,
+          receiverModel: newMessage.receiverModel,
+          createdAt: newMessage.timestamp,
+          read: newMessage.read,
+        },
+      ]);
     };
 
-
     const handleTyping = (data) => {
-      if (data.chatId === activeChat && data.userType === 'provider') {
+      if (data.chatId === activeChat && data.userType === "provider") {
         setTypingUser(data.userId);
         setIsTyping(data.isTyping);
 
@@ -99,18 +97,18 @@ export default function UserChatPage() {
       }
     };
 
-    socket.on('connect', handleConnect);
-    socket.on('disconnect', handleDisconnect);
-    socket.on('connect_error', handleConnectError);
-    socket.on('new_message', handleNewMessage);
+    socket.on("connect", handleConnect);
+    socket.on("disconnect", handleDisconnect);
+    socket.on("connect_error", handleConnectError);
+    socket.on("new_message", handleNewMessage);
 
     // socket.on('typing_indicator', handleTyping);
 
     return () => {
-      socket.off('connect', handleConnect);
-      socket.off('disconnect', handleDisconnect);
-      socket.off('connect_error', handleConnectError);
-      socket.off('new_message', handleNewMessage);
+      socket.off("connect", handleConnect);
+      socket.off("disconnect", handleDisconnect);
+      socket.off("connect_error", handleConnectError);
+      socket.off("new_message", handleNewMessage);
       // socket.off('typing_indicator', handleTyping);
       socket.disconnect();
     };
@@ -121,25 +119,23 @@ export default function UserChatPage() {
     setLoading(true);
     try {
       const res = await axios.get(`${API}/api/chats/user`, {
-        withCredentials: true
+        withCredentials: true,
       });
       console.log(res.data.data);
       setChats(res.data.data);
     } catch (error) {
-      console.error('Error fetching chats:', error);
+      console.error("Error fetching chats:", error);
     } finally {
       setLoading(false);
     }
   };
   useEffect(() => {
-
-
     fetchChats();
   }, [user]);
 
   // Join chat and fetch messages when activeChat changes
   useEffect(() => {
-    if (activeChat && socketStatus === 'connected') {
+    if (activeChat && socketStatus === "connected") {
       joinChat(activeChat);
       fetchMessages(activeChat);
     }
@@ -147,26 +143,29 @@ export default function UserChatPage() {
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const joinChat = (payment) => {
     if (socketRef.current?.connected) {
-      socketRef.current.emit('join_chat', { paymentId: payment });
+      socketRef.current.emit("join_chat", { paymentId: payment });
     }
   };
 
   const fetchMessages = async (payment) => {
     try {
-      const res = await axios.get(`${API}/api/chats/${payment}/messages/users`, {
-        withCredentials: true
-      });
+      const res = await axios.get(
+        `${API}/api/chats/${payment}/messages/users`,
+        {
+          withCredentials: true,
+        },
+      );
       setMessages(res.data.messages);
       setTimeout(async () => {
-        await fetchChats()
+        await fetchChats();
       }, 2000);
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error("Error fetching messages:", error);
     }
   };
 
@@ -178,39 +177,47 @@ export default function UserChatPage() {
       _id: tempId,
       content: message,
       sender: user._id,
-      senderType: 'user',
+      senderType: "user",
       createdAt: new Date(),
-      read: false
+      read: false,
     };
 
     // Optimistic update
     // setMessages(prev => [...prev, newMessage]);
-    setMessage('');
+    setMessage("");
 
     // Send via socket
-    socketRef.current.emit('send_message', {
-      payment: activeChat,
-      text: message
-    }, (ack) => {
-      if (ack.status === 'error') {
-        // Revert optimistic update if failed
-        setMessages(prev => prev.filter(m => m._id !== tempId));
-      }
-    });
+    socketRef.current.emit(
+      "send_message",
+      {
+        payment: activeChat,
+        text: message,
+      },
+      (ack) => {
+        if (ack.status === "error") {
+          // Revert optimistic update if failed
+          setMessages((prev) => prev.filter((m) => m._id !== tempId));
+        }
+      },
+    );
   };
 
   const handleTyping = (isTyping) => {
     if (!activeChat || !socketRef.current?.connected) return;
-    socketRef.current.emit('typing', {
+    socketRef.current.emit("typing", {
       chatId: activeChat,
-      isTyping
+      isTyping,
     });
   };
 
   const getInitials = (name) => {
-    if (!name) return '';
-    const words = name.split(' ');
-    return words.map(word => word[0]).join('').toUpperCase().slice(0, 2);
+    if (!name) return "";
+    const words = name.split(" ");
+    return words
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -220,36 +227,37 @@ export default function UserChatPage() {
       setUploading(true);
 
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
       const res = await axios.post(
         `${API}/api/chats/upload/attachments`,
         formData,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
-      socketRef.current.emit('send_message', {
+      socketRef.current.emit("send_message", {
         payment: activeChat,
         attachment: {
           url: res.data.url,
           resourceType: res.data.resourceType, // raw | image
           format: res.data.format,
           name: res.data.name,
-          size: res.data.size
-        }
+          size: res.data.size,
+        },
       });
-
     } catch (err) {
-      console.error('File upload failed', err);
+      console.error("File upload failed", err);
     } finally {
       setUploading(false);
-      e.target.value = '';
+      e.target.value = "";
     }
   };
   return (
     <div className="flex bg-gray-50 h-screen w-screen overflow-x-hidden">
       {/* Left Sidebar - Inbox */}
-      <div className={`${activeChat ? 'hidden md:block' : 'block'} fixed top-0 left-0 h-screen z-20 w-full md:w-[20%] bg-white border-r border-gray-200 flex flex-col`}>
+      <div
+        className={`${activeChat ? "hidden md:block" : "block"} fixed top-0 left-0 h-screen z-20 w-full md:w-[20%] bg-white border-r border-gray-200 flex flex-col`}
+      >
         <div className="p-4 border-b border-gray-200">
           <h1 className="text-xl font-bold text-gray-800">Messages</h1>
         </div>
@@ -258,12 +266,14 @@ export default function UserChatPage() {
           {loading ? (
             <div className="p-4 text-center">Loading conversations...</div>
           ) : chats.length === 0 ? (
-            <div className="p-4 text-center text-gray-500">No chats available</div>
+            <div className="p-4 text-center text-gray-500">
+              No chats available
+            </div>
           ) : (
-            chats.map(chat => (
+            chats.map((chat) => (
               <div
                 key={chat._id}
-                className={`p-4 border-b border-gray-200 flex items-center cursor-pointer hover:bg-gray-50 ${activeChat === chat.payment ? 'bg-blue-50' : ''}`}
+                className={`p-4 border-b border-gray-200 flex items-center cursor-pointer hover:bg-gray-50 ${activeChat === chat.payment ? "bg-blue-50" : ""}`}
                 onClick={() => setActiveChat(chat.payment)}
               >
                 <Avatar className="mr-3">
@@ -273,20 +283,35 @@ export default function UserChatPage() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-medium text-gray-900 truncate">
-                      {chat.provider?.name}
-                    </h3>
-                    {chat.unreadCount > 0 && (
-                      <span className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {chat.unreadCount}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-gray-500 truncate">
-                    {chat.serviceRequest?.type}
-                  </p>
-                </div>
+  <div className="flex items-center justify-between gap-2">
+
+    {/* LEFT SIDE (Name) */}
+    <h3 className="font-medium text-gray-900 truncate flex-1">
+      {chat.provider?.name}
+    </h3>
+
+    {/* RIGHT SIDE (Date + Badge) */}
+    <div className="flex items-center gap-2 shrink-0">
+
+      {chat.lastMessage?.createdAt && (
+        <span className="text-xs text-gray-400">
+          {format(new Date(chat.lastMessage.createdAt), "MMM d")}
+        </span>
+      )}
+
+      {chat.unreadCount > 0 && (
+        <span className="bg-[#008b6e] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+          {chat.unreadCount}
+        </span>
+      )}
+
+    </div>
+  </div>
+
+  <p className="text-xs text-gray-500 truncate">
+    {chat.serviceRequest?.type}
+  </p>
+</div>
                 <ChevronRight className="h-5 w-5 text-gray-400 ml-2" />
               </div>
             ))
@@ -306,16 +331,21 @@ export default function UserChatPage() {
               <ArrowLeft className="h-5 w-5" />
             </button>
             <Avatar className="mr-3">
-              <AvatarImage src={chats.find(c => c.payment === activeChat)?.provider?.avatar} />
+              <AvatarImage
+                src={
+                  chats.find((c) => c.payment === activeChat)?.provider?.avatar
+                }
+              />
               <AvatarFallback>
-                {getInitials(chats.find(c => c.payment === activeChat)?.provider?.name)}
+                {getInitials(
+                  chats.find((c) => c.payment === activeChat)?.provider?.name,
+                )}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
               <h2 className="font-bold text-gray-900">
-                {chats.find(c => c.payment === activeChat)?.provider?.name}
+                {chats.find((c) => c.payment === activeChat)?.provider?.name}
               </h2>
-
             </div>
           </div>
 
@@ -324,14 +354,17 @@ export default function UserChatPage() {
             {messages.map((msg) => (
               <div
                 key={msg._id}
-                className={`flex mb-4 ${msg.sender === user._id ? 'justify-end' : 'justify-start'}`}
+                className={`flex mb-4 ${msg.sender === user._id ? "justify-end" : "justify-start"}`}
               >
-                <div className={`w-auto  rounded-lg px-4 py-2 ${msg.sender === user._id
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white border border-gray-200'
-                  }`}>
+                <div
+                  className={`w-auto  rounded-lg px-4 py-2 ${
+                    msg.sender === user._id
+                      ? "bg-[#008b6e] text-white"
+                      : "bg-white border border-gray-200"
+                  }`}
+                >
                   {/* Image preview */}
-                  {msg.attachment?.resourceType === 'image' && (
+                  {msg.attachment?.resourceType === "image" && (
                     <img
                       src={msg.attachment.url}
                       className="max-w-xs rounded-lg mb-1"
@@ -340,11 +373,15 @@ export default function UserChatPage() {
                   )}
 
                   {/* File download */}
-                  {msg.attachment?.resourceType === 'raw' && (
+                  {msg.attachment?.resourceType === "raw" && (
                     <a
                       href={msg.attachment.url}
                       target="_blank"
-                      className="text-blue-600 underline block mb-1"
+                      className={`underline block mb-1 ${
+                        msg.sender === user._id
+                          ? "text-white"
+                          : "text-[#008b6e]"
+                      }`}
                     >
                       📄 {msg.attachment.name}
                     </a>
@@ -353,11 +390,14 @@ export default function UserChatPage() {
                   {/* Text */}
                   {msg.content && <p>{msg.content}</p>}
 
-                  <p className={`text-xs mt-1 ${msg.sender === user._id
-                    ? 'text-blue-100'
-                    : 'text-gray-500'
-                    }`}>
-                    {format(new Date(msg.createdAt), 'hh:mm a')}
+                  <p
+                    className={`text-xs mt-1 ${
+                      msg.sender === user._id
+                        ? "text-green-100"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {format(new Date(msg.createdAt), "hh:mm a")}
                   </p>
                 </div>
               </div>
@@ -387,34 +427,38 @@ export default function UserChatPage() {
                 }}
                 onBlur={() => handleTyping(false)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     handleTyping(false);
                     handleSendMessage();
                   }
                 }}
-                placeholder={uploading ? 'Uploading file...' : 'Type a message...'}
+                placeholder={
+                  uploading ? "Uploading file..." : "Type a message..."
+                }
                 className="flex-1"
-                disabled={socketStatus !== 'connected'}
+                disabled={socketStatus !== "connected"}
               />
               <Button
                 onClick={handleSendMessage}
                 className="ml-2"
-                disabled={socketStatus !== 'connected'}
+                disabled={socketStatus !== "connected"}
               >
                 <Send className="h-5 w-5" />
               </Button>
             </div>
             <div className="mt-1 text-xs">
-              {socketStatus === 'connecting' && (
+              {socketStatus === "connecting" && (
                 <p className="text-blue-500">Connecting to chat server...</p>
               )}
-              {socketStatus === 'error' && (
-                <p className="text-red-500">Connection failed. Trying to reconnect...</p>
+              {socketStatus === "error" && (
+                <p className="text-red-500">
+                  Connection failed. Trying to reconnect...
+                </p>
               )}
-              {socketStatus === 'connected' && (
+              {socketStatus === "connected" && (
                 <p className="text-green-500">Connected</p>
               )}
-              {socketStatus === 'disconnected' && (
+              {socketStatus === "disconnected" && (
                 <p className="text-yellow-500">Disconnected</p>
               )}
             </div>
@@ -424,7 +468,9 @@ export default function UserChatPage() {
         <div className="hidden md:flex flex-1 items-center justify-center bg-gray-100">
           <div className="text-center p-6">
             <MessageSquare className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-700">Select a conversation</h3>
+            <h3 className="text-lg font-medium text-gray-700">
+              Select a conversation
+            </h3>
             <p className="text-gray-500 mt-1">Status: {socketStatus}</p>
           </div>
         </div>

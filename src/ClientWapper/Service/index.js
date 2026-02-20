@@ -205,7 +205,7 @@ const Service = ({ name }) => {
                     {/* Features and Pricing */}
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-16">
                         <div className="h-full bg-gray-200 p-8 rounded-xl border border-green-700/20 shadow-lg">
-                            <h3 className="text-2xl font-bold text-green-600 mb-6">Why Choose Us</h3>
+                            <h3 className="text-2xl font-bold text-[#008b6e] mb-6">Why Choose Us</h3>
                             <ul className="space-y-4">
                                 {[
                                     "Licensed and insured professionals",

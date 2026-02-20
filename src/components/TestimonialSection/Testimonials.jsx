@@ -43,50 +43,53 @@ export default function Testimonials() {
   }
 
   return (
-    <section className="max-w-4xl mx-auto py-12 px-6">
-    
-
-      <div className="space-y-8 overflow-y-scroll scroll-smooth hide-scrollbar h-[600px]">
-        {reviews.map((item, i) => (
-          <div key={i} className={`border-b border-gray-200 pb-6 px-4 rounded-xl ${
-    i % 2 === 0 ? "bg-gray-100" : "bg-green-200"
-  }`}>
-            {/* Header */}
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-semibold text-gray-900">
-                  {item.review.name}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  {new Date(item.review.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
-              </div>
-              <span className="text-xs  bg-gray-100 px-3  py-1 mr-6 mt-2 rounded-full text-gray-700 font-medium">
-                {item.providerName || item.review.professionalName}
-              </span>
+  <section className="max-w-4xl mx-auto py-6 px-4">
+    <div className="space-y-4 overflow-y-scroll scroll-smooth hide-scrollbar h-[600px]">
+      {reviews.map((item, i) => (
+        <div
+          key={i}
+          className={`border-b border-gray-200 px-4 py-3 rounded-lg ${
+            i % 2 === 0 ? "bg-gray-100" : "bg-green-200"
+          }`}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="font-semibold text-gray-900 text-sm">
+                {item.review.name}
+              </h3>
+              <p className="text-xs text-gray-500">
+                {new Date(item.review.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
             </div>
 
-            {/* Rating */}
-            <div className="flex items-center mt-2">
-              {[...Array(item.review.rating || 5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-4 h-4 text-yellow-500 fill-yellow-500"
-                />
-              ))}
-            </div>
-
-            {/* Review Text */}
-            <p className="mt-2 text-gray-700 leading-relaxed">
-              {item.review.description}
-            </p>
+            <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded-full text-gray-700 font-medium">
+              {item.providerName || item.review.professionalName}
+            </span>
           </div>
-        ))}
-      </div>
-    </section>
-  );
+
+          {/* Rating */}
+          <div className="flex items-center mt-1">
+            {[...Array(item.review.rating || 5)].map((_, i) => (
+              <Star
+                key={i}
+                className="w-3 h-3 text-yellow-500 fill-yellow-500"
+              />
+            ))}
+          </div>
+
+          {/* Review Text */}
+          <p className="mt-1 text-gray-700 text-sm leading-snug">
+            {item.review.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+);
+
 }
