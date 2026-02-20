@@ -32,7 +32,7 @@ const ProfessionalLeadWrapper = () => {
             setLoading(true);
             const response = await axios.get(`${API}/api/leads/get-all-matching-leads-of-provider/${id}`);
             const leads = response.data.leads;
-            console.log(leads);
+            
             
             // Transform all leads at once
             const transformedLeads = await Promise.all(

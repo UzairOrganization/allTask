@@ -19,7 +19,7 @@ export async function middleware(req) {
         const isAuthPage = authPages.includes(req.nextUrl.pathname);
 
         const userRoutes = [
-            '/user-profile', '/user-requests', '/user-chat',
+            '/user-profile', '/user-requests', '/chat/user',
         ];
 
         const providerRoutes = [
@@ -29,7 +29,8 @@ export async function middleware(req) {
             '/purchased-leads',
             '/forums',
             '/new-forum',
-            '/estimated-price'
+            '/estimated-price',
+            '/chat/professional'
         ];
 
         const isUserRoute = userRoutes.some(route => req.nextUrl.pathname.startsWith(route));
@@ -133,6 +134,7 @@ export const config = {
         '/purchased-leads',
         '/forums/:path*', 
         '/new-forum',
-        '/estimated-price/:path*'
+        '/estimated-price/:path*',
+        '/chat/:path*'
     ],
 };

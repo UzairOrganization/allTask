@@ -53,7 +53,8 @@ export default function ProfessionalProfile({ name }) {
     description: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 6;
   // Fetch professional data
   useEffect(() => {
     const fetchProfessional = async () => {
@@ -102,6 +103,22 @@ export default function ProfessionalProfile({ name }) {
   const avgRating = professional?.reviews?.length > 0
     ? professional.reviews.reduce((acc, review) => acc + (review.rating || 0), 0) / professional.reviews.length
     : 0;
+
+  const totalReviews = professional?.reviews?.length || 0;
+  const totalPages = Math.ceil(totalReviews / reviewsPerPage);
+
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+
+  const currentReviews =
+    professional?.reviews?.slice(indexOfFirstReview, indexOfLastReview) || [];
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 600, behavior: 'smooth' });
+    }
+  };
 
   // Loading state
   if (loading) return (
@@ -315,158 +332,96 @@ export default function ProfessionalProfile({ name }) {
 
           {/* Reviews Section */}
           <Card className="shadow-md border border-green-100 rounded-2xl overflow-hidden">
-            {/* Header */}
             <CardHeader className="bg-green-700 text-white p-6 rounded-t-2xl">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-xl font-semibold tracking-wide">
                   Customer Reviews
                 </CardTitle>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
-                    <Star className="w-5 h-5 text-yellow-400 fill-yellow-400 mr-1" />
-                    <span className="font-medium text-sm">
-                      {avgRating.toFixed(1)} / 5
-                    </span>
-                  </div>
-                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                    <DialogTrigger asChild>
-                      <Button className="bg-white text-green-800 hover:bg-green-100 font-medium">
-                        + Add Review
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[600px] rounded-xl">
-                      <DialogHeader>
-                        <DialogTitle className="text-green-800 text-lg">
-                          Add Your Review
-                        </DialogTitle>
-                      </DialogHeader>
-
-                      {/* Review Form */}
-                      <div className="grid gap-4 py-4">
-                        <div className="space-y-2">
-                          <label htmlFor="name" className="text-sm font-medium text-gray-700">
-                            Your Name
-                          </label>
-                          <Input
-                            id="name"
-                            placeholder="John Doe"
-                            value={reviewData.name}
-                            onChange={(e) => setReviewData({ ...reviewData, name: e.target.value })}
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                            Your Email
-                          </label>
-                          <Input
-                            id="email"
-                            type="email"
-                            placeholder="john@example.com"
-                            value={reviewData.email}
-                            onChange={(e) => setReviewData({ ...reviewData, email: e.target.value })}
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-700">Your Rating</label>
-                          <Rating
-                            style={{ maxWidth: 150 }}
-                            value={reviewData.rating}
-                            onChange={(rating) => setReviewData({ ...reviewData, rating })}
-                            itemStyles={{
-                              itemShapes: ThinStar,
-                              activeFillColor: '#15803d',
-                              inactiveFillColor: '#E5E7EB',
-                            }}
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <label htmlFor="description" className="text-sm font-medium text-gray-700">
-                            Your Review
-                          </label>
-                          <Textarea
-                            id="description"
-                            placeholder="Share your experience..."
-                            rows={4}
-                            value={reviewData.description}
-                            onChange={(e) => setReviewData({ ...reviewData, description: e.target.value })}
-                          />
-                        </div>
-                      </div>
-
-                      <Button
-                        className="bg-green-700 hover:bg-green-800 text-white font-semibold"
-                        onClick={handleReviewSubmit}
-                        disabled={isSubmitting}
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Submitting...
-                          </>
-                        ) : (
-                          'Submit Review'
-                        )}
-                      </Button>
-                    </DialogContent>
-                  </Dialog>
+                <div className="flex items-center bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                  <Star className="w-5 h-5 text-yellow-400 fill-yellow-400 mr-1" />
+                  <span className="font-medium text-sm">
+                    {avgRating.toFixed(1)} / 5
+                  </span>
                 </div>
               </div>
             </CardHeader>
 
-            {/* Reviews Section */}
             <CardContent className="p-6 space-y-6 bg-green-50">
-              {professional?.reviews?.length > 0 ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {professional.reviews.map((review, index) => (
-                    <div
-                      key={index}
-                      className="relative bg-white rounded-2xl shadow-md p-5 border border-green-100 transition-all hover:shadow-xl hover:-translate-y-1"
-                    >
-                      {/* Decorative "cart" tab */}
-                      <div className="absolute -top-3 left-5 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                        Verified
-                      </div>
 
-                      {/* Reviewer Info */}
-                      <div className="flex items-center justify-between mb-3">
-                        <div>
-                          <h4 className="font-semibold text-gray-900">{review?.name || 'Anonymous'}</h4>
-                          <p className="text-xs text-gray-500">
-                            {review?.createdAt
-                              ? new Date(review.createdAt).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                              })
-                              : 'Date unknown'}
-                          </p>
+              {currentReviews.length > 0 ? (
+                <>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {currentReviews.map((review, index) => (
+                      <div
+                        key={index}
+                        className="relative bg-white rounded-2xl shadow-md p-5 border border-green-100 transition-all hover:shadow-xl hover:-translate-y-1"
+                      >
+                        <div className="absolute -top-3 left-5 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                          Verified
                         </div>
-                        <div className="flex items-center bg-green-100 px-2 py-1 rounded-full">
-                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                          <span className="ml-1 font-medium text-sm text-green-800">
-                            {review?.rating || 0}
-                          </span>
+
+                        <div className="flex items-center justify-between mb-3">
+                          <div>
+                            <h4 className="font-semibold text-gray-900">{review?.name || 'Anonymous'}</h4>
+                            <p className="text-xs text-gray-500">
+                              {review?.createdAt
+                                ? new Date(review.createdAt).toLocaleDateString()
+                                : 'Date unknown'}
+                            </p>
+                          </div>
+                          <div className="flex items-center bg-green-100 px-2 py-1 rounded-full">
+                            <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                            <span className="ml-1 font-medium text-sm text-green-800">
+                              {review?.rating || 0}
+                            </span>
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Review Text */}
-                      <p className="text-gray-700 text-sm leading-relaxed mb-3">
-                        {review?.description || 'No description provided'}
-                      </p>
-
-                      {/* Cart-style Footer */}
-                      <div className="flex items-center justify-between text-xs text-gray-500 mt-4 pt-3 border-t border-gray-100">
-                        <span>Customer ID #{index + 101}</span>
-                        <span className="text-green-700 font-medium cursor-pointer hover:underline">
-                          Helpful?
-                        </span>
+                        <p className="text-gray-700 text-sm leading-relaxed mb-3">
+                          {review?.description || 'No description provided'}
+                        </p>
                       </div>
+                    ))}
+                  </div>
+
+                  {/* ✅ PAGINATION UI */}
+                  {totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
+
+                      <Button
+                        variant="outline"
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="border-green-300"
+                      >
+                        Previous
+                      </Button>
+
+                      {[...Array(totalPages)].map((_, index) => (
+                        <Button
+                          key={index}
+                          onClick={() => goToPage(index + 1)}
+                          className={`w-9 h-9 p-0 rounded-full ${currentPage === index + 1
+                            ? "bg-green-700 text-white"
+                            : "bg-white border border-green-300 text-green-700"
+                            }`}
+                        >
+                          {index + 1}
+                        </Button>
+                      ))}
+
+                      <Button
+                        variant="outline"
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="border-green-300"
+                      >
+                        Next
+                      </Button>
+
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
               ) : (
                 <div className="text-center py-8">
                   <p className="text-gray-500 italic">
@@ -474,6 +429,7 @@ export default function ProfessionalProfile({ name }) {
                   </p>
                 </div>
               )}
+
             </CardContent>
           </Card>
 

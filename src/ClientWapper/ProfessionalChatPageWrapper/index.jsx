@@ -434,7 +434,7 @@ export default function ProfessionalChatPage() {
                 placeholder={
                   uploading ? "Uploading file..." : "Type a message..."
                 }
-                className="flex-1"
+                className="w-[85%]"
                 disabled={socketStatus !== "connected"}
               />
               <Button

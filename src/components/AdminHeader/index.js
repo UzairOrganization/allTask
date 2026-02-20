@@ -1,11 +1,16 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Home, Users, UserCog, PenTool, FolderKanban } from 'lucide-react' // Import icons
+
 
 export default function AdminHeader() {
     const pathname = usePathname()
-
+    const router = useRouter()
+    const handleLogout = () => {
+        localStorage.removeItem("adminAuth")
+        router.push("/admin/admin-login")
+    }
     const navLinks = [
         {
             name: 'Dashboard',
@@ -30,7 +35,7 @@ export default function AdminHeader() {
         {
             name: 'Projects',
             href: '/admin/projects',
-            icon: <FolderKanban className='h-5 w-5'/>
+            icon: <FolderKanban className='h-5 w-5' />
         }
     ]
 
@@ -59,6 +64,9 @@ export default function AdminHeader() {
                     ))}
                 </nav>
 
+                <button onClick={handleLogout}>
+                    Logout
+                </button>
                 {/* Mobile menu button (optional) */}
                 <div className="md:hidden">
                     <button className="p-2 text-gray-600 hover:text-green-700">

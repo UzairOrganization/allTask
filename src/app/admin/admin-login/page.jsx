@@ -16,7 +16,7 @@ export default function AdminLogin() {
 
     // Simulate API call with timeout
     setTimeout(() => {
-      if (username === 'admin' && password === 'admin') {
+      if (username === 'super-all-task-admin' && password === 'wappelizer-oq1457') {
         toast.success('Login successful! Redirecting...')
         // Store auth token in localStorage (for demo purposes)
         localStorage.setItem('adminAuth', 'true')
