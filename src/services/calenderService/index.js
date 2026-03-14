@@ -121,6 +121,24 @@ export const fetchDateOverrides = async () => {
     }
 };
 
+export const deleteDateOverride = async (id) => {
+  try {
+    const res = await axios.delete(`${API}/api/calender/override/${id}`, {
+      withCredentials: true
+    });
+
+    return {
+      success: true,
+      data: res.data
+    };
+
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Delete failed"
+    };
+  }
+};
 
 export const fetchMonthlyCalendar = async (providerName, month, year) => {
   try {

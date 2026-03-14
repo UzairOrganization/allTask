@@ -1,411 +1,1137 @@
-'use client'
-import { useState, useEffect } from 'react'
+"use client";
+import { useState, useEffect } from "react";
 import {
-    ChevronDown,
-    Download,
-    CheckCircle,
-    Clock,
-    XCircle,
-    User,
-    MapPin,
-    Mail,
-    Phone,
-    AlertCircle,
-    ChevronLeft,
-    Calendar,
-    ChevronRight,
-    PhoneCall
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
-import { API } from '@/lib/data-service'
-import axios from 'axios'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog'
+  ChevronDown,
+  Download,
+  CheckCircle,
+  Clock,
+  XCircle,
+  User,
+  MapPin,
+  Mail,
+  Phone,
+  AlertCircle,
+  ChevronLeft,
+  Calendar,
+  ChevronRight,
+  PhoneCall,
+} from "lucide-react";
+import { useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { API } from "@/lib/data-service";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 const PurchasedLeads = () => {
-    const [payments, setPayments] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [selectedPayment, setSelectedPayment] = useState(null)
-    const navigation = useRouter()
-    const [selectedRequest, setSelectedRequest] = useState(null)
-    const [selectedStatus, setSelectedStatus] = useState('')
-    const [updating, setUpdating] = useState(false)
-    const [statusModal, setStatusModal] = useState(false)
-    const fetchPayments = async () => {
-        try {
-            setLoading(true);
-            const res = await axios.get(`${API}/api/payments`, { withCredentials: true });
+  const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const leadsPerPage = 10;
+  const navigation = useRouter();
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [updating, setUpdating] = useState(false);
+  const [statusModal, setStatusModal] = useState(false);
+  const detailsRef = useRef(null);
 
-            // ✅ Filter out "professional_plus" payments
-            const filteredPayments = res.data.result.filter(
-                (payment) => payment.paymentType !== "professional_plus"
-            );
+  const fetchPayments = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API}/api/payments`, {
+        withCredentials: true,
+      });
 
-            setPayments(filteredPayments);
-        } catch (error) {
-            console.error("Error fetching payments:", error);
-        } finally {
-            setLoading(false);
-        }
+      // ✅ Filter out "professional_plus" payments
+      const filteredPayments = res.data.result.filter(
+        (payment) => payment.paymentType !== "professional_plus",
+      );
+
+      setPayments(filteredPayments);
+    } catch (error) {
+      console.error("Error fetching payments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchPayments();
+  }, []);
+
+  const statusOptions = [
+    "Completed",
+    "In Progress",
+    "Declined",
+    "Scheduled",
+    "Not Scheduled Yet",
+  ];
+
+  const StatusBadge = ({ status }) => {
+    const variants = {
+      completed: {
+        bg: "bg-green-100",
+        text: "text-green-800",
+        icon: <CheckCircle className="h-4 w-4" />,
+      },
+      pending: {
+        bg: "bg-yellow-100",
+        text: "text-yellow-800",
+        icon: <Clock className="h-4 w-4" />,
+      },
+      failed: {
+        bg: "bg-red-100",
+        text: "text-red-800",
+        icon: <XCircle className="h-4 w-4" />,
+      },
     };
-    useEffect(() => {
 
-
-        fetchPayments();
-    }, []);
-
-    const statusOptions = [
-        "Completed",
-        "In Progress",
-        "Declined",
-        "Scheduled",
-        "Not Scheduled Yet"
-    ]
-
-    const StatusBadge = ({ status }) => {
-        const variants = {
-            completed: { bg: 'bg-green-100', text: 'text-green-800', icon: <CheckCircle className="h-4 w-4" /> },
-            pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: <Clock className="h-4 w-4" /> },
-            failed: { bg: 'bg-red-100', text: 'text-red-800', icon: <XCircle className="h-4 w-4" /> }
-        }
-
-        return (
-            <Badge className={`${variants[status]?.bg} ${variants[status]?.text} gap-1`}>
-                {variants[status]?.icon}
-                {status?.charAt(0).toUpperCase() + status?.slice(1)}
-            </Badge>
-        )
-    }
-
-    const renderServiceDetails = (serviceRequest, payment) => {
-
-
-        if (!serviceRequest) return null;
-        // Format purchased date consistently
-        const formatPurchaseDate = (dateString) => {
-            if (!dateString) return 'N/A';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        };
-
-        // Common customer details (including formatted purchased date)
-        const customerDetails = [
-            { label: 'Name', value: serviceRequest.customerDetails?.name, icon: <User className="h-4 w-4" /> },
-            { label: 'Email', value: serviceRequest.customerDetails?.email, icon: <Mail className="h-4 w-4" /> },
-            { label: 'Address', value: serviceRequest.customerDetails?.address, icon: <MapPin className="h-4 w-4" /> },
-            { label: 'Phone No', value: serviceRequest.customerDetails?.phoneNo, icon: <PhoneCall className="h-4 w-4" /> },
-            { label: 'Contact Preference', value: serviceRequest.customerDetails?.contactPreference, icon: <Phone className="h-4 w-4" /> },
-            { label: 'Purchased Date', value: formatPurchaseDate(serviceRequest.purchasedDate), icon: <Calendar className="h-4 w-4" /> }
-        ].filter(detail => detail.value) // Only show if value exists
-
-        // Get all non-empty question/answer pairs from service request
-        const excludedFields = [
-            '_id', 'customer', 'serviceProvider', 'photos',
-            'status', 'createdAt', 'updatedAt', '__v', 'kind',
-            'purchasedBy', 'isPurchased', 'purchasedPrice', "purchasedDate", "serviceTypeSubSubCategory", "serviceTypeSubCategory" // Now handled separately
-        ]
-        const handleStartConversation = async () => {
-
-            try {
-                const result = await axios.post(
-                    `${API}/api/chats/init/${payment._id}`
-                );
-
-                navigation.push("/chat/professional")
-                return result.data;
-
-            } catch (error) {
-                console.error('Failed to start conversation:', error.response?.data || error.message);
-                if (error.response?.status === 400) {
-                    return { existingConversation: true, conversation: error.response.data };
-                }
-
-                throw error;
-            }
-        }
-        const serviceQuestions = Array.isArray(serviceRequest.questions)
-            ? serviceRequest.questions.map(q => ({
-                question: q.questionText,
-                answer: q.answer
-            }))
-            : [];
-
-
-        // Handle array fields
-        const excludedArrayFields = ['serviceProvider', 'photos']
-        const arrayFields = Object.entries(serviceRequest)
-            .filter(([key, value]) =>
-                Array.isArray(value) &&
-                value.length > 0 &&
-                !excludedArrayFields.includes(key)
-            )
-            .map(([key, value]) => ({
-                question: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
-                answer: value.join(', ')
-            }))
-
-        return (
-            <div className="space-y-6">
-                {/* Customer Details */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {customerDetails.map((detail, i) => (
-                        <div key={i} className="space-y-1">
-                            <p className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                                {detail.icon}
-                                {detail.label}
-                            </p>
-                            <p>{detail.value}</p>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Service Questions */}
-                {([...serviceQuestions, ...arrayFields].length > 0) && (
-                    <div className="space-y-4">
-                        <h3 className="text-lg font-medium">Service Details</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {[...serviceQuestions].map((item, i) => {
-                                const question = typeof item.question === 'string' ? item.question : 'Question';
-                                const answer = typeof item.answer === 'string' ? item.answer : JSON.stringify(item.answer);
-                                return (
-                                    <div key={i} className="space-y-1">
-                                        <p className="text-sm font-medium text-gray-500">{question}</p>
-                                        <p className="capitalize">{answer}</p>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                )}
-                {serviceRequest.status && (
-                    <div className='flex justify-between items-center'>
-                        <div>
-                            <p className="text-sm font-medium text-gray-500">Status</p>
-                            <p className="capitalize ">{serviceRequest.status}</p>
-                        </div>
-                        <Button
-                            size="sm"
-                            className="bg-[#007D63] text-white"
-                            onClick={() => {
-                                setSelectedRequest(serviceRequest)
-                                setStatusModal(true)
-                            }}
-                        >
-                            Change Status
-                        </Button>
-                    </div>
-                )}
-
-
-                {/* Photos if available */}
-                {serviceRequest.photos?.length > 0 && (
-                    <div className="space-y-2">
-                        <h3 className="text-sm font-medium text-gray-500">Attached Photos</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {serviceRequest.photos.map((photo, i) => {
-                                return (
-                                    <img
-                                        key={i}
-                                        src={`${API}${photo}`}
-                                        alt={`Photo ${i + 1}`}
-                                        className="h-24 w-24 object-cover rounded-md"
-                                    />
-
-                                )
-                            })}
-                        </div>
-                    </div>
-                )}
-                {serviceRequest.customer && serviceRequest.isPurchased && !payment?.isConversationStarted ? (
-                    <div className=''>
-                        <Button
-                            onClick={handleStartConversation}
-                            className="bg-green-700 cursor-pointer hover:bg-green-800 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out transform hover:scale-105"
-                        >
-                            Start Conversation
-                            <ChevronRight className="h-4 w-4 ml-2" />
-                        </Button>
-                    </div>
-                ) : (
-                    <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-md">
-                        <div className="flex">
-                            <div className="flex-shrink-0">
-                                <AlertCircle className="h-5 w-5 text-green-500" />
-                            </div>
-                            <div className="ml-3">
-                                <p className="text-sm text-black">
-                                    {!serviceRequest.customer ? (
-                                        <>This customer is not registered on our platform. Please contact them directly using the provided email or phone number.</>
-                                    ) : payment?.isConversationStarted ? (
-                                        <>You've already started a conversation with this customer. Check your messages to continue the discussion.</>
-                                    ) : (
-                                        <>This lead hasn't been purchased yet. Purchase the lead to enable messaging.</>
-                                    )}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                <Dialog open={statusModal} onOpenChange={setStatusModal}>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Change Request Status</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-3">
-                            {statusOptions.map(status => (
-                                <Button
-                                    key={status}
-                                    variant={selectedStatus === status ? "default" : "outline"}
-                                    className="justify-start"
-                                    onClick={() => setSelectedStatus(status)}
-                                >
-                                    {status}
-                                </Button>
-                            ))}
-                        </div>
-                        <DialogFooter>
-                            <Button
-                                disabled={updating || !selectedStatus}
-                                onClick={handleStatusUpdate}
-                                className="bg-[#007D63]"
-                            >
-                                {updating ? 'Updating...' : 'Confirm'}
-                            </Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
-            </div>
-        )
-    }
-
-    const handleStatusUpdate = async () => { // 🔹 update request status
-        if (!selectedRequest || !selectedStatus) return
-        setUpdating(true)
-        try {
-            await axios.patch(`${API}/api/leads/update-lead-status/${selectedRequest._id}`, {
-                status: selectedStatus
-            }, { withCredentials: true })
-
-            
-            setSelectedStatus('')
-            setStatusModal(false)
-            window.location.reload()
-        } catch (err) {
-            console.error(err)
-            toast.error('Failed to update status.')
-        } finally {
-            setUpdating(false)
-        }
-    }
     return (
-        <div >
-            <div className="flex flex-col md:flex-row gap-6">
-                {/* Payments List */}
-                <div className={`flex-1 ${selectedPayment ? 'hidden md:block' : ''}`}>
-                    {/* <h1 className="text-2xl font-bold mb-6">Purchased Leads</h1> */}
+      <Badge
+        className={`${variants[status]?.bg} ${variants[status]?.text} gap-1`}
+      >
+        {variants[status]?.icon}
+        {status?.charAt(0).toUpperCase() + status?.slice(1)}
+      </Badge>
+    );
+  };
 
-                    {loading ? (
-                        <div className="space-y-4">
-                            {[...Array(5)].map((_, i) => (
-                                <Skeleton key={i} className="h-20 w-full" />
-                            ))}
-                        </div>
-                    ) : payments.length === 0 ? (
-                        <Card>
-                            <CardContent className="py-12 text-center">
-                                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
-                                    <AlertCircle className="h-6 w-6 text-gray-400" />
-                                </div>
-                                <h3 className="mt-4 text-lg font-medium">There's no purchased leads.</h3>
-                            </CardContent>
-                        </Card>
-                    ) : (
-                        <Card>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="text-center">Service</TableHead>
-                                        <TableHead className="text-center">Amount</TableHead>
-                                        <TableHead className="text-center">Date</TableHead>
-                                        <TableHead className="text-center">Payment Status</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {payments
-                                        .filter(payment => payment.paymentStatus === 'completed')
-                                        .sort((a, b) => new Date(b.purchasedAt) - new Date(a.purchasedAt))
-                                        .map((payment) => (
-                                            <TableRow
-                                                key={payment._id}
-                                                onClick={() => setSelectedPayment(payment)}
-                                                className="cursor-pointer hover:bg-gray-50"
-                                            >
-                                                <TableCell className="text-center align-middle">
-                                                    <div className="font-medium mx-auto">
-                                                        {payment.serviceRequest?.serviceType || 'Service'}
-                                                    </div>
-                                                    <div className="text-sm text-gray-500 ">
-                                                        {new Date(payment.serviceRequest?.createdAt).toLocaleDateString('en-US')}
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className="text-center align-middle">
-                                                    ${(payment.amount / 100).toFixed(2)}
-                                                </TableCell>
-                                                <TableCell className="text-center align-middle">
-                                                    {new Date(payment.purchasedAt).toLocaleDateString()}
-                                                </TableCell>
-                                                <TableCell className="text-center align-middle">
-                                                    <div className="flex justify-center">
-                                                        <StatusBadge status={payment.paymentStatus} />
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                </TableBody>
-                            </Table>
-                        </Card>
-                    )}
-                </div>
+  const renderServiceDetails = (serviceRequest, payment) => {
+    if (!serviceRequest) return null;
+    // Format purchased date consistently
+    const formatPurchaseDate = (dateString) => {
+      if (!dateString) return "N/A";
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    };
 
-                {/* Lead Details */}
+    // Common customer details (including formatted purchased date)
+    const customerDetails = [
+      {
+        label: "Name",
+        value: serviceRequest.customerDetails?.name,
+        icon: <User className="h-4 w-4" />,
+      },
+      {
+        label: "Email",
+        value: serviceRequest.customerDetails?.email,
+        icon: <Mail className="h-4 w-4" />,
+      },
+      {
+        label: "Address",
+        value: serviceRequest.customerDetails?.address,
+        icon: <MapPin className="h-4 w-4" />,
+      },
+      {
+        label: "Phone No",
+        value: serviceRequest.customerDetails?.phoneNo,
+        icon: <PhoneCall className="h-4 w-4" />,
+      },
+      {
+        label: "Contact Preference",
+        value: serviceRequest.customerDetails?.contactPreference,
+        icon: <Phone className="h-4 w-4" />,
+      },
+      {
+        label: "Purchased Date",
+        value: formatPurchaseDate(serviceRequest.purchasedDate),
+        icon: <Calendar className="h-4 w-4" />,
+      },
+    ].filter((detail) => detail.value); // Only show if value exists
 
+    // Get all non-empty question/answer pairs from service request
+    const excludedFields = [
+      "_id",
+      "customer",
+      "serviceProvider",
+      "photos",
+      "status",
+      "createdAt",
+      "updatedAt",
+      "__v",
+      "kind",
+      "purchasedBy",
+      "isPurchased",
+      "purchasedPrice",
+      "purchasedDate",
+      "serviceTypeSubSubCategory",
+      "serviceTypeSubCategory", // Now handled separately
+    ];
+    const handleStartConversation = async () => {
+      try {
+        const result = await axios.post(`${API}/api/chats/init/${payment._id}`);
+
+        navigation.push("/chat/professional");
+        return result.data;
+      } catch (error) {
+        console.error(
+          "Failed to start conversation:",
+          error.response?.data || error.message,
+        );
+        if (error.response?.status === 400) {
+          return {
+            existingConversation: true,
+            conversation: error.response.data,
+          };
+        }
+
+        throw error;
+      }
+    };
+    const serviceQuestions = Array.isArray(serviceRequest.questions)
+      ? serviceRequest.questions.map((q) => ({
+          question: q.questionText,
+          answer: q.answer,
+        }))
+      : [];
+
+    // Handle array fields
+    const excludedArrayFields = ["serviceProvider", "photos"];
+    const arrayFields = Object.entries(serviceRequest)
+      .filter(
+        ([key, value]) =>
+          Array.isArray(value) &&
+          value.length > 0 &&
+          !excludedArrayFields.includes(key),
+      )
+      .map(([key, value]) => ({
+        question: key
+          .replace(/([A-Z])/g, " $1")
+          .replace(/^./, (str) => str.toUpperCase()),
+        answer: value.join(", "),
+      }));
+
+    return (
+      <div className="space-y-6">
+        {/* Customer Details */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {customerDetails.map((detail, i) => (
+            <div key={i} className="space-y-1">
+              <p className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                {detail.icon}
+                {detail.label}
+              </p>
+              <p>{detail.value}</p>
             </div>
-            {selectedPayment && (
-                <div className="max-w-6xl mx-auto">
-                    <Button
-                        variant="outline"
-                        className="m-4"
-                        onClick={() => setSelectedPayment(null)}
-                    >
-                        <ChevronLeft className="h-4 w-4 mr-2" />
-                        Back to list
-                    </Button>
-
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex justify-between items-center">
-                                <span>Lead Details</span>
-                                <StatusBadge status={selectedPayment.paymentStatus} />
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {renderServiceDetails(selectedPayment.serviceRequest, selectedPayment)}
-                        </CardContent>
-                    </Card>
-                </div>
-            )}
-
+          ))}
         </div>
-    )
-}
-export default PurchasedLeads
+
+        {/* Service Questions */}
+        {[...serviceQuestions, ...arrayFields].length > 0 && (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Service Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[...serviceQuestions].map((item, i) => {
+                const question =
+                  typeof item.question === "string"
+                    ? item.question
+                    : "Question";
+                const answer =
+                  typeof item.answer === "string"
+                    ? item.answer
+                    : JSON.stringify(item.answer);
+                return (
+                  <div key={i} className="space-y-1">
+                    <p className="text-sm font-medium text-gray-500">
+                      {question}
+                    </p>
+                    <p className="capitalize">{answer}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {serviceRequest.status && (
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm font-medium text-gray-500">Status</p>
+              <p className="capitalize ">{serviceRequest.status}</p>
+            </div>
+            <Button
+              size="sm"
+              className="bg-[#007D63] text-white"
+              onClick={() => {
+                setSelectedRequest(serviceRequest);
+                setStatusModal(true);
+              }}
+            >
+              Change Status
+            </Button>
+          </div>
+        )}
+
+        {/* Photos if available */}
+        {serviceRequest.photos?.length > 0 && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-gray-500">
+              Attached Photos
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {serviceRequest.photos.map((photo, i) => {
+                return (
+                  <img
+                    key={i}
+                    src={`${API}${photo}`}
+                    alt={`Photo ${i + 1}`}
+                    className="h-24 w-24 object-cover rounded-md"
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {serviceRequest.customer &&
+        serviceRequest.isPurchased &&
+        !payment?.isConversationStarted ? (
+          <div className="">
+            <Button
+              onClick={handleStartConversation}
+              className="bg-green-700 cursor-pointer hover:bg-green-800 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out transform hover:scale-105"
+            >
+              Start Conversation
+              <ChevronRight className="h-4 w-4 ml-2" />
+            </Button>
+          </div>
+        ) : (
+          <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-md">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <AlertCircle className="h-5 w-5 text-green-500" />
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-black">
+                  {!serviceRequest.customer ? (
+                    <>
+                      This customer is not registered on our platform. Please
+                      contact them directly using the provided email or phone
+                      number.
+                    </>
+                  ) : payment?.isConversationStarted ? (
+                    <>
+                      You've already started a conversation with this customer.
+                      Check your messages to continue the discussion.
+                    </>
+                  ) : (
+                    <>
+                      This lead hasn't been purchased yet. Purchase the lead to
+                      enable messaging.
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        <Dialog open={statusModal} onOpenChange={setStatusModal}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Change Request Status</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-3">
+              {statusOptions.map((status) => (
+                <Button
+                  key={status}
+                  variant={selectedStatus === status ? "default" : "outline"}
+                  className="justify-start"
+                  onClick={() => setSelectedStatus(status)}
+                >
+                  {status}
+                </Button>
+              ))}
+            </div>
+            <DialogFooter>
+              <Button
+                disabled={updating || !selectedStatus}
+                onClick={handleStatusUpdate}
+                className="bg-[#007D63]"
+              >
+                {updating ? "Updating..." : "Confirm"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  };
+
+  const handleStatusUpdate = async () => {
+    // 🔹 update request status
+    if (!selectedRequest || !selectedStatus) return;
+    setUpdating(true);
+    try {
+      await axios.patch(
+        `${API}/api/leads/update-lead-status/${selectedRequest._id}`,
+        {
+          status: selectedStatus,
+        },
+        { withCredentials: true },
+      );
+
+      setSelectedStatus("");
+      setStatusModal(false);
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update status.");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const filteredPayments = payments
+    .filter((payment) => payment.paymentStatus === "completed")
+    .sort((a, b) => new Date(b.purchasedAt) - new Date(a.purchasedAt));
+
+  const totalPages = Math.ceil(filteredPayments.length / leadsPerPage);
+
+  const paginatedPayments = filteredPayments.slice(
+    (currentPage - 1) * leadsPerPage,
+    currentPage * leadsPerPage,
+  );
+  return (
+    <div>
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Payments List */}
+        <div className={`flex-1 ${selectedPayment ? "hidden md:block" : ""}`}>
+          {/* <h1 className="text-2xl font-bold mb-6">Purchased Leads</h1> */}
+
+          {loading ? (
+            <div className="space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <Skeleton key={i} className="h-20 w-full" />
+              ))}
+            </div>
+          ) : payments.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+                  <AlertCircle className="h-6 w-6 text-gray-400" />
+                </div>
+                <h3 className="mt-4 text-lg font-medium">
+                  There's no purchased leads.
+                </h3>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              <Card>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-10"></TableHead>
+                      <TableHead>Customer Name</TableHead>
+                      <TableHead>Service</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Amount</TableHead>
+                      <TableHead>Time</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>City</TableHead>
+                      <TableHead>Payment Status</TableHead>
+                      <TableHead>Lead Status </TableHead>
+                    </TableRow>
+                  </TableHeader>
+
+                  <TableBody>
+  {paginatedPayments.map((payment) => {
+    const isOpen = selectedPayment?._id === payment._id;
+
+    return (
+      <>
+        <TableRow
+          key={payment._id}
+          onClick={() => {
+            if (isOpen) {
+              setSelectedPayment(null); // close
+            } else {
+              setSelectedPayment(payment); // open
+            }
+          }}
+          className={`cursor-pointer hover:bg-gray-50 ${
+            isOpen ? "bg-gray-50" : ""
+          }`}
+        >
+          {/* Chevron */}
+          <TableCell className="w-10">
+            {isOpen ? (
+              <ChevronDown className="h-4 w-4 text-gray-500" />
+            ) : (
+              <ChevronRight className="h-4 w-4 text-gray-500" />
+            )}
+          </TableCell>
+
+          <TableCell>
+            {payment.serviceRequest?.customerDetails?.name || "N/A"}
+          </TableCell>
+
+          <TableCell>
+            {payment.serviceRequest?.serviceType || "Service"}
+          </TableCell>
+
+          <TableCell>
+            {payment.serviceRequest?.questions
+              ?.find((q) =>
+                q.questionText?.toLowerCase().includes("type")
+              )
+              ?.answer?.split(",")[0] || "-"}
+          </TableCell>
+
+          <TableCell>
+            ${(payment.amount / 100).toFixed(2)}
+          </TableCell>
+
+          <TableCell>
+            {new Date(payment.purchasedAt).toLocaleTimeString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </TableCell>
+
+          <TableCell>
+            {new Date(payment.purchasedAt).toLocaleDateString("en-GB")}
+          </TableCell>
+
+          <TableCell>
+            {payment.serviceRequest?.location ||
+              payment.serviceRequest?.customerDetails?.address ||
+              "-"}
+          </TableCell>
+
+          <TableCell>
+            <StatusBadge status={payment.paymentStatus} />
+          </TableCell>
+
+          <TableCell>
+            <StatusBadge status={payment.serviceRequest?.status} />
+          </TableCell>
+        </TableRow>
+
+        {/* EXPANDABLE DETAILS */}
+        {isOpen && (
+          <TableRow ref={detailsRef}>
+            <TableCell colSpan={10}>
+              <Card className="bg-gray-50 border">
+                <CardContent className="p-6">
+                  {renderServiceDetails(
+                    payment.serviceRequest,
+                    payment
+                  )}
+                </CardContent>
+              </Card>
+            </TableCell>
+          </TableRow>
+        )}
+      </>
+    );
+  })}
+</TableBody>
+                </Table>
+              </Card>
+
+              {/* Pagination Info */}
+              <p className="text-sm text-gray-500 text-center mt-4">
+                Showing {(currentPage - 1) * leadsPerPage + 1} -
+                {Math.min(currentPage * leadsPerPage, filteredPayments.length)}{" "}
+                of {filteredPayments.length} leads
+              </p>
+
+              {/* Pagination Buttons */}
+              <div className="flex justify-center items-center gap-4 mt-6">
+                <Button
+                  variant="outline"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((prev) => prev - 1)}
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  Previous
+                </Button>
+
+                <span className="text-sm font-medium">
+                  Page {currentPage} of {totalPages}
+                </span>
+
+                <Button
+                  variant="outline"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((prev) => prev + 1)}
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Lead Details */}
+      </div>
+      {/* {selectedPayment && (
+        <div className="max-w-6xl mx-auto">
+          <Button
+            variant="outline"
+            className="m-4"
+            onClick={() => setSelectedPayment(null)}
+          >
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Back to list
+          </Button>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex justify-between items-center">
+                <span>Lead Details</span>
+                <StatusBadge status={selectedPayment.paymentStatus} />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {renderServiceDetails(
+                selectedPayment.serviceRequest,
+                selectedPayment,
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )} */}
+    </div>
+  );
+};
+export default PurchasedLeads;
+
+// "use client";
+// import { useState, useEffect } from "react";
+// import {
+//   ChevronDown,
+//   Download,
+//   CheckCircle,
+//   Clock,
+//   XCircle,
+//   User,
+//   MapPin,
+//   Mail,
+//   Phone,
+//   AlertCircle,
+//   ChevronLeft,
+//   Calendar,
+//   ChevronRight,
+//   PhoneCall,
+// } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/components/ui/table";
+// import { Badge } from "@/components/ui/badge";
+// import { Skeleton } from "@/components/ui/skeleton";
+// import { API } from "@/lib/data-service";
+// import axios from "axios";
+// import { useRouter } from "next/navigation";
+// import { toast } from "sonner";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogFooter,
+//   DialogHeader,
+//   DialogTitle,
+// } from "../ui/dialog";
+// const PurchasedLeads = () => {
+//   const [payments, setPayments] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [selectedPayment, setSelectedPayment] = useState(null);
+//   const navigation = useRouter();
+//   const [selectedRequest, setSelectedRequest] = useState(null);
+//   const [selectedStatus, setSelectedStatus] = useState("");
+//   const [updating, setUpdating] = useState(false);
+//   const [statusModal, setStatusModal] = useState(false);
+//   const fetchPayments = async () => {
+//     try {
+//       setLoading(true);
+//       const res = await axios.get(`${API}/api/payments`, {
+//         withCredentials: true,
+//       });
+
+//       // ✅ Filter out "professional_plus" payments
+//       const filteredPayments = res.data.result.filter(
+//         (payment) => payment.paymentType !== "professional_plus",
+//       );
+
+//       setPayments(filteredPayments);
+//     } catch (error) {
+//       console.error("Error fetching payments:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+//   useEffect(() => {
+//     fetchPayments();
+//   }, []);
+
+//   const statusOptions = [
+//     "Completed",
+//     "In Progress",
+//     "Declined",
+//     "Scheduled",
+//     "Not Scheduled Yet",
+//   ];
+
+//   const StatusBadge = ({ status }) => {
+//     const variants = {
+//       completed: {
+//         bg: "bg-green-100",
+//         text: "text-green-800",
+//         icon: <CheckCircle className="h-4 w-4" />,
+//       },
+//       pending: {
+//         bg: "bg-yellow-100",
+//         text: "text-yellow-800",
+//         icon: <Clock className="h-4 w-4" />,
+//       },
+//       failed: {
+//         bg: "bg-red-100",
+//         text: "text-red-800",
+//         icon: <XCircle className="h-4 w-4" />,
+//       },
+//     };
+
+//     return (
+//       <Badge
+//         className={`${variants[status]?.bg} ${variants[status]?.text} gap-1`}
+//       >
+//         {variants[status]?.icon}
+//         {status?.charAt(0).toUpperCase() + status?.slice(1)}
+//       </Badge>
+//     );
+//   };
+
+//   const renderServiceDetails = (serviceRequest, payment) => {
+//     if (!serviceRequest) return null;
+//     // Format purchased date consistently
+//     const formatPurchaseDate = (dateString) => {
+//       if (!dateString) return "N/A";
+//       const date = new Date(dateString);
+//       return date.toLocaleDateString("en-US", {
+//         year: "numeric",
+//         month: "long",
+//         day: "numeric",
+//         hour: "2-digit",
+//         minute: "2-digit",
+//       });
+//     };
+
+//     // Common customer details (including formatted purchased date)
+//     const customerDetails = [
+//       {
+//         label: "Name",
+//         value: serviceRequest.customerDetails?.name,
+//         icon: <User className="h-4 w-4" />,
+//       },
+//       {
+//         label: "Email",
+//         value: serviceRequest.customerDetails?.email,
+//         icon: <Mail className="h-4 w-4" />,
+//       },
+//       {
+//         label: "Address",
+//         value: serviceRequest.customerDetails?.address,
+//         icon: <MapPin className="h-4 w-4" />,
+//       },
+//       {
+//         label: "Phone No",
+//         value: serviceRequest.customerDetails?.phoneNo,
+//         icon: <PhoneCall className="h-4 w-4" />,
+//       },
+//       {
+//         label: "Contact Preference",
+//         value: serviceRequest.customerDetails?.contactPreference,
+//         icon: <Phone className="h-4 w-4" />,
+//       },
+//       {
+//         label: "Purchased Date",
+//         value: formatPurchaseDate(serviceRequest.purchasedDate),
+//         icon: <Calendar className="h-4 w-4" />,
+//       },
+//     ].filter((detail) => detail.value); // Only show if value exists
+
+//     // Get all non-empty question/answer pairs from service request
+//     const excludedFields = [
+//       "_id",
+//       "customer",
+//       "serviceProvider",
+//       "photos",
+//       "status",
+//       "createdAt",
+//       "updatedAt",
+//       "__v",
+//       "kind",
+//       "purchasedBy",
+//       "isPurchased",
+//       "purchasedPrice",
+//       "purchasedDate",
+//       "serviceTypeSubSubCategory",
+//       "serviceTypeSubCategory", // Now handled separately
+//     ];
+//     const handleStartConversation = async () => {
+//       try {
+//         const result = await axios.post(`${API}/api/chats/init/${payment._id}`);
+
+//         navigation.push("/chat/professional");
+//         return result.data;
+//       } catch (error) {
+//         console.error(
+//           "Failed to start conversation:",
+//           error.response?.data || error.message,
+//         );
+//         if (error.response?.status === 400) {
+//           return {
+//             existingConversation: true,
+//             conversation: error.response.data,
+//           };
+//         }
+
+//         throw error;
+//       }
+//     };
+//     const serviceQuestions = Array.isArray(serviceRequest.questions)
+//       ? serviceRequest.questions.map((q) => ({
+//           question: q.questionText,
+//           answer: q.answer,
+//         }))
+//       : [];
+
+//     // Handle array fields
+//     const excludedArrayFields = ["serviceProvider", "photos"];
+//     const arrayFields = Object.entries(serviceRequest)
+//       .filter(
+//         ([key, value]) =>
+//           Array.isArray(value) &&
+//           value.length > 0 &&
+//           !excludedArrayFields.includes(key),
+//       )
+//       .map(([key, value]) => ({
+//         question: key
+//           .replace(/([A-Z])/g, " $1")
+//           .replace(/^./, (str) => str.toUpperCase()),
+//         answer: value.join(", "),
+//       }));
+
+//     return (
+//       <div className="space-y-6">
+//         {/* Customer Details */}
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//           {customerDetails.map((detail, i) => (
+//             <div key={i} className="space-y-1">
+//               <p className="text-sm font-medium text-gray-500 flex items-center gap-2">
+//                 {detail.icon}
+//                 {detail.label}
+//               </p>
+//               <p>{detail.value}</p>
+//             </div>
+//           ))}
+//         </div>
+
+//         {/* Service Questions */}
+//         {[...serviceQuestions, ...arrayFields].length > 0 && (
+//           <div className="space-y-4">
+//             <h3 className="text-lg font-medium">Service Details</h3>
+//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//               {[...serviceQuestions].map((item, i) => {
+//                 const question =
+//                   typeof item.question === "string"
+//                     ? item.question
+//                     : "Question";
+//                 const answer =
+//                   typeof item.answer === "string"
+//                     ? item.answer
+//                     : JSON.stringify(item.answer);
+//                 return (
+//                   <div key={i} className="space-y-1">
+//                     <p className="text-sm font-medium text-gray-500">
+//                       {question}
+//                     </p>
+//                     <p className="capitalize">{answer}</p>
+//                   </div>
+//                 );
+//               })}
+//             </div>
+//           </div>
+//         )}
+//         {serviceRequest.status && (
+//           <div className="flex justify-between items-center">
+//             <div>
+//               <p className="text-sm font-medium text-gray-500">Status</p>
+//               <p className="capitalize ">{serviceRequest.status}</p>
+//             </div>
+//             <Button
+//               size="sm"
+//               className="bg-[#007D63] text-white"
+//               onClick={() => {
+//                 setSelectedRequest(serviceRequest);
+//                 setStatusModal(true);
+//               }}
+//             >
+//               Change Status
+//             </Button>
+//           </div>
+//         )}
+
+//         {/* Photos if available */}
+//         {serviceRequest.photos?.length > 0 && (
+//           <div className="space-y-2">
+//             <h3 className="text-sm font-medium text-gray-500">
+//               Attached Photos
+//             </h3>
+//             <div className="flex flex-wrap gap-2">
+//               {serviceRequest.photos.map((photo, i) => {
+//                 return (
+//                   <img
+//                     key={i}
+//                     src={`${API}${photo}`}
+//                     alt={`Photo ${i + 1}`}
+//                     className="h-24 w-24 object-cover rounded-md"
+//                   />
+//                 );
+//               })}
+//             </div>
+//           </div>
+//         )}
+//         {serviceRequest.customer &&
+//         serviceRequest.isPurchased &&
+//         !payment?.isConversationStarted ? (
+//           <div className="">
+//             <Button
+//               onClick={handleStartConversation}
+//               className="bg-green-700 cursor-pointer hover:bg-green-800 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out transform hover:scale-105"
+//             >
+//               Start Conversation
+//               <ChevronRight className="h-4 w-4 ml-2" />
+//             </Button>
+//           </div>
+//         ) : (
+//           <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-md">
+//             <div className="flex">
+//               <div className="flex-shrink-0">
+//                 <AlertCircle className="h-5 w-5 text-green-500" />
+//               </div>
+//               <div className="ml-3">
+//                 <p className="text-sm text-black">
+//                   {!serviceRequest.customer ? (
+//                     <>
+//                       This customer is not registered on our platform. Please
+//                       contact them directly using the provided email or phone
+//                       number.
+//                     </>
+//                   ) : payment?.isConversationStarted ? (
+//                     <>
+//                       You've already started a conversation with this customer.
+//                       Check your messages to continue the discussion.
+//                     </>
+//                   ) : (
+//                     <>
+//                       This lead hasn't been purchased yet. Purchase the lead to
+//                       enable messaging.
+//                     </>
+//                   )}
+//                 </p>
+//               </div>
+//             </div>
+//           </div>
+//         )}
+//         <Dialog open={statusModal} onOpenChange={setStatusModal}>
+//           <DialogContent>
+//             <DialogHeader>
+//               <DialogTitle>Change Request Status</DialogTitle>
+//             </DialogHeader>
+//             <div className="grid gap-3">
+//               {statusOptions.map((status) => (
+//                 <Button
+//                   key={status}
+//                   variant={selectedStatus === status ? "default" : "outline"}
+//                   className="justify-start"
+//                   onClick={() => setSelectedStatus(status)}
+//                 >
+//                   {status}
+//                 </Button>
+//               ))}
+//             </div>
+//             <DialogFooter>
+//               <Button
+//                 disabled={updating || !selectedStatus}
+//                 onClick={handleStatusUpdate}
+//                 className="bg-[#007D63]"
+//               >
+//                 {updating ? "Updating..." : "Confirm"}
+//               </Button>
+//             </DialogFooter>
+//           </DialogContent>
+//         </Dialog>
+//       </div>
+//     );
+//   };
+
+//   const handleStatusUpdate = async () => {
+//     // 🔹 update request status
+//     if (!selectedRequest || !selectedStatus) return;
+//     setUpdating(true);
+//     try {
+//       await axios.patch(
+//         `${API}/api/leads/update-lead-status/${selectedRequest._id}`,
+//         {
+//           status: selectedStatus,
+//         },
+//         { withCredentials: true },
+//       );
+
+//       setSelectedStatus("");
+//       setStatusModal(false);
+//       window.location.reload();
+//     } catch (err) {
+//       console.error(err);
+//       toast.error("Failed to update status.");
+//     } finally {
+//       setUpdating(false);
+//     }
+//   };
+//   return (
+//     <div>
+//       <div className="flex flex-col md:flex-row gap-6">
+//         {/* Payments List */}
+//         <div className={`flex-1 ${selectedPayment ? "hidden md:block" : ""}`}>
+//           {/* <h1 className="text-2xl font-bold mb-6">Purchased Leads</h1> */}
+
+//           {loading ? (
+//             <div className="space-y-4">
+//               {[...Array(5)].map((_, i) => (
+//                 <Skeleton key={i} className="h-20 w-full" />
+//               ))}
+//             </div>
+//           ) : payments.length === 0 ? (
+//             <Card>
+//               <CardContent className="py-12 text-center">
+//                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+//                   <AlertCircle className="h-6 w-6 text-gray-400" />
+//                 </div>
+//                 <h3 className="mt-4 text-lg font-medium">
+//                   There's no purchased leads.
+//                 </h3>
+//               </CardContent>
+//             </Card>
+//           ) : (
+//             <Card>
+//               <Table>
+//                 <TableHeader>
+//                   <TableRow>
+//                     <TableHead className="text-center">Service</TableHead>
+//                     <TableHead className="text-center">Amount</TableHead>
+//                     <TableHead className="text-center">Date</TableHead>
+//                     <TableHead className="text-center">
+//                       Payment Status
+//                     </TableHead>
+//                   </TableRow>
+//                 </TableHeader>
+//                 <TableBody>
+//                   {payments
+//                     .filter((payment) => payment.paymentStatus === "completed")
+//                     .sort(
+//                       (a, b) =>
+//                         new Date(b.purchasedAt) - new Date(a.purchasedAt),
+//                     )
+//                     .map((payment) => (
+//                       <TableRow
+//                         key={payment._id}
+//                         onClick={() => setSelectedPayment(payment)}
+//                         className="cursor-pointer hover:bg-gray-50"
+//                       >
+//                         <TableCell className="text-center align-middle">
+//                           <div className="font-medium mx-auto">
+//                             {payment.serviceRequest?.serviceType || "Service"}
+//                           </div>
+//                           {/* <div className="text-sm text-gray-500 ">
+//                                                         {new Date(payment.serviceRequest?.createdAt).toLocaleDateString('en-US')}
+//                                                     </div> */}
+//                         </TableCell>
+//                         <TableCell className="text-center align-middle">
+//                           ${(payment.amount / 100).toFixed(2)}
+//                         </TableCell>
+//                         <TableCell className="text-center align-middle">
+//                           {new Date(payment.purchasedAt).toLocaleDateString(
+//                             "en-US",
+//                             {
+//                               month: "2-digit",
+//                               day: "2-digit",
+//                               year: "numeric",
+//                             },
+//                           )}
+//                         </TableCell>
+//                         <TableCell className="text-center align-middle">
+//                           <div className="flex justify-center">
+//                             <StatusBadge status={payment.paymentStatus} />
+//                           </div>
+//                         </TableCell>
+//                       </TableRow>
+//                     ))}
+//                 </TableBody>
+//               </Table>
+//             </Card>
+//           )}
+//         </div>
+
+//         {/* Lead Details */}
+//       </div>
+//       {selectedPayment && (
+//         <div className="max-w-6xl mx-auto">
+//           <Button
+//             variant="outline"
+//             className="m-4"
+//             onClick={() => setSelectedPayment(null)}
+//           >
+//             <ChevronLeft className="h-4 w-4 mr-2" />
+//             Back to list
+//           </Button>
+
+//           <Card>
+//             <CardHeader>
+//               <CardTitle className="flex justify-between items-center">
+//                 <span>Lead Details</span>
+//                 <StatusBadge status={selectedPayment.paymentStatus} />
+//               </CardTitle>
+//             </CardHeader>
+//             <CardContent>
+//               {renderServiceDetails(
+//                 selectedPayment.serviceRequest,
+//                 selectedPayment,
+//               )}
+//             </CardContent>
+//           </Card>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+// export default PurchasedLeads;

@@ -68,7 +68,7 @@ export default function Header() {
         <header className="bg-white w-full border-b shadow-lg overflow-x-hidden">
             <div className="w-[95%] mx-auto p-3 flex justify-between items-center">
                 {/* Logo */}
-                <div className="logo w-[210px]">
+                <div className="logo w-[180px]">
                     <Link href="/">
                         <img src="/assets/images/logoMain.png" alt="" className="w-full" />
                     </Link>

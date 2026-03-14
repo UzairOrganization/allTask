@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -17,8 +12,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { saveDateOverride, fetchDateOverrides } from "@/services/calenderService";
+import {
+  saveDateOverride,
+  fetchDateOverrides,
+  deleteDateOverride,
+} from "@/services/calenderService";
 import TimePicker from "react-time-picker";
+import { Trash2 } from "lucide-react";
+
 
 /* ---------------- HELPERS ---------------- */
 
@@ -38,6 +39,8 @@ const DateOverrides = () => {
   const [isAvailable, setIsAvailable] = useState(false);
   const [timeSlots, setTimeSlots] = useState([{ from: "", to: "" }]);
   const [overrides, setOverrides] = useState([]);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedOverride, setSelectedOverride] = useState(null);
 
   const [open, setOpen] = useState(false);
   const toMinutes = (time) => {
@@ -59,6 +62,22 @@ const DateOverrides = () => {
   const fetchOverrides = async () => {
     const result = await fetchDateOverrides();
     if (result.success) setOverrides(result.data);
+  };
+  const handleDelete = (id) => {
+    setSelectedOverride(id);
+    setDeleteOpen(true);
+  };
+  const confirmDelete = async () => {
+    if (!selectedOverride) return;
+
+    const result = await deleteDateOverride(selectedOverride);
+
+    if (result.success) {
+      fetchOverrides();
+    }
+
+    setDeleteOpen(false);
+    setSelectedOverride(null);
   };
 
   const resetForm = () => {
@@ -90,7 +109,7 @@ const DateOverrides = () => {
   return (
     <>
       {/* MAIN CARD */}
-      <Card className={'mt-8'}>
+      <Card className={"mt-8"}>
         <CardHeader className="flex  flex-row items-center justify-between">
           <CardTitle>Date Overrides</CardTitle>
           <Button onClick={() => setOpen(true)}>Add Override</Button>
@@ -109,9 +128,7 @@ const DateOverrides = () => {
               className="flex items-center justify-between rounded-md border p-3"
             >
               <div>
-                <p className="font-medium">
-                  {new Date(o.date).toDateString()}
-                </p>
+                <p className="font-medium">{new Date(o.date).toDateString()}</p>
 
                 {o.isAvailable ? (
                   <p className="text-sm text-green-600">
@@ -125,6 +142,15 @@ const DateOverrides = () => {
                   <p className="text-sm text-red-500">Unavailable</p>
                 )}
               </div>
+
+              {/* DELETE BUTTON */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handleDelete(o._id)}
+              >
+                <Trash2 className="w-4 h-4 text-red-500" />
+              </Button>
             </div>
           ))}
         </CardContent>
@@ -152,9 +178,7 @@ const DateOverrides = () => {
             {isAvailable && (
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs text-muted-foreground">
-                    From
-                  </label>
+                  <label className="text-xs text-muted-foreground">From</label>
                   <TimePicker
                     value={timeSlots[0].from}
                     onChange={(value) =>
@@ -162,14 +186,12 @@ const DateOverrides = () => {
                     }
                     disableClock
                     clearIcon={null}
-                    locale="en-US"   // ✅ forces 12-hour
+                    locale="en-US" // ✅ forces 12-hour
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs text-muted-foreground">
-                    To
-                  </label>
+                  <label className="text-xs text-muted-foreground">To</label>
                   <TimePicker
                     value={timeSlots[0].to}
                     onChange={(value) =>
@@ -177,9 +199,8 @@ const DateOverrides = () => {
                     }
                     disableClock
                     clearIcon={null}
-                    locale="en-US"   // ✅ forces 12-hour
+                    locale="en-US" // ✅ forces 12-hour
                   />
-
                 </div>
 
                 {timeSlots[0].from && timeSlots[0].to && (
@@ -200,6 +221,33 @@ const DateOverrides = () => {
               Cancel
             </Button>
             <Button onClick={handleSave}>Save Override</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Remove Date Override</DialogTitle>
+          </DialogHeader>
+
+          <p className="text-sm text-muted-foreground">
+            Are you sure you want to remove this date override?
+          </p>
+
+          <DialogFooter className="pt-4">
+            <Button
+  variant="outline"
+  onClick={() => {
+    setDeleteOpen(false);
+    setSelectedOverride(null);
+  }}
+>
+              Cancel
+            </Button>
+
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

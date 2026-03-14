@@ -283,19 +283,37 @@ export default function UserChatPage() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-  <div className="flex items-center justify-between gap-2">
+  {/* Service Type */}
+  <p className="text-xs text-gray-500 font-semibold">
+    {chat.serviceRequest?.type || "Service"}
+  </p>
 
-    {/* LEFT SIDE (Name) */}
+  <div className="flex items-center justify-between gap-2">
+    {/* Provider Name */}
     <h3 className="font-medium text-gray-900 truncate flex-1">
       {chat.provider?.name}
     </h3>
 
-    {/* RIGHT SIDE (Date + Badge) */}
-    <div className="flex items-center gap-2 shrink-0">
+    {/* Date */}
+    {chat.lastMessage?.createdAt && (
+      <span className="text-xs text-gray-400 whitespace-nowrap">
+        {format(new Date(chat.lastMessage.createdAt), "MMM d")}
+      </span>
+    )}
+  </div>
 
+  <div className="flex items-center justify-between gap-2">
+    {/* Last Message */}
+    <p className="text-xs text-gray-500 truncate flex-1 max-w-[70%]">
+      {chat.lastMessage?.content ||
+        (chat.lastMessage?.attachment ? "📎 Attachment" : "")}
+    </p>
+
+    {/* Time + Unread */}
+    <div className="flex items-center gap-2 shrink-0">
       {chat.lastMessage?.createdAt && (
-        <span className="text-xs text-gray-400">
-          {format(new Date(chat.lastMessage.createdAt), "MMM d")}
+        <span className="text-xs text-gray-400 font-medium whitespace-nowrap">
+          {format(new Date(chat.lastMessage.createdAt), "hh:mm a")}
         </span>
       )}
 
@@ -304,13 +322,8 @@ export default function UserChatPage() {
           {chat.unreadCount}
         </span>
       )}
-
     </div>
   </div>
-
-  <p className="text-xs text-gray-500 truncate">
-    {chat.serviceRequest?.type}
-  </p>
 </div>
                 <ChevronRight className="h-5 w-5 text-gray-400 ml-2" />
               </div>
@@ -435,7 +448,7 @@ export default function UserChatPage() {
                 placeholder={
                   uploading ? "Uploading file..." : "Type a message..."
                 }
-                className=" w-[85%]" 
+                className=" w-[85%]"
                 disabled={socketStatus !== "connected"}
               />
               <Button

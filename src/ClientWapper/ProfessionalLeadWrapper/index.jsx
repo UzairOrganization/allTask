@@ -195,7 +195,7 @@ const ProfessionalLeadWrapper = () => {
                                 : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
-                            Purchased Leads
+                            Purchased Leads 
                         </button>
                     </div>
                 </div>

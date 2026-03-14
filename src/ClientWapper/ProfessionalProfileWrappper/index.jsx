@@ -4,7 +4,7 @@ import axios from "axios";
 import { API } from "@/lib/data-service";
 import { FaCrown } from "react-icons/fa";
 import { Rating, ThinStar } from '@smastrom/react-rating'
-
+import { useSelector } from "react-redux";
 import '@smastrom/react-rating/style.css'
 import {
   // Avatar, AvatarFallback, AvatarImage,
@@ -46,9 +46,10 @@ export default function ProfessionalProfile({ name }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { user } = useSelector((state) => state.auth);
   const [reviewData, setReviewData] = useState({
-    name: '',
-    email: '',
+    // name: '',
+    // email: '',
     rating: 0,
     description: ''
   });
@@ -79,25 +80,53 @@ export default function ProfessionalProfile({ name }) {
   };
   // Handle review submission
   const handleReviewSubmit = async () => {
-    setIsSubmitting(true);
-    try {
-      const response = await axios.post(`${API}/api/service-provider/add-provider-review/${professional._id}`, {
-        ...reviewData
+  if (!user) {
+    alert("Please login to leave a review.");
+    return;
+  }
+
+  if (reviewData.rating === 0) {
+    alert("Please select a rating.");
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+
+    const response = await axios.post(
+      `${API}/api/service-provider/add-provider-review/${professional._id}`,
+      {
+        rating: reviewData.rating,
+        description: reviewData.description
+      },
+      {
+        withCredentials: true
+      }
+    );
+
+    if (response.status === 201) {
+
+      const updatedResponse = await axios.get(
+        `${API}/api/service-provider/getProfessionalbyName/${name}`
+      );
+
+      setProfessional(updatedResponse.data.data);
+
+      setReviewData({
+        rating: 0,
+        description: ""
       });
 
-      if (response.status === 201) {
-        // Refresh professional data
-        const updatedResponse = await axios.get(`${API}/api/service-provider/getProfessionalbyName/${name}`);
-        setProfessional(updatedResponse.data.data);
-        setReviewData({ name: '', email: '', rating: 0, description: '' });
-        setIsDialogOpen(false);
-      }
-    } catch (err) {
-      console.error("Error submitting review:", err);
-    } finally {
-      setIsSubmitting(false);
+      setIsDialogOpen(false);
     }
-  };
+
+  } catch (err) {
+    console.error("Error submitting review:", err);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   // Calculate average rating
   const avgRating = professional?.reviews?.length > 0
@@ -334,16 +363,76 @@ export default function ProfessionalProfile({ name }) {
           <Card className="shadow-md border border-green-100 rounded-2xl overflow-hidden">
             <CardHeader className="bg-green-700 text-white p-6 rounded-t-2xl">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl font-semibold tracking-wide">
-                  Customer Reviews
-                </CardTitle>
-                <div className="flex items-center bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
-                  <Star className="w-5 h-5 text-yellow-400 fill-yellow-400 mr-1" />
-                  <span className="font-medium text-sm">
-                    {avgRating.toFixed(1)} / 5
-                  </span>
-                </div>
-              </div>
+  <CardTitle className="text-xl font-semibold tracking-wide">
+    Customer Reviews
+  </CardTitle>
+
+  <div className="flex items-center gap-3">
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      
+      {user && (
+  <DialogTrigger asChild>
+    <Button className="bg-white text-green-700 hover:bg-green-50">
+      Leave Review
+    </Button>
+  </DialogTrigger>
+)}
+
+      <DialogContent className="max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Leave a Review</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-4">
+
+          {/* Name */}
+        
+          {/* Rating */}
+          <div>
+            <p className="mb-2 text-sm font-medium">Rating</p>
+
+            <Rating
+              style={{ maxWidth: 180 }}
+              value={reviewData.rating}
+              onChange={(value) =>
+                setReviewData({ ...reviewData, rating: value })
+              }
+              itemStyles={{
+                itemShapes: ThinStar,
+                activeFillColor: "#facc15",
+                inactiveFillColor: "#e5e7eb",
+              }}
+            />
+          </div>
+
+          {/* Review text */}
+          <Textarea
+            placeholder="Write your experience..."
+            value={reviewData.description}
+            onChange={(e) =>
+              setReviewData({ ...reviewData, description: e.target.value })
+            }
+          />
+
+          <Button
+            onClick={handleReviewSubmit}
+            disabled={isSubmitting}
+            className="w-full bg-green-700 hover:bg-green-800"
+          >
+            {isSubmitting ? "Submitting..." : "Submit Review"}
+          </Button>
+
+        </div>
+      </DialogContent>
+    </Dialog>
+
+    <div className="flex items-center bg-white/20 px-3 py-1.5 rounded-full">
+      <Star className="w-5 h-5 text-yellow-400 fill-yellow-400 mr-1" />
+      <span>{avgRating.toFixed(1)} / 5</span>
+    </div>
+
+  </div>
+</div>
             </CardHeader>
 
             <CardContent className="p-6 space-y-6 bg-green-50">

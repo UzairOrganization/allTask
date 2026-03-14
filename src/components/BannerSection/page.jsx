@@ -138,7 +138,7 @@ export default function BannerSection() {
                         placeholder="What Service are you looking for?"
                         value={query}
                         onChange={handleQueryChange}
-                        className="text-black"
+                        className="text-gray-500"
                         onKeyDown={(e) => {
                           if (e.key === "ArrowDown") {
                             e.preventDefault();
@@ -200,7 +200,7 @@ export default function BannerSection() {
                       <span style={{ marginLeft: "8px" }}>
                         <IoLocationSharp size={25} />
                       </span>
-                      <input required type="text" placeholder="Zip Code" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="text-black" />
+                      <input required type="text" placeholder="Zip Code" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="text-gray-500" />
                     </div>
                     <div className="searchBtn" onClick={handleSubmit}>{loadingRedux ? "Searching..." : "Search"}</div>
                   </div>

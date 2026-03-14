@@ -363,9 +363,9 @@ export default function PurchasedLeadsPage() {
                                                         <div className="font-medium mx-auto">
                                                             {payment.serviceRequest?.serviceType || 'Service'}
                                                         </div>
-                                                        <div className="text-sm text-gray-500 ">
+                                                        {/* <div className="text-sm text-gray-500 ">
                                                             {new Date(payment.serviceRequest?.createdAt).toLocaleDateString('en-US')}
-                                                        </div>
+                                                        </div> */}
                                                     </TableCell>
                                                     <TableCell className="text-center align-middle">
                                                         ${(payment.amount / 100).toFixed(2)}

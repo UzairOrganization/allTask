@@ -41,9 +41,9 @@ export default function AdminHeader() {
 
     return (
         <header className="border-b p-4 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-            <div className="container w-[98%] mx-auto flex h-16 items-center justify-between">
+            <div className="w-full  flex justify-between items-center">
                 {/* Logo */}
-                <div className="logo w-[210px]">
+                <div className="logo w-[180px]">
                     <Link href="/">
                         <img src="/assets/images/logoMain.png" alt="" className="w-full" />
                     </Link>

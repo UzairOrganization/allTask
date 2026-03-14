@@ -22,7 +22,7 @@ export default function AdminLogin() {
         localStorage.setItem('adminAuth', 'true')
         router.push('/admin/admin-dashboard')
       } else {
-        toast.error('Invalid credentials. Try admin/admin')
+        toast.error('Invalid credentials.')
         setLoading(false)
       }
     }, 1000)
