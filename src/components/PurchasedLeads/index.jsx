@@ -125,6 +125,7 @@ const PurchasedLeads = () => {
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit",
+        hour12: true,
       });
     };
 
@@ -157,7 +158,7 @@ const PurchasedLeads = () => {
       },
       {
         label: "Purchased Date",
-        value: formatPurchaseDate(serviceRequest.purchasedDate),
+        value: formatPurchaseDate(payment.purchasedAt),
         icon: <Calendar className="h-4 w-4" />,
       },
     ].filter((detail) => detail.value); // Only show if value exists
@@ -310,7 +311,7 @@ const PurchasedLeads = () => {
           <div className="">
             <Button
               onClick={handleStartConversation}
-              className="bg-green-700 cursor-pointer hover:bg-green-800 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out transform hover:scale-105"
+              className="bg-[#007D63] cursor-pointer text-white font-medium py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out transform hover:scale-105"
             >
               Start Conversation
               <ChevronRight className="h-4 w-4 ml-2" />
@@ -507,17 +508,16 @@ const PurchasedLeads = () => {
             {new Date(payment.purchasedAt).toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
+              hour12: true,
             })}
           </TableCell>
 
           <TableCell>
-            {new Date(payment.purchasedAt).toLocaleDateString("en-GB")}
+            {new Date(payment.purchasedAt).toLocaleDateString("en-US")}
           </TableCell>
 
           <TableCell>
-            {payment.serviceRequest?.location ||
-              payment.serviceRequest?.customerDetails?.address ||
-              "-"}
+            {payment.serviceRequest?.customerDetails?.city || "-"}
           </TableCell>
 
           <TableCell>
@@ -553,8 +553,7 @@ const PurchasedLeads = () => {
 
               {/* Pagination Info */}
               <p className="text-sm text-gray-500 text-center mt-4">
-                Showing {(currentPage - 1) * leadsPerPage + 1} -
-                {Math.min(currentPage * leadsPerPage, filteredPayments.length)}{" "}
+                Showing {(currentPage - 1) * leadsPerPage + 1} - {Math.min(currentPage * leadsPerPage, filteredPayments.length)}{" "}
                 of {filteredPayments.length} leads
               </p>
 

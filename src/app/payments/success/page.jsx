@@ -83,7 +83,7 @@ export default function PaymentSuccess({ searchParams }) {
 
                             {/* Action buttons */}
                             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-                                <Button asChild className="bg-green-700 hover:bg-green-800 px-6 py-3">
+                                <Button asChild className="bg-[#00725A] hover:bg-green-800 px-6 py-3">
                                     <Link href="/professional-dashboard" className="flex items-center gap-2">
                                         Go to Dashboard <ArrowRight className="h-4 w-4" />
                                     </Link>

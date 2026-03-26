@@ -15,6 +15,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
         name: '',
         email: '',
         address: '',
+        city: '',
         zipCode: '',
         phoneNo: '',
         // contactPreference: ''
@@ -44,6 +45,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
             customerDetails.name &&
             customerDetails.email &&
             customerDetails.address &&
+            customerDetails.city &&
             customerDetails.zipCode &&
             customerDetails.phoneNo
             // customerDetails.contactPreference
@@ -76,6 +78,7 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
         finalFormData.append("customerDetails[name]", customerDetails.name)
         finalFormData.append("customerDetails[email]", customerDetails.email)
         finalFormData.append("customerDetails[address]", customerDetails.address)
+        finalFormData.append("customerDetails[city]", customerDetails.city)
         finalFormData.append("customerDetails[zipCode]", customerDetails.zipCode)
         finalFormData.append('customerDetails[phoneNo]', customerDetails.phoneNo)
         // finalFormData.append("customerDetails[contactPreference]", customerDetails.contactPreference)-
@@ -152,6 +155,22 @@ const StageThree = ({ finalFormData, formData, setFormData, next, back }) => {
                                     className="focus:ring-[#00725A] focus:border-[#00725A]"
                                 />
                             </div>
+                            {/* City Field */}
+<div className="space-y-2">
+    <Label htmlFor="city" className="flex items-center gap-2">
+        <MapPin className="h-4 w-4 text-[#00725A]" />
+        City
+    </Label>
+    <Input
+        id="city"
+        name="city"
+        type="text"
+        value={customerDetails.city}
+        onChange={handleChange}
+        required
+        className="focus:ring-[#00725A] focus:border-[#00725A]"
+    />
+</div>
 
                             {/* Zip Code Field */}
                             <div className="space-y-2">
