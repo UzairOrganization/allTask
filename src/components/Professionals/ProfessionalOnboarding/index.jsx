@@ -45,6 +45,7 @@ import PurchasedLeads from "@/components/PurchasedLeads";
 import { Suspense } from "react";
 import ProfessionalCalendar from "@/components/Calender/ProfessionalCalender";
 
+
 const stripePromise = loadStripe("pk_test_51ST0xs32vr5uocVGtKIPNsvzmzyX52yLMYfODz7Qkhg4TOZxAEProyL1P2buTsJmSRFJHOtSqq6A3gjSzFlGAn6Y001wE4hcmt");
 // FileUpload component
 const FileUpload = ({ onFileUpload, accept, uploading }) => {
@@ -879,7 +880,10 @@ export function ProfessionalOnboarding() {
                                 <h2 className="text-xl font-semibold text-gray-800">Purchased Leads</h2>
                             </CardHeader>
                             <CardContent className="p-6">
-                                <PurchasedLeads />
+                                <PurchasedLeads
+  showTime={false}
+  showPaymentStatus={false}
+/>
                             </CardContent>
                         </Card>
 

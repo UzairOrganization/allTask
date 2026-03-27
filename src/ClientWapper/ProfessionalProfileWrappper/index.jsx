@@ -152,8 +152,8 @@ export default function ProfessionalProfile({ name }) {
   // Loading state
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-[300px]">
-      <Loader2 className="h-12 w-12 animate-spin text-green-700" />
-      <p className="mt-4 text-green-700 font-medium">Loading professional profile...</p>
+      <Loader2 className="h-12 w-12 animate-spin text-[#007D63]" />
+      <p className="mt-4 text-[#007D63] font-medium">Loading professional profile...</p>
     </div>
   );
 
@@ -163,12 +163,12 @@ export default function ProfessionalProfile({ name }) {
       <Card className="border-green-200 bg-green-50">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <AlertCircle className="h-6 w-6 text-green-700" />
-            <CardTitle className="text-green-700">Profile Not Found</CardTitle>
+            <AlertCircle className="h-6 w-6 text-[#007D63]" />
+            <CardTitle className="text-[#007D63]">Profile Not Found</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-green-700">The professional you're looking for doesn't exist.</p>
+          <p className="text-[#007D63]">The professional you're looking for doesn't exist.</p>
         </CardContent>
       </Card>
     </div>
@@ -180,12 +180,12 @@ export default function ProfessionalProfile({ name }) {
       <Card className="border-green-200 bg-green-50">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <AlertCircle className="h-6 w-6 text-green-700" />
-            <CardTitle className="text-green-700">Profile Not Found</CardTitle>
+            <AlertCircle className="h-6 w-6 text-[#007D63]" />
+            <CardTitle className="text-[#007D63]">Profile Not Found</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-green-700">The professional you're looking for doesn't exist.</p>
+          <p className="text-[#007D63]">The professional you're looking for doesn't exist.</p>
         </CardContent>
       </Card>
     </div>
@@ -196,7 +196,7 @@ export default function ProfessionalProfile({ name }) {
       {/* Profile Header */}
       <div className="flex flex-col md:flex-row gap-8 mb-8">
         <div className="flex-shrink-0">
-          <Avatar className="h-32 w-32 md:h-40 md:w-40 border-4 border-green-700">
+          <Avatar className="h-32 w-32 md:h-40 md:w-40 border-4 border-[#007D63]">
             <AvatarImage src={professional?.profilePicture} />
             <AvatarFallback className="bg-green-100 text-green-800 text-4xl font-bold">
               {(professional?.name?.charAt(0) || 'P').toUpperCase()}
@@ -210,7 +210,7 @@ export default function ProfessionalProfile({ name }) {
               <div className="flex items-center gap-6 flex-wrap">
                 <h1 className="text-3xl font-bold text-gray-900">{professional?.name || 'Professional'}</h1>
                 {professional?.isSubscriptionHolder && (
-                  <Badge className="bg-green-700  hover:bg-green-800 text-md">
+                  <Badge className="bg-[#007D63]  hover:bg-green-800 text-md">
                     Platform Choice
                     <FaCrown className="text-yellow-500 w-5 h-5" />
                   </Badge>
@@ -250,7 +250,7 @@ export default function ProfessionalProfile({ name }) {
             <div className="flex gap-2">
               {professional?.status === 'approved' && !professional?.onHold ? (
                 <Badge className="gap-1 bg-green-100 text-green-800 hover:bg-green-100">
-                  <CheckCircle2 className="w-4 h-4 text-green-700" /> Approved
+                  <CheckCircle2 className="w-4 h-4 text-[#007D63]" /> Approved
                 </Badge>
               ) : professional?.onHold ? (
                 <Badge className="gap-1 bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
@@ -278,7 +278,7 @@ export default function ProfessionalProfile({ name }) {
 
           <TabsTrigger
             value="Overview"
-            className="data-[state=active]:bg-green-700 data-[state=active]:text-white
+            className="data-[state=active]:bg-[#007D63] data-[state=active]:text-white
     data-[state=active]:shadow-sm transition-all duration-300
     py-1.5 px-2 rounded-md font-medium text-sm
     text-gray-700 dark:text-gray-300
@@ -291,7 +291,7 @@ export default function ProfessionalProfile({ name }) {
           </TabsTrigger>
           <TabsTrigger
             value="Additional Information"
-            className="data-[state=active]:bg-green-700 data-[state=active]:text-white
+            className="data-[state=active]:bg-[#007D63] data-[state=active]:text-white
     data-[state=active]:shadow-sm transition-all duration-300
     py-1.5 px-2 rounded-md font-medium text-sm
     text-gray-700 dark:text-gray-300
@@ -305,7 +305,7 @@ export default function ProfessionalProfile({ name }) {
 
           <TabsTrigger
             value="Availability Calender"
-            className="data-[state=active]:bg-green-700 data-[state=active]:text-white
+            className="data-[state=active]:bg-[#007D63] data-[state=active]:text-white
     data-[state=active]:shadow-sm transition-all duration-300
     py-1.5 px-2 rounded-md font-medium text-sm
     text-gray-700 dark:text-gray-300
@@ -335,14 +335,14 @@ export default function ProfessionalProfile({ name }) {
                       <div className="space-y-2">
                         {category?.subcategories?.map((subcat, subIndex) => (
                           <div key={subIndex}>
-                            <p className="font-medium text-sm text-green-700">{subcat?.subcategory || 'General'}</p>
+                            <p className="font-medium text-sm text-[#007D63]">{subcat?.subcategory || 'General'}</p>
                             {subcat?.subSubcategories?.length > 0 && (
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {subcat.subSubcategories.map((subSub, ssIndex) => (
                                   <Badge
                                     key={ssIndex}
                                     variant="outline"
-                                    className="text-xs border-green-200 text-green-700 bg-green-50"
+                                    className="text-xs border-green-200 text-[#007D63] bg-green-50"
                                   >
                                     {subSub || 'Service'}
                                   </Badge>
@@ -361,7 +361,7 @@ export default function ProfessionalProfile({ name }) {
 
           {/* Reviews Section */}
           <Card className="shadow-md border border-green-100 rounded-2xl overflow-hidden">
-            <CardHeader className="bg-green-700 text-white p-6 rounded-t-2xl">
+            <CardHeader className="bg-[#007D63] text-white p-6 rounded-t-2xl">
               <div className="flex items-center justify-between">
   <CardTitle className="text-xl font-semibold tracking-wide">
     Customer Reviews
@@ -372,7 +372,7 @@ export default function ProfessionalProfile({ name }) {
       
       {user && (
   <DialogTrigger asChild>
-    <Button className="bg-white text-green-700 hover:bg-green-50">
+    <Button className="bg-white text-[#007D63] hover:bg-green-50">
       Leave Review
     </Button>
   </DialogTrigger>
@@ -417,7 +417,7 @@ export default function ProfessionalProfile({ name }) {
           <Button
             onClick={handleReviewSubmit}
             disabled={isSubmitting}
-            className="w-full bg-green-700 hover:bg-green-800"
+            className="w-full bg-[#007D63] hover:bg-[#005a4d]"
           >
             {isSubmitting ? "Submitting..." : "Submit Review"}
           </Button>
@@ -445,7 +445,7 @@ export default function ProfessionalProfile({ name }) {
                         key={index}
                         className="relative bg-white rounded-2xl shadow-md p-5 border border-green-100 transition-all hover:shadow-xl hover:-translate-y-1"
                       >
-                        <div className="absolute -top-3 left-5 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                        <div className="absolute -top-3 left-5 bg-[#007D63] text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
                           Verified
                         </div>
 
@@ -491,8 +491,8 @@ export default function ProfessionalProfile({ name }) {
                           key={index}
                           onClick={() => goToPage(index + 1)}
                           className={`w-9 h-9 p-0 rounded-full ${currentPage === index + 1
-                            ? "bg-green-700 text-white"
-                            : "bg-white border border-green-300 text-green-700"
+                            ? "bg-[#007D63] text-white"
+                            : "bg-white border border-green-300 text-[#007D63]"
                             }`}
                         >
                           {index + 1}

@@ -40,7 +40,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
-const PurchasedLeads = () => {
+const PurchasedLeads = ({
+  showPaymentStatus = true,
+  showTime = true,
+}) => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -448,10 +451,10 @@ const PurchasedLeads = () => {
                       <TableHead>Service</TableHead>
                       <TableHead>Type</TableHead>
                       <TableHead>Amount</TableHead>
-                      <TableHead>Time</TableHead>
+                      {showTime && <TableHead>Time</TableHead>}
                       <TableHead>Date</TableHead>
                       <TableHead>City</TableHead>
-                      <TableHead>Payment Status</TableHead>
+                     {showPaymentStatus && <TableHead>Payment Status</TableHead>}
                       <TableHead>Lead Status </TableHead>
                     </TableRow>
                   </TableHeader>
@@ -504,13 +507,15 @@ const PurchasedLeads = () => {
             ${(payment.amount / 100).toFixed(2)}
           </TableCell>
 
-          <TableCell>
-            {new Date(payment.purchasedAt).toLocaleTimeString("en-US", {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: true,
-            })}
-          </TableCell>
+         {showTime && (
+  <TableCell>
+    {new Date(payment.purchasedAt).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })}
+  </TableCell>
+)}
 
           <TableCell>
             {new Date(payment.purchasedAt).toLocaleDateString("en-US")}
@@ -520,9 +525,11 @@ const PurchasedLeads = () => {
             {payment.serviceRequest?.customerDetails?.city || "-"}
           </TableCell>
 
-          <TableCell>
-            <StatusBadge status={payment.paymentStatus} />
-          </TableCell>
+         {showPaymentStatus && (
+  <TableCell>
+    <StatusBadge status={payment.paymentStatus} />
+  </TableCell>
+)}
 
           <TableCell>
             <StatusBadge status={payment.serviceRequest?.status} />

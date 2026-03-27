@@ -82,9 +82,9 @@ export function ProfessionalEstimations() {
     return (
         <div className="space-y-6">
             {estimations.map((estimation) => (
-                <Card key={estimation._id} className="border-green-700">
+                <Card key={estimation._id} className="border-[#007D63]">
                     <CardHeader>
-                        <CardTitle className="text-green-700 flex items-center justify-between">
+                        <CardTitle className="text-[#007D63] flex items-center justify-between">
                             {decodeURIComponent(estimation.service)}
                             {/* <Badge variant="outline" className="text-green-700 border-green-700">
                                 {new Date(estimation.createdAt).toLocaleDateString()}
@@ -96,7 +96,7 @@ export function ProfessionalEstimations() {
                             {estimation.subServices.map((subService, index) => (
                                 <div key={index} className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
                                     <span className="font-medium">{subService.name}</span>
-                                    <Badge className="bg-green-700 hover:bg-green-800">
+                                    <Badge className="bg-[#007D63] hover:bg-green-800">
                                         {subService.estimatedCost}
                                     </Badge>
                                 </div>
