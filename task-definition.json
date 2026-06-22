@@ -1,0 +1,35 @@
+{
+  "family": "alltasko-frontend",
+  "executionRoleArn": "arn:aws:iam::383141098016:role/alltaskoECSExecutionRole",
+  "taskRoleArn": "arn:aws:iam::383141098016:role/alltaskoECSExecutionRole",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "containerDefinitions": [{
+    "name": "alltasko-frontend",
+    "image": "383141098016.dkr.ecr.us-east-1.amazonaws.com/alltasko-frontend:latest",
+    "portMappings": [{"containerPort": 3000, "protocol": "tcp"}],
+    "essential": true,
+    "environment": [
+      {"name": "NODE_ENV", "value": "production"},
+      {"name": "PORT", "value": "3000"},
+      {"name": "NEXT_PUBLIC_API_URL", "value": "http://alltasko-alb-1404703492.us-east-1.elb.amazonaws.com"}
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/alltasko-frontend",
+        "awslogs-region": "us-east-1",
+        "awslogs-stream-prefix": "ecs"
+      }
+    },
+    "healthCheck": {
+      "command": ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"],
+      "interval": 30,
+      "timeout": 5,
+      "retries": 3,
+      "startPeriod": 60
+    }
+  }]
+}
