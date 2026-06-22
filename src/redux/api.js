@@ -1,8 +1,7 @@
 import axios from "axios";
 
-const NODE_ENV = "production"
 const API = axios.create({
-    baseURL: NODE_ENV === "production" ?  "https://api.alltasko.com/" : "http://localhost:5001/",
+    baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/",
     headers: { "Content-Type": "application/json" },
 });
 
@@ -17,3 +16,4 @@ API.interceptors.request.use((config) => {
 });
 
 export default API;
+
